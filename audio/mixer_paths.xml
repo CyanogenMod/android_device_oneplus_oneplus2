@@ -957,6 +957,10 @@
       <ctl name="MultiMedia5 Mixer SLIM_0_TX" value="1" />
     </path>
 
+    <path name="low-latency-record usb-headset-mic">
+        <ctl name="MultiMedia5 Mixer AFE_PCM_TX" value="1" />
+    </path>
+
     <path name="low-latency-record bt-sco">
       <ctl name="MultiMedia5 Mixer SEC_AUX_PCM_UL_TX" value="1" />
     </path>
