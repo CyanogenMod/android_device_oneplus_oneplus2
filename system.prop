@@ -111,6 +111,3 @@ persist.timed.enable=true
 # Video
 media.stagefright.log-uri=1
 vidc.enc.dcvs.extra-buff-count=2
-
-# USB
-persist.sys.usb.config=mtp
