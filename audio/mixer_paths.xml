@@ -415,12 +415,14 @@
         <ctl name="SLIMBUS_0_RX Audio Mixer MultiMedia1" value="1" />
     </path>
 
-    <!-- #ifdef VENDOR_EDIT-->
     <!-- zhiguang.su@MultiMedia.AudioDrv 2015-03-05 These are audio route (FE to BE) specific mixer settings  -->
     <path name="deep-buffer-playback speaker">
         <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia1" value="1" />
     </path>
-    <!-- #ENDIF VENDOR_EDIT-->
+
+    <path name="deep-buffer-playback voice-speaker">
+        <ctl name="deep-buffer-playback speaker" />
+    </path>
     
     <!--wangdongdong@MultiMedia.AudioDrv,2015-03-30,add for speaker and headphone play ring-->
     <path name="deep-buffer-playback speaker-and-headphones">
@@ -432,14 +434,10 @@
         <path name="deep-buffer-playback" />
     </path>
 
-    <!-- #ifdef VENDOR_EDIT-->
     <!-- zhiguang.su@MultiMedia.AudioDrv,2015/4/28,changed for EC ref -->
     <path name="echo-reference">
         <ctl name="AUDIO_REF_EC_UL5 MUX" value="QUAT_MI2S_TX" />
     </path>
-   <!-- #endif VENDOR_EDIT-->
-
-
 
     <path name="deep-buffer-playback hdmi">
         <ctl name="HDMI Mixer MultiMedia1" value="1" />
@@ -510,6 +508,10 @@
     <path name="low-latency-playback speaker-and-hdmi">
         <path name="low-latency-playback hdmi" />
         <path name="low-latency-playback" />
+    </path>
+
+    <path name="low-latency-playback voice-speaker">
+        <path name="low-latency-playback speaker" />
     </path>
 
     <path name="low-latency-playback afe-proxy">
