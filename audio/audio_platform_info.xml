@@ -48,6 +48,6 @@
     </pcm_ids>
 
     <device_names>
-        <!-- empty -->
+        <device name="SND_DEVICE_IN_HANDSET_STEREO_DMIC" alias="handset-mic" />
     </device_names>
 </audio_platform_info>
