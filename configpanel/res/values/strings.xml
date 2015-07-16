@@ -40,4 +40,9 @@
     <string name="mute">Mute</string>
     <string name="do_not_disturb">Do not disturb</string>
     <string name="normal">Normal</string>
+
+    <!-- Haptic feedback  -->
+    <string name="touchscreen_extras">Extras</string>
+    <string name="haptic_feedback">Haptic feedback</string>
+    <string name="haptic_feedback_summary">Vibrate when a gesture got detected or notifciation slider got moved</string>
 </resources>

@@ -25,6 +25,7 @@ import com.cyanogenmod.settings.device.utils.FileUtils;
 import com.cyanogenmod.settings.device.utils.NodePreferenceActivity;
 
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
@@ -32,10 +33,12 @@ import android.preference.SwitchPreference;
 public class TouchscreenGestureSettings extends NodePreferenceActivity {
 
     private static final String NAV_SWITCH_NODE = "/proc/nav_switch";
+    private static final String PROP_HAPTIC_FEEDBACK = "persist.gestures.haptic";
 
     private ListPreference mSliderTop;
     private ListPreference mSliderMiddle;
     private ListPreference mSliderBottom;
+    private SwitchPreference mHapticFeedback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,10 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
         setSummary(mSliderTop, Constants.KEYCODE_SLIDER_TOP);
         setSummary(mSliderMiddle, Constants.KEYCODE_SLIDER_MIDDLE);
         setSummary(mSliderBottom, Constants.KEYCODE_SLIDER_BOTTOM);
+
+        mHapticFeedback = (SwitchPreference) findPreference("touchscreen_haptic_feedback");
+        mHapticFeedback.setChecked(SystemProperties.getBoolean(PROP_HAPTIC_FEEDBACK, true));
+        mHapticFeedback.setOnPreferenceChangeListener(this);
     }
 
     private void setSummary(ListPreference preference, String file) {
@@ -78,8 +85,15 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference instanceof SwitchPreference)
+        if (preference == mHapticFeedback) {
+            final boolean value = (Boolean) newValue;
+            return true;
+        }
+
+        if (preference instanceof SwitchPreference) {
             return super.onPreferenceChange(preference, newValue);
+        }
+
         String file = null;
         int value = ((ListPreference) preference).findIndexOfValue((String) newValue);
         if (preference == mSliderTop) file = Constants.KEYCODE_SLIDER_TOP;

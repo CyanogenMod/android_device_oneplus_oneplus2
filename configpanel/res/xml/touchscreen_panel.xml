@@ -37,7 +37,6 @@
         android:summary="@string/touchscreen_flashlight_gesture_summary" />
 
     <PreferenceCategory
-        android:key="navigation_slider_category"
         android:title="@string/notification_slider" >
 
         <ListPreference
@@ -63,6 +62,16 @@
             android:entries="@array/notification_slider_action_entries"
             android:entryValues="@array/notification_slider_action_entries"
             android:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/touchscreen_extras">
+
+        <SwitchPreference
+            android:key="touchscreen_haptic_feedback"
+            android:title="@string/haptic_feedback"
+            android:summary="@string/haptic_feedback_summary" />
 
     </PreferenceCategory>
 
