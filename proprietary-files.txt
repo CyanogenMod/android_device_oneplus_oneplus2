@@ -33,6 +33,7 @@ vendor/lib64/lib-dplmedia.so
 vendor/lib64/libdsi_netctrl.so
 vendor/lib64/libdsutils.so
 vendor/lib64/libidl.so
+vendor/lib64/lib-ims-rcscmjni.so
 vendor/lib64/lib-imscamera.so
 vendor/lib64/lib-imsdpl.so
 vendor/lib64/lib-imsqimf.so
@@ -44,6 +45,7 @@ vendor/lib64/lib-imsSDP.so
 vendor/lib64/lib-imss.so
 vendor/lib64/lib-imsvt.so
 vendor/lib64/lib-imsxml.so
+vendor/lib64/libppl.so
 vendor/lib64/libqcci_legacy.so
 vendor/lib64/libqdi.so
 vendor/lib64/libqdp.so
@@ -55,6 +57,8 @@ vendor/lib64/libqmi_csi.so
 vendor/lib64/libqmi_encdec.so
 vendor/lib64/libqmiservices.so
 vendor/lib64/libqmi.so
+vendor/lib64/libqti-at.so
+vendor/lib64/libqti-gt.so
 vendor/lib64/lib-rcsimssjni.so
 vendor/lib64/lib-rcsjni.so
 vendor/lib64/lib-rtpcommon.so
@@ -71,6 +75,7 @@ vendor/lib/lib-dplmedia.so
 vendor/lib/libdsi_netctrl.so
 vendor/lib/libdsutils.so
 vendor/lib/libidl.so
+vendor/lib/lib-ims-rcscmjni.so
 vendor/lib/lib-imscamera.so
 vendor/lib/lib-imsdpl.so
 vendor/lib/lib-imsqimf.so
@@ -93,6 +98,8 @@ vendor/lib/libqmi_csi.so
 vendor/lib/libqmi_encdec.so
 vendor/lib/libqmiservices.so
 vendor/lib/libqmi.so
+vendor/lib/libqti-at.so
+vendor/lib/libqti-gt.so
 vendor/lib/lib-rcsimssjni.so
 vendor/lib/lib-rcsjni.so
 vendor/lib/lib-rtpcommon.so
@@ -131,9 +138,18 @@ vendor/lib64/libTimeService.so
 vendor/lib/libTimeService.so
 
 # Widevine
+vendor/lib64/mediadrm/libdrmclearkeyplugin.so
 vendor/lib/drm/libdrmwvmplugin.so
+vendor/lib/libwvdrm_L3.so
 vendor/lib/libwvm.so
+vendor/lib/libWVStreamControlAPI_L3.so
 vendor/lib/mediadrm/libwvdrmengine.so
+vendor/lib/mediadrm/libdrmclearkeyplugin.so
+vendor/lib/qcdrm/playready/lib/drm/libdrmprplugin_customer.so
+vendor/lib/qcdrm/playready/lib/libprdrmdecrypt_customer.so
+vendor/lib/qcdrm/playready/lib/libtzplayready_customer.so
+vendor/lib/qcdrm/playready/lib/mediadrm/libprmediadrmdecrypt_customer.so
+vendor/lib/qcdrm/playready/lib/mediadrm/libprmediadrmplugin_customer.so
 
 # ADSP-RPC / Vision
 bin/adsprpcd
@@ -146,14 +162,20 @@ vendor/lib/libmdsprpc.so
 vendor/lib/libscve_mv.so
 vendor/lib/libscve.so
 vendor/lib/libscve_stub.so
+vendor/lib/libscveTextRecoPostProcessing.so
 vendor/lib/rfsa/adsp/fastrpc_shell_0
 vendor/lib/rfsa/adsp/libapps_mem_heap.so
 vendor/lib/rfsa/adsp/libdspCV_skel.so
 vendor/lib/rfsa/adsp/libfastcvadsp_skel.so
 vendor/lib/rfsa/adsp/libfastcvadsp.so
+vendor/lib/rfsa/adsp/libmare_hexagon_skel.so
+vendor/lib/rfsa/adsp/libobjectMattingApp_skel.so
+vendor/lib/rfsa/adsp/libpanorama_skel.so
+vendor/lib/rfsa/adsp/libscveBlobDescriptor_skel.so
 vendor/lib/rfsa/adsp/libscveObjectSegmentation_skel.so
 vendor/lib/rfsa/adsp/libscveORC_skel.so
 vendor/lib/rfsa/adsp/libscveT2T_skel.so
+vendor/lib/rfsa/adsp/libscveTextReco_skel.so
 
 # Adreno GPU
 etc/firmware/a225p5_pm4.fw
@@ -411,6 +433,7 @@ vendor/lib/libOmxAmrwbplusDec.so
 vendor/lib/libOmxEvrcDec.so
 vendor/lib/libOmxQcelp13Dec.so
 vendor/lib/libOmxWmaDec.so
+vendor/lib/libqct_resampler.so
 vendor/lib/libSHIMDivxDrm.so
 
 # GPS
@@ -469,6 +492,7 @@ etc/permissions/qcrilhook.xml
 lib/libril.so
 lib64/libril.so
 lib64/librmnetctl.so
+vendor/bin/qti
 vendor/lib64/libmdmdetect.so
 vendor/lib64/libnetmgr.so
 vendor/lib64/libperipheral_client.so
@@ -501,8 +525,12 @@ lib/hw/lights.msm8994.so
 bin/qseecomd
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
+vendor/lib64/libFidoCrypto.so
+vendor/lib64/libmare-1.0.0.so
+vendor/lib64/libmare-cpu-1.0.0.so
 vendor/lib64/libmasc.so
 vendor/lib64/libpvr.so
+vendor/lib64/libQBLAS-0.11.38.so
 vendor/lib64/libQSEEComAPI.so
 vendor/lib64/librmp.so
 vendor/lib64/librpmb.so
@@ -517,8 +545,12 @@ vendor/lib64/libSSEPKCS11.so
 vendor/lib64/libtzdrmgenprov.so
 vendor/lib/libdrmfs.so
 vendor/lib/libdrmtime.so
+vendor/lib/libFidoCrypto.so
+vendor/lib/libmare-1.0.0.so
+vendor/lib/libmare-cpu-1.0.0.so
 vendor/lib/libmasc.so
 vendor/lib/libpvr.so
+vendor/lib/libQBLAS-0.11.38.so
 vendor/lib/libQSEEComAPI.so
 vendor/lib/librmp.so
 vendor/lib/librpmb.so
@@ -570,11 +602,11 @@ vendor/lib64/libcneapiclient.so
 vendor/lib64/libcneconn.so
 vendor/lib64/libcneqmiutils.so
 vendor/lib64/libcne.so
+vendor/lib64/libdpencalib.so
 vendor/lib64/libdpmctmgr.so
 vendor/lib64/libdpmfdmgr.so
 vendor/lib64/libdpmframework.so
 vendor/lib64/libdpmnsrm.so
-vendor/lib64/libmasc.so
 vendor/lib64/libNimsWrap.so
 vendor/lib64/libvendorconn.so
 vendor/lib64/libwqe.so
@@ -586,10 +618,23 @@ vendor/lib/libdpmctmgr.so
 vendor/lib/libdpmfdmgr.so
 vendor/lib/libdpmframework.so
 vendor/lib/libdpmnsrm.so
-vendor/lib/libmasc.so
 vendor/lib/libNimsWrap.so
 vendor/lib/libvendorconn.so
 vendor/lib/libwqe.so
 
+# Always listening
+vendor/lib64/liblistenjni.so
+vendor/lib64/liblistensoundmodel2.so
+vendor/lib/hw/sound_trigger.primary.msm8994.so
+vendor/lib/liblistenjni.so
+vendor/lib/liblistensoundmodel2.so
+
 # USB driver
 etc/usb_drivers.iso
+
+# Unknown
+vendor/lib64/libGPTEE.so
+vendor/lib64/libepdsp.so
+vendor/lib64/libepdsp_SDserver.so
+vendor/lib64/libusutils.so
+vendor/lib/libGPTEE.so
