@@ -197,3 +197,6 @@ PRODUCT_PACKAGES += \
     libcnefeatureconfig \
     libtinyxml \
     libxml2
+
+# Inherit from oppo-common
+$(call inherit-product, device/oppo/common/common.mk)
