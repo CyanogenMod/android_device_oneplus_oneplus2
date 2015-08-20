@@ -1,0 +1,65 @@
+# system.prop for plutonium
+
+# RIL
+rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
+rild.libargs=-d /dev/smd0
+persist.rild.nitz_plmn=
+persist.rild.nitz_long_ons_0=
+persist.rild.nitz_long_ons_1=
+persist.rild.nitz_long_ons_2=
+persist.rild.nitz_long_ons_3=
+persist.rild.nitz_short_ons_0=
+persist.rild.nitz_short_ons_1=
+persist.rild.nitz_short_ons_2=
+persist.rild.nitz_short_ons_3=
+ril.subscription.types=NV,RUIM
+DEVICE_PROVISIONED=1
+persist.radio.multisim.config=dsds
+persist.radio.disable_flexmap=0
+persist.radio.apm_sim_not_pwdn=1
+telephony.lteOnCdmaDevice=1
+persist.radio.rat_on=combine
+ro.telephony.default_network=9
+
+# Audio
+audio.offload.buffer.size.kb=32
+audio.offload.gapless.enabled=true
+av.offload.enable=true
+audio.offload.pcm.16bit.enable=true
+audio.offload.pcm.24bit.enable=true
+persist.audio.fluence.voicecall=true
+persist.audio.fluence.voicerec=false
+persist.audio.fluence.speaker=true
+ro.qc.sdk.audio.fluencetype=fluence
+tunnel.audio.encode=false
+use.voice.path.for.pcm.voip=false
+
+# AV
+media.aac_51_output_enabled=true
+mm.enable.smoothstreaming=true
+
+# GPS
+persist.gps.qc_nlp_in_use=1
+ro.gps.agps_provider=1
+
+# Graphics
+debug.composition.type=c2d
+debug.egl.hw=1
+debug.mdpcomp.logs=0
+debug.sf.hw=1
+dev.pm.dyn_samplingrate=1
+persist.hwc.mdpcomp.enable=true
+ro.sf.lcd_density=480
+ro.opengles.version=196609
+
+# Sensors
+ro.qc.sdk.sensors.gestures=true
+
+# Time services
+persist.timed.enable=true
+
+# USB
+persist.sys.usb.config=mtp,adb
+
+# Wifi
+wifi.interface=wlan0

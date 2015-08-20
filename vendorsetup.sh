@@ -1,0 +1,2 @@
+add_lunch_combo cm_plutonium-eng
+add_lunch_combo cm_plutonium-userdebug
