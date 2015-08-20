@@ -38,7 +38,7 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Kernel
 PRODUCT_COPY_FILES += \
-    $(TARGET_PREBUILT_KERNEL):kernel
+    $(LOCAL_PATH)/zImage:kernel
 
 # Ramdisk
 PRODUCT_PACKAGES += \
@@ -128,7 +128,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     lights.msm8994
 
- Media profile
+# Media profile
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
