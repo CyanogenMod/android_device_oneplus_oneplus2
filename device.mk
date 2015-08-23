@@ -116,6 +116,11 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     setup_fs
 
+# Keylayouts
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/keylayout/fpc1020.kl:system/usr/keylayout/fpc1020.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl
+
 # Keymaster
 PRODUCT_PACKAGES += \
     keystore.msm8994
