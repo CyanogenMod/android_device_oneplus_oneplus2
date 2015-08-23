@@ -105,6 +105,9 @@ service qcom-usb-sh /system/bin/sh /init.qcom.usb.sh
 # e.g. rmnet_hsic[,rmnet_hsusb]
 # Only required for transport type hsic, optional for other transport types.
 
+on property:sys.usb.config=adb
+    write /sys/class/android_usb/android0/idVendor 2A70
+
 # USB compositions
 on property:sys.usb.config=diag,serial_tty,serial_smd
     write /sys/class/android_usb/android0/enable 0
