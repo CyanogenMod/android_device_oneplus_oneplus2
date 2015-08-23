@@ -20,9 +20,6 @@
 # definition file).
 #
 
-# inherit from Oppo common
--include device/oppo/common/BoardConfigCommon.mk
-
 TARGET_OTA_ASSERT_DEVICE := OnePlus2,plutonium
 
 BOARD_VENDOR := oneplus
