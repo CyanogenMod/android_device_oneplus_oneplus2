@@ -38,6 +38,12 @@ use.voice.path.for.pcm.voip=false
 media.aac_51_output_enabled=true
 mm.enable.smoothstreaming=true
 
+# Bluetooth
+bluetooth.hfp.client=1
+qcom.bluetooth.soc=rome
+ro.bluetooth.a4wp=true
+ro.bluetooth.wipower=true
+
 # GPS
 persist.gps.qc_nlp_in_use=1
 ro.gps.agps_provider=1
