@@ -508,3 +508,6 @@ vendor/lib/libmasc.so
 vendor/lib/libNimsWrap.so
 vendor/lib/libvendorconn.so
 vendor/lib/libwqe.so
+
+# USB driver
+etc/usb_drivers.iso

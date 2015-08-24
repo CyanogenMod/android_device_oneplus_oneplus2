@@ -36,13 +36,26 @@ PRODUCT_CHARACTERISTICS := nosdcard
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
+# Kernel
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/dt.img:dt.img
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
     init.qcom.rc \
-    init.qcom.ril.sh \
+    init.qcom.sh \
     init.qcom.usb.rc \
     ueventd.qcom.rc
+
+# Qcom init scripts for /etc
+PRODUCT_PACKAGES += \
+   init.qcom.bt.sh \
+   init.qcom.coex.sh \
+   init.qcom.fm.sh \
+   init.qcom.post_boot.sh \
+   init.qcom.ril.sh \
+   init.qcom.uicc.sh
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -115,6 +128,10 @@ PRODUCT_PACKAGES += \
     e2fsck \
     make_ext4fs \
     setup_fs
+
+# IRQ
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
 
 # Keylayouts
 PRODUCT_COPY_FILES += \

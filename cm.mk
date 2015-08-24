@@ -12,12 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-
-# Inherit from bacon device
-$(call inherit-product, device/oneplus/plutonium/device.mk)
+$(call inherit-product, device/oneplus/plutonium/full_plutonium.mk)
 
 # Inherit some common CM stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
@@ -25,22 +20,11 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 # Inherit plutonium-specific vendor tree
 $(call inherit-product-if-exists, vendor/oneplus/plutonium/plutonium-vendor.mk)
 
-PRODUCT_NAME := cm_plutonium
-PRODUCT_DEVICE := plutonium
-PRODUCT_MANUFACTURER := OnePlus
-PRODUCT_MODEL := A2001
-
-PRODUCT_GMS_CLIENTID_BASE := android-oneplus
-
-PRODUCT_BRAND := oneplus
 TARGET_VENDOR := oneplus
 TARGET_VENDOR_PRODUCT_NAME := plutonium
 TARGET_VENDOR_DEVICE_NAME := A2001
-PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=A2001 PRODUCT_NAME=plutonium
-
-## Use the latest approved GMS identifiers unless running a signed build
-ifneq ($(SIGN_BUILD),true)
 PRODUCT_BUILD_PROP_OVERRIDES += \
+    TARGET_DEVICE=A2001 \
+    PRODUCT_NAME=plutonium \
     BUILD_FINGERPRINT=oneplus/plutonium/A2001:5.1.1/LMY47V/1436933040:user/release-keys \
     PRIVATE_BUILD_DESC="plutonium-user 5.1.1 LMY47V 44 dev-keys"
-endif
