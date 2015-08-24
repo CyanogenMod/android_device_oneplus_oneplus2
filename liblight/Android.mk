@@ -1,4 +1,4 @@
-# Copyright (C) 2013 The CyanogenMod Project
+# Copyright (C) 2015 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,15 +13,26 @@
 # limitations under the License.
 
 LOCAL_PATH:= $(call my-dir)
-# HAL module implemenation stored in
-# hw/<COPYPIX_HARDWARE_MODULE_ID>.<ro.board.platform>.so
+
+ifeq ($(TARGET_PROVIDES_LIBLIGHT),true)
+ifeq ($(BOARD_VENDOR),oneplus)
+ifeq ($(TARGET_BOARD_PLATFORM),msm8994)
+
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := lights.c
-LOCAL_MODULE_RELATIVE_PATH := hw
-LOCAL_SHARED_LIBRARIES := liblog libcutils
+LOCAL_MODULE := lights.$(TARGET_BOARD_PLATFORM)
 
-LOCAL_MODULE := lights.msm8994
+LOCAL_MODULE_RELATIVE_PATH := hw
+
+LOCAL_MODULE_TAGS := optional
+
+LOCAL_SRC_FILES := lights.c
+LOCAL_SHARED_LIBRARIES := liblog
+
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
+
+endif # TARGET_BOARD_PLATFORM
+endif # TARGET_VENDOR
+endif # TARGET_PROVIDES_LIBLIGHT
