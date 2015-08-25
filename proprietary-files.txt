@@ -27,8 +27,10 @@ bin/radish
 bin/rfs_access
 bin/rmt_storage
 bin/usb_uicc_client
-lib64/librmnetctl.so
+lib/libparam.so
 lib/librmnetctl.so
+lib64/libparam.so
+lib64/librmnetctl.so
 vendor/lib64/libconfigdb.so
 vendor/lib64/libdiag.so
 vendor/lib64/lib-dplmedia.so
