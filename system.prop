@@ -22,21 +22,22 @@ persist.radio.rat_on=combine
 ro.telephony.default_network=9
 
 # Audio
-audio.offload.buffer.size.kb=32
-audio.offload.gapless.enabled=true
 av.offload.enable=true
-audio.offload.pcm.16bit.enable=true
-audio.offload.pcm.24bit.enable=true
+av.streaming.offload.enable=true
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
-ro.qc.sdk.audio.fluencetype=fluence
-tunnel.audio.encode=false
-use.voice.path.for.pcm.voip=false
-
-# AV
+ro.qc.sdk.audio.fluencetype=true
+ro.qc.sdk.audio.ssr=false
 media.aac_51_output_enabled=true
+audio.offload.pcm.16bit.enable=false
+audio.offload.pcm.24bit.enable=true
+use.voice.path.for.pcm.voip=true
+audio.offload.multiple.enabled=true
+audio.offload.gapless.enabled=true
 mm.enable.smoothstreaming=true
+mm.enable.qcom_parser=3314291
+audio.offload.buffer.size.kb=1024
 
 # Bluetooth
 bluetooth.hfp.client=1
