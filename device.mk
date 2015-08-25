@@ -36,10 +36,6 @@ PRODUCT_CHARACTERISTICS := nosdcard
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# Kernel
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/dt.img:dt.img
-
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
