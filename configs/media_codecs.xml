@@ -154,19 +154,21 @@ Only the three quirks included above are recognized at this point:
             <Limit name="blocks-per-second" min="1" max="972000" />
             <Limit name="bitrate" range="1-20000000" />
         </MediaCodec>
-        <MediaCodec name="OMX.qcom.video.encoder.hevc" type="video/hevc" >
+	<!--lifei@OnePlus.MultiMediaService, 2015/05/12,remove qcom OMX.qcom.video.encoder.hevc for CTS --> 
+        <!--MediaCodec name="OMX.qcom.video.encoder.hevc" type="video/hevc" >
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
             <Quirk name="requires-loaded-to-idle-after-allocation" />
-            <Limit name="size" min="176x64" max="4096x2160" />
+            <Limit name="size" min="96x64" max="4096x2160" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
             <Limit name="blocks-per-second" min="1" max="972000" />
             <Limit name="bitrate" range="1-100000000" />
-        </MediaCodec>
+        </MediaCodec-->
     </Encoders>
     <Decoders>
         <!-- Audio Hardware  -->
+	<!--lifei@OnePlus.MultiMediaService, 2015/04/27,add ffmpeg for Nuplayer mediaservice -->
         <MediaCodec name="OMX.qcom.audio.decoder.wma" type="audio/x-ms-wma" >
             <Quirk name="requires-global-flush" />
             <Quirk name="requires-wma-pro-component" />
@@ -177,9 +179,25 @@ Only the three quirks included above are recognized at this point:
         <MediaCodec name="OMX.qcom.audio.decoder.wma10Pro" type="audio/x-ms-wma-pro" >
             <Quirk name="requires-global-flush" />
         </MediaCodec>
+       <!--lifei@OnePlus.MultiMediaService, 2015/04/27,add ffmpeg for Nuplayer mediaservice end -->
         <MediaCodec name="OMX.qcom.audio.decoder.amrwbplus" type="audio/amr-wb-plus" >
         </MediaCodec>
         <!-- Audio Software  -->
+	<!--lifei@OnePlus.MultiMediaService, 2015/04/27,add ffmpeg for Nuplayer mediaservice -->
+        <!-- ffmpeg audio codec -->
+        <!--MediaCodec name="OMX.ffmpeg.aac.decoder"    type="audio/mp4a-latm" /-->
+        <!--MediaCodec name="OMX.ffmpeg.mp3.decoder"    type="audio/mpeg" /-->
+        <!--MediaCodec name="OMX.ffmpeg.vorbis.decoder" type="audio/vorbis" /-->
+        <!--MediaCodec name="OMX.ffmpeg.wma.decoder"    type="audio/x-ms-wma" /-->
+        <MediaCodec name="OMX.ffmpeg.ra.decoder"     type="audio/vnd.rn-realaudio" />
+        <!--MediaCodec name="OMX.ffmpeg.flac.decoder"   type="audio/flac" /-->
+        <MediaCodec name="OMX.ffmpeg.mp2.decoder"    type="audio/mpeg-L2" />
+        <MediaCodec name="OMX.ffmpeg.ac3.decoder"    type="audio/ac3" />
+        <MediaCodec name="OMX.ffmpeg.ape.decoder"    type="audio/x-ape" />
+        <MediaCodec name="OMX.ffmpeg.dts.decoder"    type="audio/vnd.dts" />
+        <MediaCodec name="OMX.ffmpeg.atrial.decoder" type="audio/ffmpeg" />
+        <!-- ffmpeg audio codec -->
+       <!--lifei@OnePlus.MultiMediaService, 2015/04/27,add ffmpeg for Nuplayer mediaservice end -->
         <MediaCodec name="OMX.google.aac.decoder" type="audio/mp4a-latm" />
         <MediaCodec name="OMX.qcom.audio.decoder.Qcelp13" type="audio/qcelp" >
             <Quirk name="requires-global-flush" />
@@ -188,6 +206,22 @@ Only the three quirks included above are recognized at this point:
             <Quirk name="requires-global-flush" />
         </MediaCodec>
         <!-- Video Hardware  -->
+        <!--lifei@OnePlus.MultiMediaService, 2015/04/27,add ffmpeg for Nuplayer mediaservice -->
+        <!-- ffmpeg video codec -->
+        <!--MediaCodec name="OMX.ffmpeg.mpeg2v.decoder" type="video/mpeg2" /-->
+        <!--MediaCodec name="OMX.ffmpeg.h263.decoder"   type="video/3gpp" /-->
+        <!--MediaCodec name="OMX.ffmpeg.mpeg4.decoder"  type="video/mp4v-es" /-->
+        <MediaCodec name="OMX.ffmpeg.wmv.decoder"    type="video/x-ms-wmv" />
+        <MediaCodec name="OMX.ffmpeg.rv.decoder"     type="video/vnd.rn-realvideo" />
+        <!--MediaCodec name="OMX.ffmpeg.h264.decoder"   type="video/avc" /-->
+        <!--MediaCodec name="OMX.ffmpeg.vpx.decoder"    type="video/x-vnd.on2.vp8" /-->
+        <MediaCodec name="OMX.ffmpeg.vc1.decoder"    type="video/vc1" />
+        <MediaCodec name="OMX.ffmpeg.flv1.decoder"    type="video/x-flv" />
+        <!--MediaCodec name="OMX.ffmpeg.divx.decoder"    type="video/divx" /-->
+        <!--MediaCodec name="OMX.ffmpeg.hevc.decoder"    type="video/hevc" /-->
+        <MediaCodec name="OMX.ffmpeg.vtrial.decoder" type="video/ffmpeg" />
+         <!-- ffmpeg video codec -->
+       <!--lifei@OnePlus.MultiMediaService, 2015/04/27,add ffmpeg for Nuplayer mediaservice end --> 
         <MediaCodec name="OMX.qcom.video.decoder.avc" type="video/avc" >
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
@@ -334,5 +368,4 @@ Only the three quirks included above are recognized at this point:
         </MediaCodec>
     </Decoders>
     <Include href="media_codecs_google_video.xml" />
-    <Include href="media_codecs_ffmpeg.xml" />
 </MediaCodecs>

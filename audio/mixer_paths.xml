@@ -192,6 +192,11 @@
      <ctl name="AUDIO_REF_EC_UL5 MUX" value="None" />
     <!-- #endif VENDOR_EDIT-->
 
+    <!-- #ifdef VENDOR_EDIT-->
+    <!-- zhiguang.su@MultiMedia.AudioDrv,2015/7/25,reset values  -->
+     <ctl name="VOC_EXT_EC MUX" value="NONE" />
+    <!-- #endif VENDOR_EDIT-->
+
     <!-- usb headset -->
     <ctl name="AFE_PCM_RX Audio Mixer MultiMedia1" value="0" />
     <ctl name="AFE_PCM_RX Audio Mixer MultiMedia4" value="0" />
@@ -952,10 +957,6 @@
       <ctl name="MultiMedia5 Mixer SLIM_0_TX" value="1" />
     </path>
 
-    <path name="low-latency-record usb-headset-mic">
-        <ctl name="MultiMedia5 Mixer AFE_PCM_TX" value="1" />
-    </path>
-
     <path name="low-latency-record bt-sco">
       <ctl name="MultiMedia5 Mixer SEC_AUX_PCM_UL_TX" value="1" />
     </path>
@@ -1027,7 +1028,7 @@
         <ctl name="Voice_Tx Mixer AFE_PCM_TX_Voice" value="1" />
     </path>
 
-    <path name="voice2-call speaker-and-headphones">
+    <path name="voice2-call">
         <ctl name="SLIM_0_RX_Voice Mixer Voice2" value="1" />
         <ctl name="Voice2_Tx Mixer SLIM_0_TX_Voice2" value="1" />
     </path>
@@ -1244,12 +1245,12 @@
         <ctl name="SLIMBUS_DL_HL Switch" value="1" />
    </path>
 
-    <path name="hfp-sco-wb">
+   <path name="hfp-sco-wb">
         <ctl name="AUX PCM SampleRate" value="16000" />
         <path name="hfp-sco" />
-    </path>
+   </path>
 
-    <path name="volte-call speaker-and-headphones">
+    <path name="volte-call">
         <ctl name="SLIM_0_RX_Voice Mixer VoLTE" value="1" />
         <ctl name="VoLTE_Tx Mixer SLIM_0_TX_VoLTE" value="1" />
     </path>
@@ -1290,7 +1291,7 @@
     <path name="volte-call speaker-protected">
     </path>
 
-    <path name="compress-voip-call speaker-and-headphones">
+    <path name="compress-voip-call">
         <ctl name="SLIM_0_RX_Voice Mixer Voip" value="1" />
         <ctl name="Voip_Tx Mixer SLIM_0_TX_Voip" value="1" />
     </path>
@@ -1704,13 +1705,12 @@
     </path>
 
     <path name="handset-mic">
-        <ctl name="AIF1_CAP Mixer SLIM TX7" value="1"/>
-        <ctl name="SLIM_0_TX Channels" value="One" />
-        <ctl name="SLIM TX7 MUX" value="DEC3" />
-        <ctl name="DEC3 MUX" value="ADC4" />
-        <ctl name="MIC_BIAS1_Bypass Cap" value="0" />
-        <ctl name="ADC4 Volume" value="13" />
-        <ctl name="DEC3 Volume" value="88" />
+    <!-- #ifdef VENDOR_EDIT-->
+    <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/19,add for 14049 mic -->
+    
+        <path name="adc3" />
+    <!-- #ENDIF-->
+	
     </path>
 
     <path name="handset-mic-db">

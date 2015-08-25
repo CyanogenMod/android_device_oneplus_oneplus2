@@ -1,6 +1,7 @@
 # system.prop for plutonium
 
 # RIL
+ro.vendor.extension_library=libqti-perfd-client.so
 rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
 rild.libargs=-d /dev/smd0
 persist.rild.nitz_plmn=
@@ -14,16 +15,16 @@ persist.rild.nitz_short_ons_2=
 persist.rild.nitz_short_ons_3=
 ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
+ro.telephony.default_network=9
+ro.rf_version=TDD_FDD_Ch_All
+ro.ril.gprsclass=10
+ro.ril.hsxpa=1
 persist.radio.multisim.config=dsds
 persist.radio.disable_flexmap=0
-persist.radio.apm_sim_not_pwdn=1
-telephony.lteOnCdmaDevice=1
-persist.radio.rat_on=combine
-ro.telephony.default_network=9
+persist.data.qmi.adb_logmask=0
 
 # Audio
 av.offload.enable=true
-av.streaming.offload.enable=true
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
@@ -37,7 +38,12 @@ audio.offload.multiple.enabled=true
 audio.offload.gapless.enabled=true
 mm.enable.smoothstreaming=true
 mm.enable.qcom_parser=3314291
-audio.offload.buffer.size.kb=1024
+audio.offload.buffer.size.kb=32
+audio.dolby.ds2.enabled=true
+audio.dolby.ds2.hardbypass=true
+audio.offload.passthrough=false
+
+persist.dpm.feature=1
 
 # Bluetooth
 bluetooth.hfp.client=1
@@ -45,17 +51,35 @@ qcom.bluetooth.soc=rome
 ro.bluetooth.a4wp=true
 ro.bluetooth.wipower=true
 
+# CEC
+ro.hdmi.device_type=4
+persist.sys.hdmi.addr.playback=4
+ro.hdmi.enable=true
+persist.speaker.prot.enable=false
+persist.spkr.cal.duration=0
+qcom.hw.aac.encoder=true
+
+# CNE
+persist.cne.feature=1
+
 # GPS
 persist.gps.qc_nlp_in_use=1
 ro.gps.agps_provider=1
 
 # Graphics
-debug.composition.type=c2d
-debug.egl.hw=1
-debug.mdpcomp.logs=0
 debug.sf.hw=1
-dev.pm.dyn_samplingrate=1
+debug.egl.hw=1
+debug.composition.type=c2d
 persist.hwc.mdpcomp.enable=true
+persist.mdpcomp.4k2kSplit=1
+persist.hwc.mdpcomp.maxpermixer=5
+persist.mdpcomp_perfhint=50
+debug.mdpcomp.logs=0
+persist.metadata_dynfps.disable=true
+persist.hwc.ptor.enable=true
+dalvik.vm.heapsize=36m
+dev.pm.dyn_samplingrate=1
+persist.demo.hdmirotationlock=false
 ro.sf.lcd_density=480
 ro.opengles.version=196609
 

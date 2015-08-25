@@ -22,6 +22,36 @@ include $(call all-makefiles-under,$(LOCAL_PATH))
 
 include $(CLEAR_VARS)
 
+$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wcd9320)
+
+WCD9320 := \
+    wcd9320_anc.bin wcd9320_mad_audio.bin wcd9320_mbhc.bin
+
+WCD9320_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/wcd9320/,$(notdir $(WCD9320)))
+$(WCD9320_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
+	@echo "WCD9320 firmware link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	$(hide) ln -sf /data/misc/audio/$(notdir $@) $@
+
+ALL_DEFAULT_INSTALLED_MODULES += $(WCD9320_SYMLINKS)
+
+$(shell mkdir -p $(TARGET_OUT_VENDOR)/firmware/keymaster; \
+    ln -sf /firmware/image/keymaste.b00 \
+        $(TARGET_OUT_VENDOR)/firmware/keymaster/keymaster.b00; \
+    ln -sf /firmware/image/keymaste.b01 \
+        $(TARGET_OUT_VENDOR)/firmware/keymaster/keymaster.b01; \
+    ln -sf /firmware/image/keymaste.b02 \
+        $(TARGET_OUT_VENDOR)/firmware/keymaster/keymaster.b02; \
+    ln -sf /firmware/image/keymaste.b03 \
+        $(TARGET_OUT_VENDOR)/firmware/keymaster/keymaster.b03; \
+    ln -sf /firmware/image/keymaste.mdt \
+        $(TARGET_OUT_VENDOR)/firmware/keymaster/keymastermdt)
+
+$(shell mkdir -p $(TARGET_OUT_ETC)/firmware; \
+    ln -sf /dev/block/bootdevice/by-name/msadp \
+        $(TARGET_OUT_ETC)/firmware/msadp)
+
 # Create a link for the WCNSS config file, which ends up as a writable
 # version in /data/misc/wifi
 $(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/qca_cld; \
