@@ -150,8 +150,12 @@ PRODUCT_PACKAGES += \
 
 # GPS
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/flp.conf:system/etc/flp.conf \
     $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
-    $(LOCAL_PATH)/configs/izat.conf:system/etc/izat.conf
+    $(LOCAL_PATH)/configs/izat.conf:system/etc/izat.conf \
+    $(LOCAL_PATH)/configs/lowi.conf:system/etc/lowi.conf \
+    $(LOCAL_PATH)/configs/msap.conf:system/etc/msap.conf \
+    $(LOCAL_PATH)/configs/quipc.conf:system/etc/quipc.conf
 
 # IRQ
 PRODUCT_COPY_FILES += \
