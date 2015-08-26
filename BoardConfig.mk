@@ -131,13 +131,10 @@ TARGET_PROVIDES_LIBLIGHT := true
 TARGET_POWERHAL_VARIANT := qcom
 
 # RIL
-TARGET_RIL_VARIANT := caf
+BOARD_PROVIDES_LIBRIL := true
 
 # RPC
 TARGET_NO_RPC := true
-
-# Added to indicate that protobuf-c is supported in this build
-PROTOBUF_SUPPORTED := true
 
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)

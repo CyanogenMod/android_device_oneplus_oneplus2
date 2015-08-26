@@ -459,12 +459,15 @@ vendor/lib/libxtwifi_zpp_adaptor.so
 bin/netmgrd
 bin/qmuxd
 bin/radish
+bin/rild
 bin/rfs_access
 bin/rmt_storage
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar
 -framework/qcrilhook.jar
+lib/libril.so
+lib64/libril.so
 lib64/librmnetctl.so
 vendor/lib64/libmdmdetect.so
 vendor/lib64/libnetmgr.so
