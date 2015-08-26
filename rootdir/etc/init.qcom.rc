@@ -613,6 +613,11 @@ on property:bluetooth.startbtsnoop=true
 on property:bluetooth.startbtsnoop=false
     stop btsnoop
 
+service qcom-c_main-sh /system/bin/sh /init.class_main.sh
+    class main
+    user root
+    oneshot
+
 on property:vold.decrypt=trigger_restart_framework
     start qcom-c_main-sh
     start config_bluetooth
@@ -973,14 +978,8 @@ service ril-daemon2 /system/bin/rild -c 2
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system
     user root
-    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
     disabled
-
-service rild2-wrapper /system/bin/sh /system/etc/init.qcom.ril.sh
-    class late_start
-    user root
-    group root
-    oneshot
+    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
 
 service usb_uicc_enable /system/bin/sh /system/etc/init.qcom.uicc.sh
     class late_start

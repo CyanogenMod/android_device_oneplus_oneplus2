@@ -172,6 +172,9 @@ TARGET_USERIMAGES_USE_EXT4 := true
 # Recovery
 TARGET_RECOVERY_FSTAB := device/oneplus/plutonium/rootdir/etc/fstab.qcom
 
+# SELinux
+include device/qcom/sepolicy/sepolicy.mk
+
 # Webkit
 ENABLE_WEBGL := true
 TARGET_FORCE_CPU_UPLOAD := true
