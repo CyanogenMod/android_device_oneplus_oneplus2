@@ -482,7 +482,6 @@ etc/fpc1021w160.bin
 etc/firmware/tp/14049/14049_FW_S1302.img
 etc/firmware/tp/14049/14049_FW_S3320_jdi.img
 lib/hw/wbc_hal.default.so
-lib64/hw/sensors.hal.tof.so
 lib64/hw/wbc_hal.default.so
 vendor/lib/hw/sensors.msm8994.so
 vendor/lib64/hw/sensors.msm8994.so
