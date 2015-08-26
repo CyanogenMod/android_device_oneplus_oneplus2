@@ -211,6 +211,7 @@ vendor/lib64/egl/libQTapGLES.so
 
 # Audio
 bin/fm_qsoc_patches
+etc/firmware/tfa98xx.cnt
 vendor/bin/audioflacapp
 vendor/lib/libacdb-fts.so
 vendor/lib/libacdbloader.so
