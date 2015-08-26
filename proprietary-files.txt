@@ -41,7 +41,6 @@ vendor/lib/libbtnv.so
 
 # Camera
 bin/mm-qcamera-daemon
-lib64/hw/sensors.hal.tof.so
 lib64/libopcamera.so
 lib64/libopcameralib.so
 lib/hw/camera.msm8994.so
