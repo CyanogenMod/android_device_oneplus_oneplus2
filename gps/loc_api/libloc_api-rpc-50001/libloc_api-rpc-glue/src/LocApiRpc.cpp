@@ -799,7 +799,7 @@ void LocApiRpc::reportPosition(const rpc_loc_parsed_position_s_type *location_re
 
 void LocApiRpc::reportSv(const rpc_loc_gnss_info_s_type *gnss_report_ptr)
 {
-    GnssSvStatus     SvStatus = {0};
+    GpsSvStatus     SvStatus = {0};
     GpsLocationExtended locationExtended = {0};
     locationExtended.size = sizeof(locationExtended);
     int             num_svs_max = 0;
@@ -825,7 +825,7 @@ void LocApiRpc::reportSv(const rpc_loc_gnss_info_s_type *gnss_report_ptr)
             {
                 if (sv_info_ptr->system == RPC_LOC_SV_SYSTEM_GPS)
                 {
-                    SvStatus.sv_list[SvStatus.num_svs].size = sizeof(GpsSvInfo);
+                    SvStatus.sv_list[SvStatus.num_svs].size = sizeof(GpsSvStatus);
                     SvStatus.sv_list[SvStatus.num_svs].prn = sv_info_ptr->prn;
 
                     // We only have the data field to report gps eph and alm mask
@@ -844,7 +844,7 @@ void LocApiRpc::reportSv(const rpc_loc_gnss_info_s_type *gnss_report_ptr)
                     if ((sv_info_ptr->valid_mask & RPC_LOC_SV_INFO_VALID_PROCESS_STATUS) &&
                         (sv_info_ptr->process_status == RPC_LOC_SV_STATUS_TRACK))
                     {
-                        SvStatus.gps_used_in_fix_mask |= (1 << (sv_info_ptr->prn-1));
+                        SvStatus.used_in_fix_mask |= (1 << (sv_info_ptr->prn-1));
                     }
                 }
                 // SBAS: GPS RPN: 120-151,
@@ -857,12 +857,6 @@ void LocApiRpc::reportSv(const rpc_loc_gnss_info_s_type *gnss_report_ptr)
                 // In extended measurement report, we follow nmea standard, which is 65-96
                 else if (sv_info_ptr->system == RPC_LOC_SV_SYSTEM_GLONASS)
                 {
-                    if ((sv_info_ptr->valid_mask & RPC_LOC_SV_INFO_VALID_PROCESS_STATUS) &&
-                        (sv_info_ptr->process_status == RPC_LOC_SV_STATUS_TRACK))
-                    {
-                        SvStatus.glo_used_in_fix_mask |= (1 << (sv_info_ptr->prn-1));
-                    }
-
                     SvStatus.sv_list[SvStatus.num_svs].prn = sv_info_ptr->prn + (65-1);
                 }
                 // Unsupported SV system

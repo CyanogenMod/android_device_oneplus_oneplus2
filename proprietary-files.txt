@@ -421,6 +421,7 @@ etc/permissions/com.qualcomm.location.xml
 -lib/libloc_ds_api.so
 -priv-app/com.qualcomm.location/com.qualcomm.location.apk
 vendor/lib64/hw/flp.default.so
+vendor/lib64/libalarmservice_jni.so
 vendor/lib64/libgeofence.so
 vendor/lib64/libizat_core.so
 vendor/lib64/liblbs_core.so
@@ -431,6 +432,7 @@ vendor/lib64/libulp2.so
 vendor/lib64/libxtadapter.so
 vendor/lib64/libxtwifi_ulp_adaptor.so
 vendor/lib64/libxtwifi_zpp_adaptor.so
+vendor/lib/libalarmservice_jni.so
 vendor/lib/hw/flp.default.so
 vendor/lib/libgeofence.so
 vendor/lib/libizat_core.so

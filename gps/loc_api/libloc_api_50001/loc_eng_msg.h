@@ -105,11 +105,11 @@ struct LocEngReportPosition : public LocMsg {
 
 struct LocEngReportSv : public LocMsg {
     LocAdapterBase* mAdapter;
-    const GnssSvStatus mSvStatus;
+    const GpsSvStatus mSvStatus;
     const GpsLocationExtended mLocationExtended;
     const void* mSvExt;
     LocEngReportSv(LocAdapterBase* adapter,
-                   GnssSvStatus &sv,
+                   GpsSvStatus &sv,
                    GpsLocationExtended &locExtended,
                    void* svExtended);
     virtual void proc() const;

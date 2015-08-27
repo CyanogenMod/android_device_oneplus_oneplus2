@@ -79,7 +79,7 @@ void LocAdapterBase::
 }
 
 void LocAdapterBase::
-    reportSv(GnssSvStatus &svStatus,
+    reportSv(GpsSvStatus &svStatus,
              GpsLocationExtended &locationExtended,
              void* svExt)
 DEFAULT_IMPL()

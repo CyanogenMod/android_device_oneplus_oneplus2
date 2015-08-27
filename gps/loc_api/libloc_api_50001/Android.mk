@@ -101,7 +101,7 @@ LOCAL_C_INCLUDES:= \
 #LOCAL_SHARED_LIBRARIES += \
 #    libmdmdetect \
 #    libperipheral_client
-
+#
 #LOCAL_C_INCLUDES += \
 #    $(TARGET_OUT_HEADERS)/libmdmdetect/inc \
 #    $(TARGET_OUT_HEADERS)/libperipheralclient/inc

@@ -604,7 +604,7 @@ SIDE EFFECTS
 
 ===========================================================================*/
 void loc_eng_nmea_generate_sv(loc_eng_data_s_type *loc_eng_data_p,
-                              const GnssSvStatus &svStatus, const GpsLocationExtended &locationExtended)
+                              const GpsSvStatus &svStatus, const GpsLocationExtended &locationExtended)
 {
     ENTRY_LOG();
 
@@ -790,9 +790,7 @@ void loc_eng_nmea_generate_sv(loc_eng_data_s_type *loc_eng_data_p,
 
     }//if
 
-    if (svStatus.gps_used_in_fix_mask == 0 &&
-        svStatus.glo_used_in_fix_mask == 0 &&
-        svStatus.bds_used_in_fix_mask == 0)
+    if (svStatus.used_in_fix_mask == 0)
     {   // No sv used, so there will be no position report, so send
         // blank NMEA sentences
         strlcpy(sentence, "$GPGSA,A,1,,,,,,,,,,,,,,,", sizeof(sentence));
@@ -814,7 +812,7 @@ void loc_eng_nmea_generate_sv(loc_eng_data_s_type *loc_eng_data_p,
     else
     {   // cache the used in fix mask, as it will be needed to send $GPGSA
         // during the position report
-        loc_eng_data_p->sv_used_mask = svStatus.gps_used_in_fix_mask;
+        loc_eng_data_p->sv_used_mask = svStatus.used_in_fix_mask;
 
         // For RPC, the DOP are sent during sv report, so cache them
         // now to be sent during position report.
