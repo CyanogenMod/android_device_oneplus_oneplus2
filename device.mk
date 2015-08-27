@@ -233,7 +233,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin \
     $(LOCAL_PATH)/wifi/lowi.conf:system/etc/lowi.conf \
-    $(LOCAL_PATH)/wifi/msap.conf:system/etc/msap.conf
+    $(LOCAL_PATH)/wifi/msap.conf:system/etc/msap.conf \
+    $(LOCAL_PATH)/wifi/xtwifi.conf:system/etc/xtwifi.conf
 
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
