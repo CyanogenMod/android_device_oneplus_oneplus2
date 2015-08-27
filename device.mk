@@ -149,13 +149,13 @@ PRODUCT_PACKAGES += \
     setup_fs
 
 # GPS
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/flp.conf:system/etc/flp.conf \
-    $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
-    $(LOCAL_PATH)/configs/izat.conf:system/etc/izat.conf \
-    $(LOCAL_PATH)/configs/lowi.conf:system/etc/lowi.conf \
-    $(LOCAL_PATH)/configs/msap.conf:system/etc/msap.conf \
-    $(LOCAL_PATH)/configs/quipc.conf:system/etc/quipc.conf
+PRODUCT_PACKAGES += \
+    gps.msm8994 \
+    flp.conf \
+    gps.conf \
+    izat.conf \
+    quipc.conf \
+    sap.conf
 
 # IRQ
 PRODUCT_COPY_FILES += \
@@ -217,8 +217,7 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf \
-    $(LOCAL_PATH)/configs/fpc1021.conf:system/etc/fpc1021.conf \
-    $(LOCAL_PATH)/configs/sap.conf:system/etc/sap.conf
+    $(LOCAL_PATH)/configs/fpc1021.conf:system/etc/fpc1021.conf
 
 # Thermal config
 PRODUCT_COPY_FILES += \
@@ -232,7 +231,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/qca_cld/WCNSS_cfg.dat \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin \
+    $(LOCAL_PATH)/wifi/lowi.conf:system/etc/lowi.conf \
+    $(LOCAL_PATH)/wifi/msap.conf:system/etc/msap.conf
 
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
