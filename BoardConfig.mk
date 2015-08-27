@@ -160,7 +160,6 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 TARGET_USES_WCNSS_CTRL           := true
 TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_USES_WCNSS_MAC_ADDR_REV   := true
-CONFIG_EAP_PROXY                 := qmi
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
