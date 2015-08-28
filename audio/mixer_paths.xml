@@ -1450,7 +1450,7 @@
         <ctl name="DEC4 MUX" value="ADC3" />
         <ctl name="DEC4 Volume" value="84" />
         <ctl name="IIR1 INP1 MUX" value="DEC4" />
-       <ctl name="ADC3 Volume" value="13" />
+        <ctl name="ADC3 Volume" value="13" />
     </path>
 
 	<path name="adc4">
