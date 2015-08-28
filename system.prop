@@ -1,4 +1,4 @@
-# system.prop for plutonium
+# system.prop for OnePlus2
 
 # RIL
 ro.vendor.extension_library=libqti-perfd-client.so

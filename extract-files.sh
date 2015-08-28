@@ -2,7 +2,7 @@
 
 set -e
 
-export DEVICE=plutonium
+export DEVICE=oneplus2
 export VENDOR=oneplus
 
 function extract() {

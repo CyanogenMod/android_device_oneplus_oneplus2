@@ -1,2 +1,2 @@
-add_lunch_combo cm_plutonium-eng
-add_lunch_combo cm_plutonium-userdebug
+add_lunch_combo cm_oneplus2-eng
+add_lunch_combo cm_oneplus2-userdebug

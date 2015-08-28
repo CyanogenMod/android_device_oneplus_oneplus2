@@ -18,11 +18,11 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from bacon device
-$(call inherit-product, device/oneplus/plutonium/device.mk)
+# Inherit from oneplus2 device
+$(call inherit-product, device/oneplus/oneplus2/device.mk)
 
-PRODUCT_NAME := cm_plutonium
-PRODUCT_DEVICE := plutonium
+PRODUCT_NAME := cm_oneplus2
+PRODUCT_DEVICE := oneplus2
 PRODUCT_MANUFACTURER := OnePlus
-PRODUCT_MODEL := A2001
-PRODUCT_BRAND := oneplus
+PRODUCT_MODEL := ONE A2001
+PRODUCT_BRAND := OnePlus
