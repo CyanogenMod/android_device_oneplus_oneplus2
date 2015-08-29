@@ -180,6 +180,9 @@ TARGET_RECOVERY_FSTAB := device/oneplus/oneplus2/rootdir/etc/fstab.qcom
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
 
+# Time services
+BOARD_USES_QC_TIME_SERVICES := true
+
 # Webkit
 ENABLE_WEBGL := true
 TARGET_FORCE_CPU_UPLOAD := true
