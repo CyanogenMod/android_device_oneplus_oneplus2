@@ -57,7 +57,6 @@ PRODUCT_PACKAGES += \
 # RIL
 PRODUCT_PACKAGES += \
     libcnefeatureconfig
-    libril_shim
 
 # Permissions
 PRODUCT_COPY_FILES += \
