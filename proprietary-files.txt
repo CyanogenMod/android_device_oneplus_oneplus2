@@ -399,7 +399,6 @@ vendor/lib/libsmemlog.so
 bin/netmgrd
 bin/qmuxd
 bin/radish
-bin/rild
 bin/rfs_access
 bin/rmt_storage
 etc/permissions/qcnvitems.xml
@@ -407,7 +406,6 @@ etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar
 -framework/qcrilhook.jar
 lib64/libparam.so
-lib64/libril.so
 lib64/librmnetctl.so
 vendor/lib64/libcneapiclient.so
 vendor/lib64/libconfigdb.so

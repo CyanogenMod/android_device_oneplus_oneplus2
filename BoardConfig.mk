@@ -113,6 +113,9 @@ MAX_EGL_CACHE_SIZE := 2048*1024
 HAVE_ADRENO_SOURCE:= false
 OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 
+# Include path
+TARGET_SPECIFIC_HEADER_PATH := device/oneplus/oneplus2/include
+
 # Init
 TARGET_UNIFIED_DEVICE := true
 TARGET_INIT_VENDOR_LIB := libinit_msm
@@ -124,6 +127,9 @@ TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # Power
 TARGET_POWERHAL_VARIANT := qcom
+
+# RIL
+TARGET_RIL_VARIANT := caf
 
 # RPC
 TARGET_NO_RPC := true
