@@ -949,7 +949,7 @@ int main(int argc, char **argv)
 
     /* Calculate offset of first DTB block */
     dtb_offset = 12               + /* header */
-                 (40 * dtb_count) + /* DTB table entries */
+                 (52 * dtb_count) + /* DTB table entries */
                  4;                 /* end of table indicator */
 
     /* Round up to page size */
@@ -962,6 +962,8 @@ int main(int argc, char **argv)
          platform
          subtype
          soc rev
+         product-name
+         hw-ver
          pmic model0
          pmic model1
          pmic model2
@@ -974,6 +976,8 @@ int main(int argc, char **argv)
         wrote += write(out_fd, &chip->platform, sizeof(uint32_t));
         wrote += write(out_fd, &chip->subtype, sizeof(uint32_t));
         wrote += write(out_fd, &chip->revNum, sizeof(uint32_t));
+        wrote += write(out_fd, "14049\0\0\0", sizeof(uint64_t)); // FIXME: hardcode qcom,product-name
+        wrote += write(out_fd, &chip->hwVer, sizeof(uint32_t));
         wrote += write(out_fd, &chip->pmic_model[0], sizeof(uint32_t));
         wrote += write(out_fd, &chip->pmic_model[1], sizeof(uint32_t));
         wrote += write(out_fd, &chip->pmic_model[2], sizeof(uint32_t));
