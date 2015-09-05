@@ -20,7 +20,7 @@
 # definition file).
 #
 
-TARGET_OTA_ASSERT_DEVICE := OnePlus2
+TARGET_OTA_ASSERT_DEVICE := OnePlus2,oneplus2
 
 BOARD_VENDOR := oneplus
 
