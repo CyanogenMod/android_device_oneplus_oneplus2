@@ -58,6 +58,7 @@ ro.bluetooth.wipower=true
 # Camera
 camera.disable_zsl_mode=1
 persist.camera.cpp.duplication=false
+persist.camera.HAL3.enabled=0
 
 # CEC
 ro.hdmi.device_type=4
