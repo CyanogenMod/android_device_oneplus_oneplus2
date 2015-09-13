@@ -31,12 +31,16 @@ import init.qcom.usb.rc
 on early-init
     symlink /data/tombstones /tombstones
 
+    # Setup zram options
+    write /sys/block/zram0/comp_algorithm lz4
+
 on early-fs
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
 
     mount_all /fstab.qcom
+    swapon_all /fstab.qcom
 
 on init
     chmod 0644 /proc/cmdline
