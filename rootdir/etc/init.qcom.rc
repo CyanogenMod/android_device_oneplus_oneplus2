@@ -81,11 +81,29 @@ on init
     # Laser AF in factory mode
     chown system system /dev/stmvl6180_ranging
 
-    # for leds permission
+    # Leds permission
     chown system system /sys/class/leds/led:flash_0/brightness
     chown system system /sys/class/leds/led:flash_1/brightness
     chown system system /sys/class/leds/led:torch_0/brightness
     chown system system /sys/class/leds/led:torch_1/brightness
+
+    # Vibrator permissions
+    chown system system /sys/devices/virtual/timed_output/vibrator/vmax_mv
+    chmod 0644 /sys/devices/virtual/timed_output/vibrator/vmax_mv
+
+    # Display color calibration
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_cont
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_hue
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_invert
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_min
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_sat
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_val
+
+    # PCC Calibration
+    chown system system /sys/devices/virtual/graphics/fb0/rgb
+    chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
 
     # for product mode flashlight
     chown system system /proc/qcom_flash
@@ -103,7 +121,7 @@ on init
     chown system system /sys/class/leds/blue/blink
     chown system system /sys/class/leds/green/blink
 
-    # modify for RGB breath effect control support
+    # Modify for RGB breath effect control support
     chown system system /sys/class/leds/red/ramp_step_ms
     chown system system /sys/class/leds/blue/ramp_step_ms
     chown system system /sys/class/leds/green/ramp_step_ms
@@ -120,7 +138,7 @@ on init
     chmod 660 /sys/class/leds/green/duty_pcts
     chmod 660 /sys/class/leds/blue/duty_pcts
 
-    # add for enginerr app for sys/class selinux recon
+    # Add for enginerr app for sys/class selinux recon
     restorecon /sys/class/leds/keyboard-backlight/brightness
     restorecon /sys/class/leds/button-backlight/brightness
     restorecon /sys/class/leds/red/brightness
@@ -130,7 +148,7 @@ on init
     restorecon /sys/class/leds/green/blink
     restorecon /sys/class/leds/blue/blink
 
-    # wifi ftm test
+    # Wifi ftm test
     chown system system /system/bin/wifi_ftm
     chmod 0777  /system/bin/wifi_ftm
     chown system system /system/bin/wifi_single
@@ -144,7 +162,7 @@ on init
 
     write /sys/module/printk/parameters/print_wall_time 1
 
-    # access permission for secure touch
+    # Access permission for secure touch
     chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch_enable
     chmod 0440 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch
     chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/secure_touch_enable
