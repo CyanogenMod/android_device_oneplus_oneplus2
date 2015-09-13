@@ -9,8 +9,10 @@
 /dev/block/bootdevice/by-name/boot                    /boot             emmc    defaults                                                                                                        defaults
 /dev/block/bootdevice/by-name/recovery                /recovery         emmc    defaults                                                                                                        defaults
 /dev/block/bootdevice/by-name/system                  /system           ext4    ro,barrier=1,discard                                                                                            wait
-/dev/block/bootdevice/by-name/userdata                /data             ext4    nosuid,nodev,barrier=1,noauto_da_alloc,discard                                                                  wait,check,encryptable=footer,length=-16384
-/dev/block/bootdevice/by-name/cache                   /cache            ext4    nosuid,nodev,barrier=1                                                                                          wait
+/dev/block/bootdevice/by-name/userdata                /data             f2fs    rw,discard,nosuid,nodev,noatime,nodiratime,inline_xattr                                                         wait,check,encryptable=footer,length=-16384
+/dev/block/bootdevice/by-name/userdata                /data             ext4    nosuid,nodev,barrier=1,noauto_da_alloc,discard,errors=panic                                                     wait,check,encryptable=footer,length=-16384
+/dev/block/bootdevice/by-name/cache                   /cache            f2fs    rw,discard,nosuid,nodev,noatime,nodiratime,inline_xattr                                                         wait
+/dev/block/bootdevice/by-name/cache                   /cache            ext4    nosuid,nodev,barrier=1,noauto_da_alloc,discard,errors=panic                                                     wait
 /dev/block/bootdevice/by-name/persist                 /persist          ext4    nosuid,nodev,barrier=1                                                                                          wait
 /dev/block/bootdevice/by-name/modem                   /firmware         vfat    ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337                                                        wait
 /dev/block/bootdevice/by-name/bluetooth               /bt_firmware      vfat    ro,shortname=lower,uid=1002,gid=1002,dmask=222,fmask=333                                                        wait
