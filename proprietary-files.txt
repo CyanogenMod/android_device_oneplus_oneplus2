@@ -477,21 +477,24 @@ vendor/lib64/libxml.so
 
 # Sensors
 bin/sensors.qcom
-etc/fpc1021w160.bin
 etc/firmware/tp/14049/14049_FW_S1302.img
 etc/firmware/tp/14049/14049_FW_S3320_jdi.img
-lib/hw/wbc_hal.default.so
 lib64/hw/wbc_hal.default.so
-vendor/lib/hw/sensors.msm8994.so
-vendor/lib64/hw/sensors.msm8994.so
-vendor/lib/hw/sensors.oem.so
-vendor/lib64/hw/sensors.oem.so
+lib/hw/wbc_hal.default.so
 vendor/lib64/hw/activity_recognition.msm8994.so
 vendor/lib64/libsensor1.so
 vendor/lib64/libsensor_reg.so
+vendor/lib64/hw/sensors.msm8994.so
+vendor/lib64/hw/sensors.oem.so
 vendor/lib/hw/activity_recognition.msm8994.so
 vendor/lib/libsensor1.so
 vendor/lib/libsensor_reg.so
+vendor/lib/hw/sensors.msm8994.so
+vendor/lib/hw/sensors.oem.so
+
+# Lights
+lib64/hw/lights.msm8994.so
+lib/hw/lights.msm8994.so
 
 # TZBSP
 bin/qseecomd
@@ -539,6 +542,25 @@ vendor/lib/libmm-color-convertor.so
 vendor/lib/libmm-disp-apis.so
 vendor/lib/libmm-qdcm.so
 vendor/lib/libsd_sdk_display.so
+
+# Fingerprint
+bin/qfp-daemon
+etc/fpc1021w160.bin
+etc/firmware/fingerprints.b00
+etc/firmware/fingerprints.b03
+etc/firmware/fingerprints.b02
+etc/firmware/fingerprints.b01
+etc/firmware/fingerprints.mdt
+etc/firmware/fingerprintsecurity.b00
+etc/firmware/fingerprintsecurity.b01
+etc/firmware/fingerprintsecurity.b02
+etc/firmware/fingerprintsecurity.b03
+etc/firmware/fingerprintsecurity.mdt
+lib/hw/fingerprint.msm8994.so
+lib64/libqseecom_fingerprints_client.so
+lib/libqseecom_fingerprints_client.so
+vendor/lib64/libqfp-service.so
+vendor/lib/libfpcalgorithm.so
 
 # CNE / DPM
 lib64/libcnefeatureconfig.so

@@ -133,9 +133,6 @@ OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
-
 # Power
 TARGET_POWERHAL_VARIANT := qcom
 
