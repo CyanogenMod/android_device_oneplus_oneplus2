@@ -934,14 +934,14 @@
     </path>
 
     <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/25,add for 14049 voice call speaker -->
-    <path name="voice-call speaker">
+    <path name="voice-call voice-speaker">
     <!-- zhiguang.su@MultiMedia.AudioDrv,2015/4/28,add for EC ref -->
         <ctl name="VOC_EXT_EC MUX" value="QUAT_MI2S_TX" />
         <ctl name="QUAT_MI2S_RX_Voice Mixer CSVoice" value="1" />
         <ctl name="Voice_Tx Mixer SLIM_0_TX_Voice" value="1" />
     </path>
     <!-- guangyi.guo@MultiMedia.AudioDrv,2015/4/26,add for 14049 voice2 call speaker -->
-    <path name="voice2-call speaker">
+    <path name="voice2-call voice-speaker">
     <!-- zhiguang.su@MultiMedia.AudioDrv,2015/6/03,add for EC ref -->
         <ctl name="VOC_EXT_EC MUX" value="QUAT_MI2S_TX" />
         <ctl name="QUAT_MI2S_RX_Voice Mixer Voice2" value="1" />
