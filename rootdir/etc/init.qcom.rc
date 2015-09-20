@@ -550,13 +550,9 @@ on property:init.svc.bootanim=running
     write /sys/module/lpm_levels/system/a53/a53-l2-retention/idle_enabled 0
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
-    # Switch to NOOP and performance mode while booting
-    write /sys/block/mmcblk0/queue/scheduler noop
-
 on property:init.svc.bootanim=stopped
-    # Switch to fipos and balanced mode after boot for better UX
-    write /sys/block/mmcblk0/queue/scheduler fiops
     start usf-post-boot
+    setprop sys.io.scheduler bfq
 
 service dts_configurator /system/bin/dts_configurator
     class main
