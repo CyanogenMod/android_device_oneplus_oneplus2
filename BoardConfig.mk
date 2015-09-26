@@ -180,7 +180,10 @@ include device/qcom/sepolicy/sepolicy.mk
 BOARD_USES_QC_TIME_SERVICES := true
 
 # CM Hardware
-BOARD_HARDWARE_CLASS := device/oneplus/oneplus2/cmhw
+BOARD_USES_CYANOGEN_HARDWARE := true
+BOARD_HARDWARE_CLASS += \
+    device/oneplus/oneplus2/cmhw \
+    hardware/cyanogen/cmhw
 
 # inherit from the proprietary version
 -include vendor/oneplus/oneplus2/BoardConfigVendor.mk
