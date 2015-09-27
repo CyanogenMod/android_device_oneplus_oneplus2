@@ -78,6 +78,8 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference instanceof SwitchPreference)
+            return super.onPreferenceChange(preference, newValue);
         String file = null;
         int value = ((ListPreference) preference).findIndexOfValue((String) newValue);
         if (preference == mSliderTop) file = Constants.KEYCODE_SLIDER_TOP;
