@@ -114,6 +114,19 @@ on init
     chown root system /proc/touchpanel/flashlight_enable
     chmod 0660 /proc/touchpanel/flashlight_enable
 
+    # Buttons
+    chown root system /proc/s1302/key_rep
+    chmod 0660 /proc/s1302/key_rep
+
+    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_top
+    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_top
+
+    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_middle
+    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_middle
+
+    chown system system /sys/devices/soc.0/tri_state_key.82/keyCode_bottom
+    chmod 0660 /sys/devices/soc.0/tri_state_key.82/keyCode_bottom
+
     # PCC Calibration
     chown system system /sys/devices/virtual/graphics/fb0/rgb
     chmod 0660 /sys/devices/virtual/graphics/fb0/rgb

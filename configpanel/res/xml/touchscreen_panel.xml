@@ -36,4 +36,34 @@
         android:title="@string/touchscreen_flashlight_gesture_title"
         android:summary="@string/touchscreen_flashlight_gesture_summary" />
 
+    <PreferenceCategory
+        android:key="navigation_slider_category"
+        android:title="@string/notification_slider" >
+
+        <ListPreference
+            android:key="keycode_slider_top"
+            android:dialogTitle="@string/action"
+            android:title="@string/slider_top"
+            android:entries="@array/notification_slider_action_entries"
+            android:entryValues="@array/notification_slider_action_entries"
+            android:persistent="false" />
+
+        <ListPreference
+            android:key="keycode_slider_middle"
+            android:dialogTitle="@string/action"
+            android:title="@string/slider_middle"
+            android:entries="@array/notification_slider_action_entries"
+            android:entryValues="@array/notification_slider_action_entries"
+            android:persistent="false" />
+
+        <ListPreference
+            android:key="keycode_slider_bottom"
+            android:dialogTitle="@string/action"
+            android:title="@string/slider_bottom"
+            android:entries="@array/notification_slider_action_entries"
+            android:entryValues="@array/notification_slider_action_entries"
+            android:persistent="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

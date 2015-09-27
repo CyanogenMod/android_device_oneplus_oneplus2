@@ -29,4 +29,15 @@
     <string name="touchscreen_flashlight_gesture_summary">Draw a V to toggle flashlight</string>
     <string name="touchscreen_music_gesture_title">Music control</string>
     <string name="touchscreen_music_gesture_summary">Draw || with two fingers to play or pause music. Draw &lt; or &gt; for previous or next track</string>
+
+    <!-- Notification slider -->
+    <string name="notification_slider">Notification slider</string>
+    <string name="action">Action</string>
+
+    <string name="slider_top">Top slider</string>
+    <string name="slider_middle">Middle slider</string>
+    <string name="slider_bottom">Bottom slider</string>
+    <string name="mute">Mute</string>
+    <string name="do_not_disturb">Do not disturb</string>
+    <string name="normal">Normal</string>
 </resources>

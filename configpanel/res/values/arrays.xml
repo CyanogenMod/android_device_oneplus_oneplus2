@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="notification_slider_action_entries">
+        <item>@string/mute</item>
+        <item>@string/do_not_disturb</item>
+        <item>@string/normal</item>
+    </string-array>
+
+</resources>
