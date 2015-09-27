@@ -40,6 +40,7 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.provider.Settings.Global;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
@@ -130,7 +131,6 @@ public class KeyHandler implements DeviceKeyHandler {
         @Override
         public void handleMessage(Message msg) {
             KeyEvent event = (KeyEvent) msg.obj;
-            Log.i("KeyHandler", event.getScanCode() + "");
             switch (event.getScanCode()) {
             case GESTURE_CIRCLE_SCANCODE:
                 ensureKeyguardManager();
@@ -160,6 +160,18 @@ public class KeyHandler implements DeviceKeyHandler {
                 break;
             case GESTURE_GTR_SCANCODE:
                 dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT);
+                break;
+            case MODE_MUTE:
+                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
+                        Global.ZEN_MODE_NO_INTERRUPTIONS);
+                break;
+            case MODE_DO_NOT_DISTURB:
+                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
+                        Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
+                break;
+            case MODE_NORMAL:
+                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
+                        Global.ZEN_MODE_OFF);
                 break;
             }
         }
