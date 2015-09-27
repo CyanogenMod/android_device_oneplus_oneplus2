@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014-2015 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License"
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          android:sharedUserId="android.uid.system"
+          package="com.cyanogenmod.settings.device"
+          android:versionCode="5"
+          android:versionName="2.3" >
+
+    <uses-sdk
+        android:minSdkVersion="21" />
+
+    <application
+        android:icon="@mipmap/ic_launcher_settings"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Main">
+
+        <!-- stub to ensure its loaded - DO NOT REMOVE -->
+        <activity android:name=".KeyHandler"/>
+
+        <activity
+            android:name=".TouchscreenGestureSettings"
+            android:label="@string/screen_gestures_panel_title">
+            <intent-filter>
+                <action android:name="com.cyanogenmod.action.LAUNCH_TOUCHSCREEN_GESTURE_SETTINGS" />
+            </intent-filter>
+            <meta-data
+                android:name="com.android.settings.title"
+                android:resource="@string/screen_gestures_panel_title"/>
+            <meta-data
+                android:name="com.android.settings.summary"
+                android:resource="@string/screen_gestures_panel_summary"/>
+        </activity>
+
+        <receiver android:name=".Startup" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="cyanogenmod.intent.action.GESTURE_CAMERA" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
