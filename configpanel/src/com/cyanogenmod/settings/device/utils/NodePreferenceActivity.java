@@ -24,6 +24,8 @@ import android.preference.SwitchPreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import java.io.File;
+
 public class NodePreferenceActivity extends PreferenceActivity
         implements OnPreferenceChangeListener {
 
@@ -53,8 +55,12 @@ public class NodePreferenceActivity extends PreferenceActivity
             if (b == null) continue;
             b.setOnPreferenceChangeListener(this);
             String node = Constants.sNodePreferenceMap.get(pref);
-            String curNodeValue = FileUtils.readOneLine(node);
-            b.setChecked(curNodeValue.equals("1"));
+            if (new File(node).exists()) {
+                String curNodeValue = FileUtils.readOneLine(node);
+                b.setChecked(curNodeValue.equals("1"));
+            } else {
+                b.setEnabled(false);
+            }
         }
     }
 
