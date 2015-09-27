@@ -70,18 +70,9 @@
          The user is forbidden from setting the brightness below this level. -->
     <integer name="config_screenBrightnessSettingMinimum">2</integer>
 
-    <!-- Maximum screen brightness allowed by the power manager.
-         The user is forbidden from setting the brightness above this level. -->
-    <integer name="config_screenBrightnessSettingMaximum">255</integer>
-
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
     <integer name="config_screenBrightnessSettingDefault">60</integer>
-
-    <!-- Screen brightness used to dim the screen when the user activity
-         timeout expires.  May be less than the minimum allowed brightness setting
-         that can be set by the user. -->
-    <integer name="config_screenBrightnessDim">10</integer>
 
     <!-- Indicate whether closing the lid causes the device to go to sleep and opening
          it causes the device to wake up.
@@ -98,27 +89,6 @@
     <!-- Does the battery LED support multiple colors?
          Used to decide if the user can change the colors -->
     <bool name="config_multiColorBatteryLed">true</bool>
-
-    <!-- Indicate the device's Smart Cover coordinates.
-         If none are provided, then the feature will be disabled.
-         The array should contain 4 values, in pixels, (sample values provided):
-         Top      0
-         Left     100
-         Bottom   Top + 400
-         Right    Display Width - 100
-    -->
-    <!-- disabled until smart cover can be tested
-    <integer-array name="config_smartCoverWindowCoords">
-        <item>0</item>
-        <item>44</item>
-        <item>774</item>
-        <item>1036</item>
-    </integer-array>
-    -->
-
-    <!-- Base "touch slop" value used by ViewConfiguration as a
-         movement threshold where scrolling should begin. -->
-    <dimen name="config_viewConfigurationTouchSlop">8dp</dimen>
 
     <!-- Vibrator pattern for feedback about a long screen/key press -->
     <integer-array name="config_longPressVibePattern">
@@ -179,18 +149,29 @@
     -->
     <integer name="config_longPressOnHomeBehavior">3</integer>
 
-    <!-- If this is true, the screen will fade off. -->
-    <bool name="config_animateScreenLights">false</bool>
-
-    <!-- The duration (in milliseconds) that the radio will scan for a signal
-         when there's no network connection. If the scan doesn't timeout, use zero -->
-    <integer name="config_radioScanningTimeout">0</integer>
+    <!-- Control the behavior when the user long presses the app switch button.
+            0 - Nothing
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
+         This needs to match the constants in
+         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+    -->
+    <integer name="config_longPressOnAppSwitchBehavior">1</integer>
 
     <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
     <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
 
+    <!-- Boolean indicating associated scan are allowed -->
+    <bool translatable="false" name="config_wifi_framework_enable_associated_autojoin_scan">false</bool>
+
     <!-- Boolean indicating whether the wifi chipset has background scan support -->
-    <bool translatable="false" name="config_wifi_background_scan_support">true</bool>
+    <bool translatable="false" name="config_wifi_background_scan_support">false</bool>
+
+    <!-- Boolean indicating associated network selection is allowed -->
+    <bool translatable="false" name="config_wifi_framework_enable_associated_network_selection">true</bool>
 
     <!-- Wifi driver supports batched scan -->
     <bool translatable="false" name="config_wifi_batched_scan_supported">true</bool>
@@ -274,8 +255,6 @@
     <!-- reference volume index for music stream to limit headphone volume and display warning -->
     <integer name="config_safe_media_volume_index">9</integer>
 
-    <bool name="config_enableWifiDisplay">true</bool>
-
     <!-- Set to true to add links to Cell Broadcast app from Settings and MMS app. -->
     <bool name="config_cellBroadcastAppLinks">true</bool>
 
@@ -327,10 +306,6 @@
     <string name="config_perf_profile_prop">powerhal</string>
     <string name="config_perf_profile_default_entry">1</string>
 
-    <!-- Setting this true forces the headset jack switches to use the/dev/input/event subsystem
-         rather than the uevent framework. -->
-    <bool name="config_useDevInputEventForAudioJack">true</bool>
-
     <!-- Indicate whether closing the lid causes the device to go to sleep and opening
          it causes the device to wake up.
          The default is false. -->
@@ -346,8 +321,16 @@
     <!-- Is the device capable of hot swapping an ICC Card -->
     <bool name="config_hotswapCapable">true</bool>
 
-    <!-- Flag specifying whether VoLTE & VT is availasble on device -->
-    <bool name="config_device_volte_available">false</bool>
+    <!-- Flag specifying whether VoLTE & VT is available on device -->
+    <bool name="config_device_volte_available">true</bool>
+
+    <!-- Flag specifying whether VoLTE should be available for carrier: independent of
+         carrier provisioning. If false: hard disabled. If true: then depends on carrier
+         provisioning, availability etc -->
+    <bool name="config_carrier_volte_available">true</bool>
+
+    <!-- Flag specifying whether VoLTE TTY is supported -->
+    <bool name="config_carrier_volte_tty_supported">false</bool>
 
     <!-- Enable the option to check proximity sensor when deciding whether to
          turn the screen on
@@ -370,5 +353,47 @@
     <!-- Full qualified name of the class that implements
          com.android.internal.os.DeviceKeyHandler interface. -->
     <string name="config_deviceKeyHandlerClass" translatable="false">com.cyanogenmod.settings.device.KeyHandler</string>
+
+    <!-- Screen brightness used to dim the screen while dozing in a very low power state.
+         May be less than the minimum allowed brightness setting
+         that can be set by the user. -->
+    <integer name="config_screenBrightnessDoze">20</integer>
+
+    <!-- If true, the doze component is not started until after the screen has been
+          turned off and the screen off animation has been performed. -->
+    <bool name="config_dozeAfterScreenOff">true</bool>
+
+    <!-- Power Management: Specifies whether to decouple the auto-suspend state of the
+         device from the display on/off state.
+         When false, autosuspend_disable() will be called before the display is turned on
+         and autosuspend_enable() will be called after the display is turned off.
+         This mode provides best compatibility for devices using legacy power management
+         features such as early suspend / late resume.
+         When true, autosuspend_display() and autosuspend_enable() will be called
+         independently of whether the display is being turned on or off.  This mode
+         enables the power manager to suspend the application processor while the
+         display is on.
+         This resource should be set to "true" when a doze component has been specified
+         to maximize power savings but not all devices support it.
+         Refer to autosuspend.h for details.
+    -->
+    <bool name="config_powerDecoupleAutoSuspendModeFromDisplay">true</bool>
+
+    <!-- Power Management: Specifies whether to decouple the interactive state of the
+         device from the display on/off state.
+         When false, setInteractive(..., true) will be called before the display is turned on
+         and setInteractive(..., false) will be called after the display is turned off.
+         This mode provides best compatibility for devices that expect the interactive
+         state to be tied to the display state.
+         When true, setInteractive(...) will be called independently of whether the display
+         is being turned on or off.  This mode enables the power manager to reduce
+         clocks and disable the touch controller while the display is on.
+         This resource should be set to "true" when a doze component has been specified
+         to maximize power savings but not all devices support it.
+         Refer to power.h for details.
+    -->
+    <bool name="config_powerDecoupleInteractiveModeFromDisplay">true</bool>
+
+    <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
 
 </resources>
