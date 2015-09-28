@@ -53,8 +53,8 @@ public class Startup extends BroadcastReceiver {
                 }
 
                 int keyCode_slider_top = Constants.getPreferenceInteger(context, "keycode_slider_top", 0);
-                int keyCode_slider_middle = Constants.getPreferenceInteger(context, "keycode_slider_top", 1);
-                int keyCode_slider_bottom = Constants.getPreferenceInteger(context, "keycode_slider_top", 2);
+                int keyCode_slider_middle = Constants.getPreferenceInteger(context, "keycode_slider_middle", 1);
+                int keyCode_slider_bottom = Constants.getPreferenceInteger(context, "keycode_slider_bottom", 2);
 
                 FileUtils.writeLine(Constants.KEYCODE_SLIDER_TOP, String.valueOf(keyCode_slider_top + 600));
                 FileUtils.writeLine(Constants.KEYCODE_SLIDER_MIDDLE, String.valueOf(keyCode_slider_middle + 600));
