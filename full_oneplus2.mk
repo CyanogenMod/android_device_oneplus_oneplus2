@@ -24,5 +24,5 @@ $(call inherit-product, device/oneplus/oneplus2/device.mk)
 PRODUCT_NAME := cm_oneplus2
 PRODUCT_DEVICE := oneplus2
 PRODUCT_MANUFACTURER := OnePlus
-PRODUCT_MODEL := ONE A2001
+PRODUCT_MODEL := oneplus2
 PRODUCT_BRAND := OnePlus
