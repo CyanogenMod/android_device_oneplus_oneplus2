@@ -15,6 +15,8 @@
 #
 
 LOCAL_PATH := $(call my-dir)
+
+ifeq ($(TARGET_DEVICE),oneplus2)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
@@ -22,3 +24,4 @@ LOCAL_CERTIFICATE := platform
 LOCAL_PACKAGE_NAME := ConfigPanel
 
 include $(BUILD_PACKAGE)
+endif
