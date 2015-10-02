@@ -61,6 +61,11 @@ on init
     symlink /storage/usbdisk /usbdisk
     symlink /storage/usbdisk /mnt/usbdisk
 
+    # Add for fpc fingerprints permission
+    chmod -h 777 /dev/qseecom
+    chown system system /dev/fpc1020
+    chmod 0660 /dev/fpc1020
+
     chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
     chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
     chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
