@@ -18,8 +18,6 @@
 #define FPC_HW_RESET			_IOW('K', 0, int)
 #define FPC_GET_INTERRUPT		_IOR('K', 1, int)
 #define FPC_ABORT			_IOR('K', 6, int)
-#define FPC_ENABLE_SPI_CLK		_IOR('K', 7, int)
-#define FPC_DISABLE_SPI_CLK		_IOR('K', 8, int)
 
 #endif // ANDROID_HARDWARE_FPC1020_IOCTL_H
 
