@@ -286,16 +286,10 @@ int Fpc1020Sensor::scanForTouchDown()
         return 0;
     }
 
-    if (ioctl(mFpcFd, FPC_DISABLE_SPI_CLK) < 0) {
-        ret = -errno;
-        ALOGE("Failed disabling SPI clock: %d", ret);
-        return ret;
-    }
     if (ioctl(mFpcFd, FPC_GET_INTERRUPT, &result) < 0) {
         ret = -errno;
         ALOGE("Failed waiting for interrupt: %d", ret);
     }
-    ioctl(mFpcFd, FPC_ENABLE_SPI_CLK);
 
     return ret;
 }
