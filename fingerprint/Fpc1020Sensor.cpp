@@ -303,19 +303,27 @@ int Fpc1020Sensor::FingerprintThread::waitForTouchDown()
     // First wait for the sensor to become free ...
     do {
         ret = mSensor->sendCommand(CLIENT_CMD_WAIT_FOR_TOUCH_UP);
-        if (ret) {
-            return ret;
+        if (exitPending()) {
+            ret = -EINTR;
         }
-    } while (resp->result != 0);
+    } while (ret == 0 && resp->result != 0);
+
+    if (ret) {
+        ALOGV("Waiting for touch down failed: %d", ret);
+        return ret;
+    }
 
     // ... then wait for the next touch
     do {
         ret = mSensor->scanForTouchDown();
         if (exitPending()) {
-            return -EINTR;
+            ret = -EINTR;
         }
     } while (ret == 0 && resp->result != 0);
 
+    if (ret) {
+        ALOGV("Waiting for touch up failed: %d", ret);
+    }
     return ret;
 }
 
