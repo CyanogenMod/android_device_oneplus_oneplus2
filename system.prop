@@ -109,5 +109,4 @@ ro.qc.sdk.camera.facialproc=false
 persist.timed.enable=true
 
 # USB
-persist.sys.isUsbOtgEnabled=true
 persist.sys.usb.config=mtp
