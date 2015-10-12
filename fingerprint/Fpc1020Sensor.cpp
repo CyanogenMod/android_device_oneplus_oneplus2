@@ -384,7 +384,7 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
         } else if (resp->result == 0) {
             stepsRemaining--;
             // While empiric evidence shows the number of enrollment steps is
-            // always 10, the protocol doesn't provide any guarantee for it.
+            // always 20, the protocol doesn't provide any guarantee for it.
             // Safeguard against that case.
             if (stepsRemaining <= 0) {
                 stepsRemaining = 1;
