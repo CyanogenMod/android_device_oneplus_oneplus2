@@ -58,7 +58,7 @@ class Fpc1020Sensor {
         int removeId(uint32_t id);
 
     public:
-        static const int EnrollmentStepCount = 10;
+        static const int EnrollmentStepCount = 20;
 
     private:
         bool isIdle() {
