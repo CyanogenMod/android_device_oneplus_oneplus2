@@ -577,23 +577,11 @@ vendor/lib/libmm-qdcm.so
 vendor/lib/libsd_sdk_display.so
 
 # Fingerprint
-bin/qfp-daemon
-etc/fpc1021w160.bin
 etc/firmware/fingerprints.b00
 etc/firmware/fingerprints.b03
 etc/firmware/fingerprints.b02
 etc/firmware/fingerprints.b01
 etc/firmware/fingerprints.mdt
-etc/firmware/fingerprintsecurity.b00
-etc/firmware/fingerprintsecurity.b01
-etc/firmware/fingerprintsecurity.b02
-etc/firmware/fingerprintsecurity.b03
-etc/firmware/fingerprintsecurity.mdt
-lib/hw/fingerprint.msm8994.so
-lib64/libqseecom_fingerprints_client.so
-lib/libqseecom_fingerprints_client.so
-vendor/lib64/libqfp-service.so
-vendor/lib/libfpcalgorithm.so
 
 # CNE / DPM
 lib64/libcnefeatureconfig.so
