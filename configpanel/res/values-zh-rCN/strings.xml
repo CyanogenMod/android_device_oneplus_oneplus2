@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013-2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">高级设置</string>
+
+    <!-- Gesture shortcuts -->
+    <string name="screen_gestures_panel_title">快捷手势</string>
+    <string name="screen_gestures_panel_summary">在屏幕关闭时使用手势</string>
+
+    <string name="key_swap_title">按键切换</string>
+    <string name="key_swap_summary">切换多任务和返回键按键位置</string>
+    <string name="touchscreen_camera_gesture_title">相机</string>
+    <string name="touchscreen_camera_gesture_summary">画一个圆圈以启动相机</string>
+    <string name="touchscreen_flashlight_gesture_title">手电筒</string>
+    <string name="touchscreen_flashlight_gesture_summary">画 \'V\' 以启动手电筒</string>
+    <string name="touchscreen_music_gesture_title">音乐</string>
+    <string name="touchscreen_music_gesture_summary">使用手势控制音乐播放 \n • 两个手指垂直滑动来播放或暂停\n • 向左划切换到上一首\n • 向右划切换到下一首</string>
+
+    <!-- Notification slider -->
+    <string name="notification_slider">三段式</string>
+    <string name="action">动作</string>
+
+    <string name="slider_top">上</string>
+    <string name="slider_middle">中</string>
+    <string name="slider_bottom">下</string>
+    <string name="mute">静音模式</string>
+    <string name="do_not_disturb">勿扰模式</string>
+    <string name="normal">响铃模式</string>
+</resources>
