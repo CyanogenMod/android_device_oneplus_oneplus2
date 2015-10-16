@@ -201,6 +201,9 @@ on init
     write /proc/sys/vm/dirty_ratio 15
     write /proc/sys/vm/dirty_background_ratio 1
 
+    # OTG
+    write /proc/otg_config/otg_switch 1
+
     # Modify for drv2605 support
     chmod 0666 /dev/drv2605
     chown system system /dev/drv2605
