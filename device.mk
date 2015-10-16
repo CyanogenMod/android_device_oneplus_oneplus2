@@ -204,6 +204,10 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_BOOT_JARS += qcmediaplayer
 
+# Modules
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/modules/core_ctl.ko:system/lib/modules/core_ctl.ko \
+
 # Power
 PRODUCT_PACKAGES += \
     power.msm8994
