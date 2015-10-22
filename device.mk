@@ -240,9 +240,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/xtwifi.conf:system/etc/xtwifi.conf
 
 PRODUCT_PACKAGES += \
-    dhcpcd.conf \
+    libqsap_sdk \
+    libQWiFiSoftApCfg \
     libwpa_client \
     hostapd \
+    dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf \
     wpa_supplicant_overlay.conf \
