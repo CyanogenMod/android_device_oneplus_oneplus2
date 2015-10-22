@@ -351,14 +351,20 @@ on post-fs-data
     mkdir /persist/data/sfs 0700 system system
     mkdir /persist/data/tz 0700 system system
     mkdir /data/usf 0700 system system
+    mkdir /data/misc/sfs/sfs 0700 system system
+    mkdir /data/misc/sfs/tz 0700 system system
     mkdir /data/misc/dts 0770 media audio
+    mkdir /data/misc/fp 0700 system system
+    mkdir /data/oemnvitems 0771 radio radio
 
     # Create directory for TZ Apps
     mkdir /data/misc/qsee 0770 system system
 
     # We will remap this as /mnt/sdcard with the sdcard fuse tool
-    # Create folder for mm-qcamera-daemon
     mkdir /data/misc/camera 0770 camera camera
+
+    # Create folder for mm-qcamera-daemon
+    mkdir /data/camera 0770 media camera
 
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
@@ -459,9 +465,6 @@ on post-fs-data
     chmod 2755 /data/misc/perfd
     mkdir /data/system/perfd 0770 root system
     chmod 2770 /data/system/perfd
-
-    # OEM
-    mkdir /data/oemnvitems  0771 radio radio
 
 # start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
@@ -682,9 +685,62 @@ service qcom-c_main-sh /system/bin/sh /init.class_main.sh
     user root
     oneshot
 
+service ppd /system/bin/mm-pp-daemon
+    class late_start
+    disabled
+    user system
+    socket pps stream 0660 system system
+    group system graphics
+
+on property:init.svc.surfaceflinger=stopped
+    stop ppd
+
+on property:init.svc.surfaceflinger=running
+    start ppd
+
+service wcnss-service /system/bin/wcnss_service
+    class late_start
+    user system
+    group system wifi radio
+    oneshot
+
+service imsqmidaemon /system/bin/imsqmidaemon
+    class main
+    user system
+    socket ims_qmid stream 0660 system radio
+    group radio net_raw log qcom_diag
+
+service imsdatadaemon /system/bin/imsdatadaemon
+    class main
+    user system
+    socket ims_datad stream 0660 system radio
+    group system wifi radio inet net_raw log qcom_diag net_admin
+    disabled
+
+on property:sys.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon
+
+service ims_rtp_daemon /system/bin/ims_rtp_daemon
+    class main
+    user system
+    socket ims_rtpd stream 0660 system radio
+    group radio net_raw diag qcom_diag log
+    disabled
+
+service imscmservice /system/bin/imscmservice
+    class main
+    user system
+    group radio net_raw diag qcom_diag log
+    disabled
+
+on property:sys.ims.DATA_DAEMON_STATUS=1
+    start ims_rtp_daemon
+    start imscmservice
+
 on property:vold.decrypt=trigger_restart_framework
     start qcom-c_main-sh
     start config_bluetooth
+    start wcnss-service
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
@@ -978,10 +1034,6 @@ service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     disabled
     oneshot
 
-on property:crypto.driver.load=1
-     insmod /system/lib/modules/qce.ko
-     insmod /system/lib/modules/qcedev.ko
-
 service drmdiag /system/bin/drmdiagapp
     class late_start
      user root
@@ -1157,23 +1209,12 @@ service qlogd /system/xbin/qlogd
     socket qlogd stream 0662 system system
     class main
     disabled
+
 on property:persist.sys.qlogd=1
     start qlogd
+
 on property:persist.sys.qlogd=0
     stop qlogd
-
-service rootagent /system/bin/sh /system/etc/init.qcom.rootagent.sh
-    disabled
-    oneshot
-on property:persist.sys.rootagent=1
-    start rootagent
-on property:persist.sys.rootagent=0
-    stop rootagent
-
-service vm_bms /system/bin/vm_bms
-    user root
-    group root
-    disabled
 
 service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     socket msm_irqbalance seqpacket 660 root system

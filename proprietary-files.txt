@@ -17,7 +17,10 @@ vendor/lib/libbtnv.so
 
 # QMI
 bin/ATFWD-daemon
+bin/ims_rtp_daemon
 bin/imscmservice
+bin/imsdatadaemon
+bin/imsqmidaemon
 bin/irsc_util
 bin/pm-proxy
 bin/pm-service
