@@ -25,15 +25,15 @@ import com.cyanogenmod.settings.device.utils.FileUtils;
 import com.cyanogenmod.settings.device.utils.NodePreferenceActivity;
 
 import android.os.Bundle;
-import android.os.SystemProperties;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
+import android.provider.Settings;
 
 public class TouchscreenGestureSettings extends NodePreferenceActivity {
 
     private static final String NAV_SWITCH_NODE = "/proc/nav_switch";
-    private static final String PROP_HAPTIC_FEEDBACK = "persist.gestures.haptic";
+    private static final String KEY_HAPTIC_FEEDBACK = "touchscreen_gesture_haptic_feedback";
 
     private ListPreference mSliderTop;
     private ListPreference mSliderMiddle;
@@ -67,8 +67,7 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
         setSummary(mSliderMiddle, Constants.KEYCODE_SLIDER_MIDDLE);
         setSummary(mSliderBottom, Constants.KEYCODE_SLIDER_BOTTOM);
 
-        mHapticFeedback = (SwitchPreference) findPreference("touchscreen_haptic_feedback");
-        mHapticFeedback.setChecked(SystemProperties.getBoolean(PROP_HAPTIC_FEEDBACK, true));
+        mHapticFeedback = (SwitchPreference) findPreference(KEY_HAPTIC_FEEDBACK);
         mHapticFeedback.setOnPreferenceChangeListener(this);
     }
 
@@ -87,6 +86,7 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mHapticFeedback) {
             final boolean value = (Boolean) newValue;
+            Settings.System.putInt(getContentResolver(), KEY_HAPTIC_FEEDBACK, value ? 1 : 0);
             return true;
         }
 
@@ -117,6 +117,8 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
         if (!ScreenType.isTablet(this)) {
             getListView().setPadding(0, 0, 0, 0);
         }
-    }
 
+        mHapticFeedback.setChecked(
+                Settings.System.getInt(getContentResolver(), KEY_HAPTIC_FEEDBACK, 1) != 0);
+    }
 }

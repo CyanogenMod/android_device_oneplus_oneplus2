@@ -69,7 +69,8 @@
         android:title="@string/touchscreen_extras">
 
         <SwitchPreference
-            android:key="touchscreen_haptic_feedback"
+            android:key="touchscreen_gesture_haptic_feedback"
+            android:persistent="false"
             android:title="@string/haptic_feedback"
             android:summary="@string/haptic_feedback_summary" />
 

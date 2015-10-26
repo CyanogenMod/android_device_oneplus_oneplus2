@@ -37,7 +37,6 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.MediaStore;
@@ -55,7 +54,8 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final String TAG = KeyHandler.class.getSimpleName();
     private static final int GESTURE_REQUEST = 1;
 
-    private static final String PROP_HAPTIC_FEEDBACK = "persist.gestures.haptic";
+    private static final String KEY_GESTURE_HAPTIC_FEEDBACK =
+            "touchscreen_gesture_haptic_feedback";
 
     private static final String ACTION_DISMISS_KEYGUARD =
             "com.android.keyguard.action.DISMISS_KEYGUARD_SECURELY";
@@ -278,7 +278,13 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     private void doHapticFeedback() {
-        if (mVibrator == null || !SystemProperties.getBoolean(PROP_HAPTIC_FEEDBACK, true)) return;
-        mVibrator.vibrate(50);
+        if (mVibrator == null) {
+            return;
+        }
+        boolean enabled = Settings.System.getInt(mContext.getContentResolver(),
+                KEY_GESTURE_HAPTIC_FEEDBACK, 1) != 0;
+        if (enabled) {
+            mVibrator.vibrate(50);
+        }
     }
 }
