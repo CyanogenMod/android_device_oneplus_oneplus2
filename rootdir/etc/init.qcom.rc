@@ -30,9 +30,6 @@ import init.qcom.usb.rc
 on early-init
     symlink /data/tombstones /tombstones
     mount debugfs debugfs /sys/kernel/debug
-    write /sys/block/mmcblk0/queue/scheduler noop
-    write /sys/block/mmcblk0/bdi/read_ahead_kb 512
-    write /sys/block/mmcblk1/bdi/read_ahead_kb 512
 
 on early-fs
     mount_all /fstab.qcom
@@ -584,7 +581,6 @@ on property:init.svc.bootanim=running
 
 on property:init.svc.bootanim=stopped
     start usf-post-boot
-    setprop sys.io.scheduler bfq
 
 service dts_configurator /system/bin/dts_configurator
     class main
