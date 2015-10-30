@@ -93,10 +93,12 @@ public class KeyHandler implements DeviceKeyHandler {
     private TorchManager mTorchManager;
     private Sensor mProximitySensor;
     private Vibrator mVibrator;
-    WakeLock mProximityWakeLock;
-    WakeLock mGestureWakeLock;
+    private WakeLock mProximityWakeLock;
+    private WakeLock mGestureWakeLock;
     private int mProximityTimeOut;
     private boolean mProximityWakeSupported;
+
+    private boolean mNotificationSliderVibrate;
 
     public KeyHandler(Context context) {
         mContext = context;
@@ -141,7 +143,8 @@ public class KeyHandler implements DeviceKeyHandler {
         @Override
         public void handleMessage(Message msg) {
             KeyEvent event = (KeyEvent) msg.obj;
-            switch (event.getScanCode()) {
+            int scanCode = event.getScanCode();
+            switch (scanCode) {
             case GESTURE_CIRCLE_SCANCODE:
                 ensureKeyguardManager();
                 final String action;
@@ -177,19 +180,20 @@ public class KeyHandler implements DeviceKeyHandler {
                 doHapticFeedback();
                 break;
             case MODE_MUTE:
-                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
-                        Global.ZEN_MODE_NO_INTERRUPTIONS);
-                doHapticFeedback();
-                break;
             case MODE_DO_NOT_DISTURB:
-                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
-                        Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
-                doHapticFeedback();
-                break;
             case MODE_NORMAL:
+                int zenMode = Global.ZEN_MODE_OFF;
+                if (scanCode == MODE_MUTE) {
+                    zenMode = Global.ZEN_MODE_NO_INTERRUPTIONS;
+                } else if (scanCode == MODE_DO_NOT_DISTURB) {
+                    zenMode = Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
+                }
                 Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE,
-                        Global.ZEN_MODE_OFF);
-                doHapticFeedback();
+                        zenMode);
+                if (mNotificationSliderVibrate) {
+                    doHapticFeedback();
+                }
+                mNotificationSliderVibrate = true;
                 break;
             }
         }
