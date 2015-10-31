@@ -1,0 +1,3 @@
+genfscon proc /qcom_flash   u:object_r:cam_proc:s0
+genfscon proc /laser_info   u:object_r:cam_proc:s0
+genfscon proc /touchpanel   u:object_r:proc_touchpanel:s0

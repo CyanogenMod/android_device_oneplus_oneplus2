@@ -1,0 +1,7 @@
+type proc_touchpanel, fs_type;
+type cam_proc, file_type;
+type cam_sysfs, sysfs_type;
+type fingerprint_data, file_type;
+type fingerprint_device, dev_type;
+type fingerprint_sysfs, sysfs_type;
+type nv_data_file, file_type;
