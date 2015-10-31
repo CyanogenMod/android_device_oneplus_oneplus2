@@ -30,6 +30,7 @@
 #include <hardware/gps.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 extern const GpsInterface* get_gps_interface();
 
