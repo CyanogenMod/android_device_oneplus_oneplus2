@@ -121,7 +121,8 @@ typedef enum {
     RIL_E_SS_MODIFIED_TO_DIAL = 24,             /* SS request modified to DIAL */
     RIL_E_SS_MODIFIED_TO_USSD = 25,             /* SS request modified to USSD */
     RIL_E_SUBSCRIPTION_NOT_SUPPORTED = 26,      /* Subscription not supported by RIL */
-    RIL_E_SS_MODIFIED_TO_SS = 27                /* SS request modified to different SS request */
+    RIL_E_SS_MODIFIED_TO_SS = 27,               /* SS request modified to different SS request */
+    RIL_E_LCE_NOT_SUPPORTED = 36                /* LCE service not supported(36 in RILConstants.java) */
 
 
 } RIL_Errno;
@@ -171,7 +172,8 @@ typedef enum {
     RADIO_TECH_HSPAP = 15, // HSPA+
     RADIO_TECH_GSM = 16, // Only supports voice
     RADIO_TECH_TD_SCDMA = 17,
-    RADIO_TECH_IWLAN = 18
+    RADIO_TECH_IWLAN = 18,
+    RADIO_TECH_LTE_CA = 19
 } RIL_RadioTechnology;
 
 typedef enum {
@@ -193,6 +195,7 @@ typedef enum {
     RAF_HSPAP = (1 << RADIO_TECH_HSPAP),
     RAF_GSM = (1 << RADIO_TECH_GSM),
     RAF_TD_SCDMA = (1 << RADIO_TECH_TD_SCDMA),
+    RAF_LTE_CA = (1 << RADIO_TECH_LTE_CA)
 } RIL_RadioAccessFamily;
 
 typedef enum {
@@ -245,7 +248,17 @@ typedef enum {
     PREF_NET_TYPE_LTE_GSM_WCDMA            = 9, /* LTE, GSM/WCDMA */
     PREF_NET_TYPE_LTE_CMDA_EVDO_GSM_WCDMA  = 10, /* LTE, CDMA, EvDo, GSM/WCDMA */
     PREF_NET_TYPE_LTE_ONLY                 = 11, /* LTE only */
-    PREF_NET_TYPE_LTE_WCDMA                = 12  /* LTE/WCDMA */
+    PREF_NET_TYPE_LTE_WCDMA                = 12,  /* LTE/WCDMA */
+    PREF_NET_TYPE_TD_SCDMA_ONLY            = 13, /* TD-SCDMA only */
+    PREF_NET_TYPE_TD_SCDMA_WCDMA           = 14, /* TD-SCDMA and WCDMA */
+    PREF_NET_TYPE_TD_SCDMA_LTE             = 15, /* TD-SCDMA and LTE */
+    PREF_NET_TYPE_TD_SCDMA_GSM             = 16, /* TD-SCDMA and GSM */
+    PREF_NET_TYPE_TD_SCDMA_GSM_LTE         = 17, /* TD-SCDMA,GSM and LTE */
+    PREF_NET_TYPE_TD_SCDMA_GSM_WCDMA       = 18, /* TD-SCDMA, GSM/WCDMA */
+    PREF_NET_TYPE_TD_SCDMA_WCDMA_LTE       = 19, /* TD-SCDMA, WCDMA and LTE */
+    PREF_NET_TYPE_TD_SCDMA_GSM_WCDMA_LTE   = 20, /* TD-SCDMA, GSM/WCDMA and LTE */
+    PREF_NET_TYPE_TD_SCDMA_GSM_WCDMA_CDMA_EVDO_AUTO  = 21, /* TD-SCDMA, GSM/WCDMA, CDMA and EvDo */
+    PREF_NET_TYPE_TD_SCDMA_LTE_CDMA_EVDO_GSM_WCDMA   = 22  /* TD-SCDMA, LTE, CDMA, EvDo GSM/WCDMA */
 } RIL_PreferredNetworkType;
 
 /* Source for cdma subscription */
@@ -578,6 +591,27 @@ typedef struct {
                         */
 } RIL_NeighboringCell;
 
+typedef struct {
+  char lce_status;                 /* LCE service status:
+                                    * -1 = not supported;
+                                    * 0 = stopped;
+                                    * 1 = active.
+                                    */
+  unsigned int actual_interval_ms; /* actual LCE reporting interval,
+                                    * meaningful only if LCEStatus = 1.
+                                    */
+} RIL_LceStatusInfo;
+
+typedef struct {
+  unsigned int last_hop_capacity_kbps; /* last-hop cellular capacity: kilobits/second. */
+  unsigned char confidence_level;      /* capacity estimate confidence: 0-100 */
+  unsigned char lce_suspended;         /* LCE report going to be suspended? (e.g., radio
+                                        * moves to inactive state or network type change)
+                                        * 1 = suspended;
+                                        * 0 = not suspended.
+                                        */
+} RIL_LceDataInfo;
+
 /* See RIL_REQUEST_LAST_CALL_FAIL_CAUSE */
 typedef enum {
     CALL_FAIL_UNOBTAINABLE_NUMBER = 1,
@@ -649,10 +683,16 @@ typedef enum {
     CALL_FAIL_ERROR_UNSPECIFIED = 0xffff
 } RIL_LastCallFailCause;
 
+typedef struct {
+  RIL_LastCallFailCause cause_code;
+  char *                vendor_cause;
+} RIL_LastCallFailCauseInfo;
+
 /* See RIL_REQUEST_LAST_DATA_CALL_FAIL_CAUSE */
 typedef enum {
     PDP_FAIL_NONE = 0, /* No error, connection ok */
 
+    PDP_FAIL_ACTIVATION_NOT_ALLOWED  = 0x07,
     /* an integer cause code defined in TS 24.008
        section 6.1.3.1.3 or TS 24.301 Release 8+ Annex B.
        If the implementation does not have access to the exact cause codes,
@@ -1444,11 +1484,23 @@ typedef struct {
     int enabled;
 } RIL_DataProfileInfo;
 
-/* Data Call Profile: Simple IP User Profile Parameters*/
+/* Tx Power Levels */
+#define RIL_NUM_TX_POWER_LEVELS     5
+
 typedef struct {
-  int  profileId;
-  int  priority;       /* priority. [0..255], 0 - highest */
-} RIL_DataCallProfileInfo;
+
+  /* period (in ms) when modem is power collapsed */
+  uint32_t sleep_mode_time_ms;
+
+  /* period (in ms) when modem is awake and in idle mode*/
+  uint32_t idle_mode_time_ms;
+
+  /* period (in ms) for which Tx is active */
+  uint32_t tx_mode_time_ms[RIL_NUM_TX_POWER_LEVELS];
+
+  /* period (in ms) for which Rx is active */
+  uint32_t rx_mode_time_ms;
+} RIL_ActivityStatsInfo;
 
 /**
  * RIL_REQUEST_GET_SIM_STATUS
@@ -1609,13 +1661,12 @@ typedef struct {
 #define RIL_REQUEST_CHANGE_SIM_PIN2 7
 
 /**
- * RIL_REQUEST_ENTER_DEPERSONALIZATION_CODE
+ * RIL_REQUEST_ENTER_NETWORK_DEPERSONALIZATION
  *
- * Requests that personlization be deactivated
+ * Requests that network personlization be deactivated
  *
  * "data" is const char **
- * ((const char **)(data))[0]] is personlization type
- * ((const char **)(data))[1]] is depersonlization code
+ * ((const char **)(data))[0]] is network depersonlization code
  *
  * "response" is int *
  * ((int *)response)[0] is the number of retries remaining, or -1 if unknown
@@ -1629,7 +1680,7 @@ typedef struct {
  *     (code is invalid)
  */
 
-#define RIL_REQUEST_ENTER_DEPERSONALIZATION_CODE 8
+#define RIL_REQUEST_ENTER_NETWORK_DEPERSONALIZATION 8
 
 /**
  * RIL_REQUEST_GET_CURRENT_CALLS
@@ -4310,6 +4361,7 @@ typedef struct {
 /**
  * RIL_REQUEST_GET_DC_RT_INFO
  *
+ * The request is DEPRECATED, use RIL_REQUEST_GET_ACTIVITY_INFO
  * Requests the Data Connection Real Time Info
  *
  * "data" is NULL
@@ -4328,6 +4380,7 @@ typedef struct {
 /**
  * RIL_REQUEST_SET_DC_RT_INFO_RATE
  *
+ * The request is DEPRECATED
  * This is the minimum number of milliseconds between successive
  * RIL_UNSOL_DC_RT_INFO_CHANGED messages and defines the highest rate
  * at which RIL_UNSOL_DC_RT_INFO_CHANGED's will be sent. A value of
@@ -4375,15 +4428,12 @@ typedef struct {
  */
 #define RIL_REQUEST_SHUTDOWN 129
 
-
 /**
  * RIL_REQUEST_GET_RADIO_CAPABILITY
  *
  * Used to get phone radio capablility.
  *
- * "data" is int *
- * ((int *)data)[0] is the phone radio access family defined in
- * RadioAccessFamily. It's a bit mask value to represent the support type.
+ * "data" is the RIL_RadioCapability structure
  *
  * Valid errors:
  *  SUCCESS
@@ -4412,39 +4462,63 @@ typedef struct {
 #define RIL_REQUEST_SET_RADIO_CAPABILITY 131
 
 /**
- * RIL_REQUEST_GET_DATA_CALL_PROFILE
+ * RIL_REQUEST_START_LCE
  *
- * Get the Data Call Profile for a particular app type
- *
- * "data" is const int*
- * (const int*)data[0] - App type. Value is specified the RUIM spec C.S0023-D
- *
- *
- * "response" is a const char * containing the count and the array of profiles
- * ((const int *)response)[0] Number RIL_DataCallProfileInfo structs(count)
- * ((const char *)response)[1] is the buffer that contains 'count' number of
- *                              RIL_DataCallProfileInfo structs.
- *
- * Valid errors:
- *  SUCCESS
- *  GENERIC_FAILURE
- *  RIL_E_DATA_CALL_PROFILE_ERROR
- *  RIL_E_DATA_CALL_PROFILE_NOT_AVAILABLE
- *
- */
-#define RIL_REQUEST_GET_DATA_CALL_PROFILE 132
-
-/**
- * RIL_REQUEST_SIM_GET_ATR
- *
- * Get the ATR from SIM Card
- *
- * Only valid when radio state is "RADIO_STATE_ON"
+ * Start Link Capacity Estimate (LCE) service if supported by the radio.
  *
  * "data" is const int *
- * ((const int *)data)[0] contains the slot index on the SIM from which ATR is requested.
+ * ((const int*)data)[0] specifies the desired reporting interval (ms).
+ * ((const int*)data)[1] specifies the LCE service mode. 1: PULL; 0: PUSH.
  *
- * "response" is a const char * containing the ATR, See ETSI 102.221 8.1 and ISO/IEC 7816 3
+ * "response" is the RIL_LceStatusInfo.
+ *
+ * Valid errors:
+ * SUCCESS
+ * RADIO_NOT_AVAILABLE
+ * LCE_NOT_SUPPORTED
+ */
+#define RIL_REQUEST_START_LCE 132
+
+/**
+ * RIL_REQUEST_STOP_LCE
+ *
+ * Stop Link Capacity Estimate (LCE) service, the STOP operation should be
+ * idempotent for the radio modem.
+ *
+ * "response" is the RIL_LceStatusInfo.
+ *
+ * Valid errors:
+ * SUCCESS
+ * RADIO_NOT_AVAILABLE
+ * LCE_NOT_SUPPORTED
+ */
+#define RIL_REQUEST_STOP_LCE 133
+
+/**
+ * RIL_REQUEST_PULL_LCEDATA
+ *
+ * Pull LCE service for capacity information.
+ *
+ * "response" is the RIL_LceDataInfo.
+ *
+ * Valid errors:
+ * SUCCESS
+ * RADIO_NOT_AVAILABLE
+ * LCE_NOT_SUPPORTED
+ */
+#define RIL_REQUEST_PULL_LCEDATA 134
+
+/**
+ * RIL_REQUEST_GET_ACTIVITY_INFO
+ *
+ * Get modem activity statisitics info.
+ *
+ * There can be multiple RIL_REQUEST_GET_ACTIVITY_INFO calls to modem.
+ * Once the response for the request is sent modem will clear
+ * current statistics information.
+ *
+ * "data" is null
+ * "response" is const RIL_ActivityStatsInfo *
  *
  * Valid errors:
  *
@@ -4452,7 +4526,7 @@ typedef struct {
  * RADIO_NOT_AVAILABLE (radio resetting)
  * GENERIC_FAILURE
  */
-#define RIL_REQUEST_SIM_GET_ATR 133
+#define RIL_REQUEST_GET_ACTIVITY_INFO 135
 
 /***********************************************************************/
 
@@ -5000,6 +5074,7 @@ typedef struct {
 /**
  * RIL_UNSOL_DC_RT_INFO_CHANGED
  *
+ * The message is DEPRECATED, use RIL_REQUEST_GET_ACTIVITY_INFO
  * Sent when the DC_RT_STATE changes but the time
  * between these messages must not be less than the
  * value set by RIL_REQUEST_SET_DC_RT_RATE.
@@ -5041,6 +5116,16 @@ typedef struct {
  *
  */
 #define RIL_UNSOL_STK_CC_ALPHA_NOTIFY 1044
+
+/**
+ * RIL_UNSOL_LCEDATA_RECV
+ *
+ * Called when there is an incoming Link Capacity Estimate (LCE) info report.
+ *
+ * "data" is the RIL_LceDataInfo structure.
+ *
+ */
+#define RIL_UNSOL_LCEDATA_RECV 1045
 
 /***********************************************************************/
 
