@@ -21,24 +21,24 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <fstream>
 
 #include "Fpc1020Sensor.h"
 #include "fpc1020_ioctl.h"
 
-int Fpc1020Sensor::startAuthentication(bool inWakeupMode)
+int Fpc1020Sensor::startAuthentication()
 {
     if (!isIdle()) {
         return -EINVAL;
     }
 
-    ALOGV("startAuthentication(%d)", inWakeupMode);
+    ALOGV("startAuthentication()");
     int ret = activate(true);
     if (ret) {
         return ret;
     }
 
     mThread = new AuthenticationThread(this);
-    mWaitingForWakeup = inWakeupMode;
     mThread->run("FingerprintAuthentication");
 
     ALOGD("State machine now in authentication state");
@@ -46,13 +46,15 @@ int Fpc1020Sensor::startAuthentication(bool inWakeupMode)
     return 0;
 }
 
-int Fpc1020Sensor::startEnrollment(unsigned int timeout)
+int Fpc1020Sensor::startEnrollment(unsigned int timeout,
+                                   uint32_t userId,
+                                   uint32_t gid)
 {
     if (!isIdle()) {
         return -EINVAL;
     }
 
-    ALOGV("startEnrollment(%d)", timeout);
+    ALOGV("startEnrollment(%d, %d, %d)", timeout, userId, gid);
     int ret = activate(true);
     if (ret) {
         return ret;
@@ -63,36 +65,12 @@ int Fpc1020Sensor::startEnrollment(unsigned int timeout)
         mTimeoutWatchdog->run("FingerprintTimeout");
     }
 
-    mThread = new EnrollmentThread(this);
+    mThread = new EnrollmentThread(this, userId, gid);
     mThread->run("FingerprintEnrollment");
 
     ALOGD("State machine now in enrollment state");
 
     return 0;
-}
-
-int Fpc1020Sensor::setWakeupMode(bool enable)
-{
-    int ret = 0;
-    bool idle, inWakeupMode;
-
-    ALOGV("setWakeupMode(%d)", enable);
-    {
-        android::Mutex::Autolock l(mThreadStateLock);
-        idle = isIdleLocked();
-        inWakeupMode = mWaitingForWakeup;
-    }
-
-    ALOGD("Set wakeup mode: idle %d wait for wakeup %d enable %d", idle, inWakeupMode, enable);
-    mWakeupEnabled = enable;
-
-    if (enable && idle) {
-        ret = startAuthentication(true);
-    } else if (!enable && !idle && inWakeupMode) {
-        ret = goToIdleState();
-    }
-
-    return ret;
 }
 
 int Fpc1020Sensor::goToIdleState()
@@ -121,13 +99,7 @@ int Fpc1020Sensor::goToIdleState()
     }
 
     mCancelledDueToTimeout = false;
-
-    if (mWakeupEnabled) {
-        ALOGD("Starting idle wakeup mode");
-        startAuthentication(true);
-    } else {
-        ALOGD("State machine now in idle state");
-    }
+    ALOGD("State machine now in idle state");
 
     return 0;
 }
@@ -150,13 +122,10 @@ void Fpc1020Sensor::stopWatchdogThread()
     }
 }
 
-int Fpc1020Sensor::getEnrolledIds(android::Vector<uint32_t>& ids)
+int Fpc1020Sensor::getEnrolledFingerprints(android::Vector<EnrolledFingerprint>& fps)
 {
-    if (!isIdle()) {
-        return -EINVAL;
-    }
-
-    ALOGV("getEnrolledIds()");
+    ALOGD("getEnrolledFingerprints()");
+    android::Mutex::Autolock l(mTzLock);
     int ret = activate(false);
     if (ret) {
         return ret;
@@ -170,33 +139,49 @@ int Fpc1020Sensor::getEnrolledIds(android::Vector<uint32_t>& ids)
 
         if (resp->result == 0) {
             for (uint32_t i = 0; i < resp->count; i++) {
-                ids.push_back(resp->ids[i]);
+                ssize_t index = mFpMetadata.indexOfKey(resp->ids[i]);
+                uint32_t gid = index >= 0 ? mFpMetadata.valueAt(index).gid : 0;
+                fps.push_back(EnrolledFingerprint(resp->ids[i], gid));
             }
         }
     }
 
-    deactivate();
+    if (isIdle()) {
+        deactivate();
+    }
 
     return ret;
 }
 
-int Fpc1020Sensor::removeId(uint32_t id)
+int Fpc1020Sensor::removeId(EnrolledFingerprint& fp)
 {
-    if (!isIdle()) {
-        return -EINVAL;
+    ALOGV("removeId(%d)", fp.fid);
+    ssize_t index = mFpMetadata.indexOfKey(fp.fid);
+    if (index >= 0) {
+        fp.gid = mFpMetadata.valueAt(index).gid;
     }
 
-    ALOGV("removeId(%d)", id);
+    android::Mutex::Autolock l(mTzLock);
     int ret = activate(false);
     if (ret) {
         return ret;
     }
 
     fingerprint_delete_cmd_t *req = (fingerprint_delete_cmd_t *) mQseecom.getSendBuffer();
-    req->id = id;
+    req->id = fp.fid;
 
     ret = sendCommand(CLIENT_CMD_REMOVE_ID);
-    deactivate();
+    if (isIdle()) {
+        deactivate();
+    }
+
+    if (ret == 0) {
+        mFpMetadata.removeItem(fp.fid);
+        if (mFpMetadata.isEmpty()) {
+            mAuthenticatorId = 0;
+        }
+        persistMetaData();
+    }
 
     return ret;
 }
@@ -204,6 +189,10 @@ int Fpc1020Sensor::removeId(uint32_t id)
 int Fpc1020Sensor::activate(bool connect)
 {
     int ret;
+
+    if (mQseecom.isRunning()) {
+        return 0;
+    }
 
     ret = mQseecom.start();
     if (ret) {
@@ -294,6 +283,60 @@ int Fpc1020Sensor::scanForTouchDown()
     return ret;
 }
 
+void Fpc1020Sensor::loadPersistedMetaData()
+{
+    std::ifstream stream(MetaDataFileName, std::ios::in | std::ios::binary);
+    size_t i = 0, count = 0;
+
+    if (!stream.fail()) {
+        uint32_t version = 0;
+        stream.read((char *) &version, sizeof(version));
+        if (version != MetadataFileVersion) {
+            ALOGE("Unexpected metadata version %d", version);
+            return;
+        }
+        stream.read((char *) &mAuthenticatorId, sizeof(mAuthenticatorId));
+        stream.read((char *) &count, sizeof(count));
+    }
+
+    ALOGV("Loading %d persisted metadata records", count);
+    for (size_t i = 0; i < count && !stream.fail(); i++) {
+        uint32_t fid, gid, userId;
+        stream.read((char *) &fid, sizeof(fid));
+        stream.read((char *) &gid, sizeof(gid));
+        stream.read((char *) &userId, sizeof(userId));
+        if (!stream.fail()) {
+            ALOGV("Got metadata record for %d: (%d, %d)", fid, gid, userId);
+            mFpMetadata.add(fid, FingerprintMetadata(gid, userId));
+        }
+    }
+
+    if (stream.fail()) {
+        ALOGE("Failed to load persisted fingerprint metadata");
+    }
+}
+
+void Fpc1020Sensor::persistMetaData()
+{
+    std::ofstream stream(MetadataFileName, std::ios::out | std::ios::binary | std::ios::trunc);
+    uint32_t version = MetadataFileVersion;
+    size_t count = mFpMetadata.size();
+
+    stream.write((char *) &version, sizeof(version));
+    stream.write((char *) &mAuthenticatorId, sizeof(mAuthenticatorId));
+    stream.write((char *) &count, sizeof(count));
+    for (size_t i = 0; i < count; i++) {
+        uint32_t fid = mFpMetadata.keyAt(i);
+        const FingerprintMetadata& meta = mFpMetadata.valueAt(i);
+        stream.write((char *) &fid, sizeof(fid));
+        stream.write((char *) &meta.gid, sizeof(meta.gid));
+        stream.write((char *) &meta.userId, sizeof(meta.userId));
+    }
+    if (stream.fail()) {
+        ALOGE("Failed to persist fingerprint metadata");
+    }
+}
+
 int Fpc1020Sensor::FingerprintThread::waitForTouchDown()
 {
     fingerprint_get_touch_rsp_t *resp =
@@ -301,12 +344,15 @@ int Fpc1020Sensor::FingerprintThread::waitForTouchDown()
     int ret;
 
     // First wait for the sensor to become free ...
-    do {
-        ret = mSensor->sendCommand(CLIENT_CMD_WAIT_FOR_TOUCH_UP);
-        if (exitPending()) {
-            ret = -EINTR;
-        }
-    } while (ret == 0 && resp->result != 0);
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        do {
+            ret = mSensor->sendCommand(CLIENT_CMD_WAIT_FOR_TOUCH_UP);
+            if (exitPending()) {
+                ret = -EINTR;
+            }
+        } while (ret == 0 && resp->result != 0);
+    }
 
     if (ret) {
         ALOGV("Waiting for touch down failed: %d", ret);
@@ -330,11 +376,13 @@ int Fpc1020Sensor::FingerprintThread::waitForTouchDown()
 void Fpc1020Sensor::FingerprintThread::handleShutdown()
 {
     ALOGV("Shutting down thread %d", getTid());
-    mSensor->deactivate();
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        mSensor->deactivate();
+    }
     mSensor->stopWatchdogThread();
 
     android::Mutex::Autolock l(mSensor->mThreadStateLock);
-    mSensor->mWaitingForWakeup = false;
     mSensor->mThread.clear();
 
     ALOGV("Thread %d now shut down", getTid());
@@ -352,7 +400,7 @@ int Fpc1020Sensor::FingerprintThread::adjustReturnValueForCancel(int ret)
 
 bool Fpc1020Sensor::EnrollmentThread::threadLoop()
 {
-    int ret, enrolledId, stepsRemaining = Fpc1020Sensor::EnrollmentStepCount;
+    int ret, enrolledId = 0, stepsRemaining = Fpc1020Sensor::EnrollmentStepCount;
     fingerprint_enroll_rsp_t *resp =
             (fingerprint_enroll_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
     fingerprint_end_enroll_cmd_t *endReq =
@@ -367,6 +415,8 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
             goto out;
         }
         mSensor->mAcquiredCb(mSensor->mCbData);
+
+        android::Mutex::Autolock l(mSensor->mTzLock);
         ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
         if (ret) {
             goto out;
@@ -389,7 +439,7 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
             if (stepsRemaining <= 0) {
                 stepsRemaining = 1;
             }
-            mSensor->mEnrollmentCb(0xffffffff, stepsRemaining, mSensor->mCbData);
+            mSensor->mEnrollmentCb(NULL, stepsRemaining, mSensor->mCbData);
         } else {
             ALOGI("Enrollment step returned error (%d), ignoring.", resp->result);
         }
@@ -398,15 +448,18 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
     memset(endReq->unknown, 0, sizeof(endReq->unknown));
     endReq->identifier_len = 0; // identifier unused for now
 
-    ret = mSensor->sendCommand(CLIENT_CMD_FP_END_ENROLL);
-    if (ret) {
-        goto out;
-    }
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        ret = mSensor->sendCommand(CLIENT_CMD_FP_END_ENROLL);
+        if (ret) {
+            goto out;
+        }
 
-    ALOGD("Enrollment thread finished: result %d id 0x%08x", endResp->result, endResp->id);
-    enrolledId = endResp->id;
-    if (endResp->result != 0) {
-        ret = -EIO;
+        ALOGD("Enrollment thread finished: result %d id 0x%08x", endResp->result, endResp->id);
+        enrolledId = endResp->id;
+        if (endResp->result != 0) {
+            ret = -EIO;
+        }
     }
 
 out:
@@ -414,12 +467,17 @@ out:
     handleShutdown();
 
     if (ret == 0) {
+        EnrolledFingerprint fp(enrolledId, mGid);
+        mSensor->mFpMetadata.replaceValueFor(enrolledId, FingerprintMetadata(mGid, mUserId));
+        mSensor->mAuthenticatorId = ((uint64_t) rand()) << 32 | rand();
+        mSensor->persistMetaData();
+
         // Do the final enrollment callback after doing the cleanup, so
         // we're in idle state when doing this call. Upper layers query
         // the enrollment list more or less directly after this callback,
         // so if we aren't in idle state at this point, we're prone to
         // race conditions.
-        mSensor->mEnrollmentCb(enrolledId, 0, mSensor->mCbData);
+        mSensor->mEnrollmentCb(&fp, 0, mSensor->mCbData);
     } else {
         ALOGD("Enrollment failed: %d", ret);
         mSensor->mErrorCb(ret, mSensor->mCbData);
@@ -431,6 +489,8 @@ out:
 int Fpc1020Sensor::AuthenticationThread::doSingleAuthentication()
 {
     int ret;
+    uint32_t id;
+    ssize_t index;
     fingerprint_verify_rsp_t *resp =
             (fingerprint_verify_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
 
@@ -441,18 +501,30 @@ int Fpc1020Sensor::AuthenticationThread::doSingleAuthentication()
 
     mSensor->mAcquiredCb(mSensor->mCbData);
 
-    ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
-    if (ret) {
-        goto out;
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
+        if (ret) {
+            goto out;
+        }
+
+        ret = mSensor->sendCommand(CLIENT_CMD_VERIFY);
+        if (ret) {
+            goto out;
+        }
+
+        id = resp->id;
+        ALOGD("Authentication: got id 0x%08x certainty %d", resp->id, resp->certainty);
     }
 
-    ret = mSensor->sendCommand(CLIENT_CMD_VERIFY);
-    if (ret) {
-        goto out;
+    index = id == 0xffffffff ? -1 : mSensor->mFpMetadata.indexOfKey(id);
+    if (index < 0) {
+        mSensor->mAuthenticateCb(NULL, 0, mSensor->mCbData);
+    } else {
+        FingerprintMetadata meta = mSensor->mFpMetadata.valueAt(index);
+        EnrolledFingerprint fp(id, meta.gid);
+        mSensor->mAuthenticateCb(&fp, meta.userId, mSensor->mCbData);
     }
-
-    ALOGD("Authentication: got id 0x%08x certainty %d", resp->id, resp->certainty);
-    mSensor->mAuthenticateCb(resp->id != 0xffffffff, resp->id, mSensor->mCbData);
 
 out:
     ret = adjustReturnValueForCancel(ret);
@@ -466,14 +538,16 @@ out:
 bool Fpc1020Sensor::AuthenticationThread::threadLoop()
 {
     ALOGV("Started authentication thread");
+    int ret;
 
     do {
-        int ret = doSingleAuthentication();
-        if (ret) {
-            ALOGW("Authentication attempt failed: %d", ret);
-            mSensor->mErrorCb(ret, mSensor->mCbData);
-        }
-    } while (!exitPending() && mSensor->mWaitingForWakeup);
+        ret = doSingleAuthentication();
+    } while (ret == 0 && !exitPending());
+
+    if (ret) {
+        ALOGW("Authentication attempt failed: %d", ret);
+        mSensor->mErrorCb(ret, mSensor->mCbData);
+    }
 
     handleShutdown();
     return false;
@@ -501,3 +575,4 @@ bool Fpc1020Sensor::TimeoutWatchdogThread::threadLoop()
 
     return false;
 }
+

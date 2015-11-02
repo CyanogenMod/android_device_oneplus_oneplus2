@@ -28,6 +28,9 @@ typedef struct {
     fingerprint_device_t device;
     Fpc1020Sensor *impl;
     android::Mutex notify_lock;
+    uint64_t operation_id;
+    uint32_t gid;
+    uint64_t challenge;
 } fpc1020_device_t;
 
 #define to_impl(dev) (((fpc1020_device_t *) dev)->impl)
@@ -37,6 +40,10 @@ static fingerprint_notify_t fingerprint_get_notify(struct fingerprint_device *de
     fpc1020_device_t *fpc1020_dev = (fpc1020_device_t *) dev;
     android::Mutex::Autolock l(fpc1020_dev->notify_lock);
     return dev->notify;
+}
+
+static uint64_t get_64bit_rand() {
+    return (((uint64_t) rand()) << 32) | ((uint64_t) rand());
 }
 
 static int fingerprint_close(hw_device_t *dev)
@@ -51,14 +58,20 @@ static int fingerprint_close(hw_device_t *dev)
     return -1;
 }
 
-static int fingerprint_authenticate(struct fingerprint_device *dev)
+static int fingerprint_authenticate(struct fingerprint_device *dev,
+                                    uint64_t operation_id,
+                                    uint32_t gid)
 {
+    fpc1020_device_t *device = (fpc1020_device_t *) dev;
     ALOGV("fingerprint_authenticate");
     int ret = to_impl(dev)->startAuthentication();
     if (ret != 0) {
         ALOGE("Starting authentication mode failed: %d", ret);
-        return FINGERPRINT_ERROR;
+        return ret;
     }
+
+    device->operation_id = operation_id;
+    device->gid = gid;
 
     return 0;
 }
@@ -69,41 +82,127 @@ static int fingerprint_cancel(struct fingerprint_device *dev)
     int ret = to_impl(dev)->goToIdleState();
     if (ret != 0) {
         ALOGE("Transitioning state machine to idle state failed: %d", ret);
-        return FINGERPRINT_ERROR;
     }
+    return ret;
+}
 
+static uint64_t fingerprint_pre_enroll(struct fingerprint_device *dev) {
+    ALOGV("fingerprint_pre_enroll");
+    fpc1020_device_t *device = (fpc1020_device_t *) dev;
+    device->challenge = get_64bit_rand();
+    return device->challenge;
+}
+
+static int fingerprint_post_enroll(struct fingerprint_device *dev) {
+    ALOGV("fingerprint_post_enroll");
+    fpc1020_device_t *device = (fpc1020_device_t *) dev;
+    device->challenge = 0;
     return 0;
 }
 
 static int fingerprint_enroll(struct fingerprint_device *dev,
+                              const hw_auth_token_t *hat,
+                              uint32_t gid,
                               uint32_t timeout_sec)
 {
     ALOGV("fingerprint_enroll, timeout %d sec", timeout_sec);
-    int ret = to_impl(dev)->startEnrollment(timeout_sec);
+
+    fpc1020_device_t *device = (fpc1020_device_t *) dev;
+    if (!hat) {
+        ALOGW("Null auth token");
+        return -EINVAL;
+    }
+
+    if (hat->version != HW_AUTH_TOKEN_VERSION) {
+        return -EPROTONOSUPPORT;
+    }
+    if (hat->challenge != device->challenge && !(hat->authenticator_type & HW_AUTH_FINGERPRINT)) {
+        return -EPERM;
+    }
+
+    if (gid == 0) {
+        gid = rand();
+    }
+
+    int ret = to_impl(dev)->startEnrollment(timeout_sec, hat->user_id, gid);
     if (ret != 0) {
         ALOGE("Starting enrollment mode failed: %d", ret);
-        return FINGERPRINT_ERROR;
+    }
+
+    return ret;
+}
+
+static uint64_t fingerprint_get_auth_id(struct fingerprint_device *dev)
+{
+    return to_impl(dev)->getAuthenticatorId();
+}
+
+static int fingerprint_set_active_group(struct fingerprint_device *dev,
+                                        uint32_t gid,
+                                        const char * __unused path)
+{
+    fpc1020_device_t *device = (fpc1020_device_t *) dev;
+    device->gid = gid;
+    return 0;
+}
+
+static int fingerprint_enumerate(struct fingerprint_device *dev,
+                                 fingerprint_finger_id_t *results,
+                                 uint32_t *max_size)
+{
+    android::Vector<Fpc1020Sensor::EnrolledFingerprint> fps;
+    android::Vector<Fpc1020Sensor::EnrolledFingerprint>::iterator iter;
+    fpc1020_device_t *device = (fpc1020_device_t *) dev;
+    int ret = to_impl(dev)->getEnrolledFingerprints(fps);
+
+    if (ret != 0) {
+        ALOGE("Getting enrolled fingerprints failed: %d", ret);
+        return ret;
+    }
+
+    for (iter = fps.begin(); iter != fps.end(); ) {
+        if (device->gid != 0 && device->gid != iter->gid) {
+            iter = fps.erase(iter);
+        } else {
+            ++iter;
+        }
+    }
+
+    if (*max_size == 0) {
+        *max_size = fps.size();
+    } else {
+        for (size_t i = 0; i < *max_size && i < fps.size(); i++) {
+            results[i].fid = fps[i].fid;
+            results[i].gid = fps[i].gid;
+        }
     }
 
     return 0;
 }
 
 static int fingerprint_remove(struct fingerprint_device *dev,
-                              uint32_t fingerprint_id)
+                              uint32_t gid,
+                              uint32_t fid)
 {
-    ALOGV("fingerprint_remove, id 0x%08x", fingerprint_id);
-    int ret = to_impl(dev)->removeId(fingerprint_id);
+    ALOGV("fingerprint_remove, id 0x%08x gid 0x%08x", fid, gid);
+    fpc1020_device_t *device = (fpc1020_device_t *) dev;
+    if (device->gid != gid) {
+        return -EINVAL;
+    }
+    Fpc1020Sensor::EnrolledFingerprint fp(fid, gid);
+    int ret = to_impl(dev)->removeId(fp);
     if (ret != 0) {
         ALOGE("Removing enrolled fingerprint failed: %d", ret);
-        return FINGERPRINT_ERROR;
+        return ret;
     }
 
     fingerprint_notify_t notify = fingerprint_get_notify(dev);
     if (notify) {
         fingerprint_msg_t msg;
         msg.type = FINGERPRINT_TEMPLATE_REMOVED;
-        msg.data.removed.id = fingerprint_id;
-        notify(msg);
+        msg.data.removed.finger.fid = fp.fid;
+        msg.data.removed.finger.gid = fp.gid;
+        notify(&msg);
     }
 
     return 0;
@@ -119,99 +218,6 @@ static int set_notify_callback(struct fingerprint_device *dev,
     return 0;
 }
 
-static int fingerprint_get_enrollment_info(struct fingerprint_device *dev,
-                                           enrollment_info_t **enrollmentInfo)
-{
-    ALOGV("fingerprint_get_enrollment_info");
-    android::Vector<uint32_t> ids;
-    int ret = to_impl(dev)->getEnrolledIds(ids);
-
-    if (ret != 0) {
-        ALOGE("Getting enrolled fingerprints failed: %d", ret);
-        return FINGERPRINT_ERROR;
-    }
-
-    enrollment_info_t *info = new enrollment_info_t;
-    if (!info) {
-        ALOGE("Allocating enrollment info failed");
-        return FINGERPRINT_ERROR;
-    }
-    info->num_fingers = ids.size();
-    info->fpinfo = new fingerprint_t[ids.size()];
-    if (!info->fpinfo) {
-        ALOGE("Allocating fingerprint info failed");
-        delete info;
-        return FINGERPRINT_ERROR;
-    }
-    for (size_t i = 0; i < ids.size(); i++) {
-        info->fpinfo[i].index = ids[i];
-    }
-
-    *enrollmentInfo = info;
-    return 0;
-}
-
-static int fingerprint_release_enrollment_info(struct fingerprint_device __unused *dev,
-                                               enrollment_info_t *enrollmentInfo)
-{
-    ALOGV("fingerprint_release_enrollment_info");
-    if (!enrollmentInfo) {
-        return FINGERPRINT_ERROR;
-    }
-
-    delete [] enrollmentInfo->fpinfo;
-    delete enrollmentInfo;
-    return 0;
-}
-
-static int fingerprint_get_num_enrollment_steps(struct fingerprint_device __unused *dev)
-{
-    return Fpc1020Sensor::EnrollmentStepCount;
-}
-
-static int fingerprint_set_parameters(struct fingerprint_device *dev, const char *kvpairs)
-{
-    ALOGV("fingerprint_set_parameters %s", kvpairs);
-
-    android::KeyedVector<android::String8, android::String8> paramMap;
-    // from CameraParameters.cpp
-    const char *a = kvpairs, *b;
-
-    for (;;) {
-        // Find the bounds of the key name.
-        b = strchr(a, '=');
-        if (b == 0)
-            break;
-
-        // Create the key string.
-        android::String8 k(a, (size_t)(b-a));
-
-        // Find the value.
-        a = b+1;
-        b = strchr(a, ';');
-        if (b == 0) {
-            // If there's no semicolon, this is the last item.
-            android::String8 v(a);
-            paramMap.add(k, v);
-            break;
-        }
-
-        android::String8 v(a, (size_t)(b-a));
-        paramMap.add(k, v);
-        a = b+1;
-    }
-
-    bool wakeup = paramMap.valueFor(android::String8("wakeup")) == "1";
-    int ret = to_impl(dev)->setWakeupMode(wakeup);
-
-    if (ret != 0) {
-        ALOGE("Setting wakeup mode failed: %d", ret);
-        return FINGERPRINT_ERROR;
-    }
-
-    return 0;
-}
-
 static void fingerprint_cb_acquired(void *data)
 {
     struct fingerprint_device *dev = (struct fingerprint_device *) data;
@@ -220,11 +226,11 @@ static void fingerprint_cb_acquired(void *data)
         fingerprint_msg_t msg;
         msg.type = FINGERPRINT_ACQUIRED;
         msg.data.acquired.acquired_info = FINGERPRINT_ACQUIRED_GOOD;
-        notify(msg);
+        notify(&msg);
     }
 }
 
-static void fingerprint_cb_enrollment_progress(uint32_t id,
+static void fingerprint_cb_enrollment_progress(const Fpc1020Sensor::EnrolledFingerprint *fp,
                                                int steps_remaining,
                                                void *data)
 {
@@ -233,23 +239,32 @@ static void fingerprint_cb_enrollment_progress(uint32_t id,
     if (notify) {
         fingerprint_msg_t msg;
         msg.type = FINGERPRINT_TEMPLATE_ENROLLING;
-        msg.data.enroll.id = id;
+        msg.data.enroll.finger.fid = fp ? fp->fid : 0;
+        msg.data.enroll.finger.gid = fp ? fp->gid : 0;
         msg.data.enroll.samples_remaining = steps_remaining;
-        notify(msg);
+        msg.data.enroll.msg = 0;
+        notify(&msg);
     }
 }
 
-static void fingerprint_cb_authenticate(bool success,
-                                        uint32_t id,
+static void fingerprint_cb_authenticate(const Fpc1020Sensor::EnrolledFingerprint *fp,
+                                        uint32_t user_id,
                                         void *data)
 {
-    struct fingerprint_device *dev = (struct fingerprint_device *) data;
-    fingerprint_notify_t notify = fingerprint_get_notify(dev);
-    if (notify) {
+    fpc1020_device_t *device = (fpc1020_device_t *) data;
+    fingerprint_notify_t notify = fingerprint_get_notify(&device->device);
+    if (notify && (!fp || device->gid == 0 || device->gid == fp->gid)) {
         fingerprint_msg_t msg;
-        msg.type = FINGERPRINT_PROCESSED;
-        msg.data.processed.id = success ? id : 0;
-        notify(msg);
+        msg.type = FINGERPRINT_AUTHENTICATED;
+        msg.data.authenticated.finger.gid = fp ? fp->gid : 0;
+        msg.data.authenticated.finger.fid = fp ? fp->fid : 0;
+        msg.data.authenticated.hat.version = HW_AUTH_TOKEN_VERSION;
+        msg.data.authenticated.hat.authenticator_type = htobe32(HW_AUTH_FINGERPRINT);
+        msg.data.authenticated.hat.challenge = device->operation_id;
+        msg.data.authenticated.hat.authenticator_id = device->impl->getAuthenticatorId();
+        msg.data.authenticated.hat.user_id = user_id;
+
+        notify(&msg);
     }
 }
 
@@ -265,7 +280,7 @@ static void fingerprint_cb_error(int result, void *data)
             case -ETIMEDOUT: msg.data.error = FINGERPRINT_ERROR_TIMEOUT; break;
             default: msg.data.error = FINGERPRINT_ERROR_HW_UNAVAILABLE; break;
         }
-        notify(msg);
+        notify(&msg);
     }
 }
 
@@ -293,20 +308,25 @@ static int fingerprint_open(const hw_module_t* module,
     }
 
     dev->device.common.tag = HARDWARE_DEVICE_TAG;
-    dev->device.common.version = HARDWARE_MODULE_API_VERSION(1, 2);
+    dev->device.common.version = HARDWARE_MODULE_API_VERSION(2, 0);
     dev->device.common.module = (struct hw_module_t*) module;
     dev->device.common.close = fingerprint_close;
 
     dev->device.authenticate = fingerprint_authenticate;
     dev->device.cancel = fingerprint_cancel;
+    dev->device.pre_enroll = fingerprint_pre_enroll;
     dev->device.enroll = fingerprint_enroll;
+    dev->device.post_enroll = fingerprint_post_enroll;
+    dev->device.get_authenticator_id = fingerprint_get_auth_id;
+    dev->device.set_active_group = fingerprint_set_active_group;
+    dev->device.enumerate = fingerprint_enumerate;
     dev->device.remove = fingerprint_remove;
     dev->device.set_notify = set_notify_callback;
     dev->device.notify = NULL;
-    dev->device.get_enrollment_info = fingerprint_get_enrollment_info;
-    dev->device.release_enrollment_info = fingerprint_release_enrollment_info;
-    dev->device.get_num_enrollment_steps = fingerprint_get_num_enrollment_steps;
-    dev->device.set_parameters = fingerprint_set_parameters;
+
+    dev->gid = 0;
+    dev->operation_id = 0;
+    dev->challenge = get_64bit_rand();
 
     *device = (hw_device_t *) &dev->device;
 
@@ -320,7 +340,7 @@ static struct hw_module_methods_t fingerprint_module_methods = {
 fingerprint_module_t HAL_MODULE_INFO_SYM = {
     .common = {
         .tag                = HARDWARE_MODULE_TAG,
-        .module_api_version = FINGERPRINT_MODULE_API_VERSION_1_2,
+        .module_api_version = FINGERPRINT_MODULE_API_VERSION_2_0,
         .hal_api_version    = HARDWARE_HAL_API_VERSION,
         .id                 = FINGERPRINT_HARDWARE_MODULE_ID,
         .name               = "FPC1020 Fingerprint HAL",
