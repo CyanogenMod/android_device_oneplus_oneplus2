@@ -47,13 +47,6 @@ bin/thermal-engine
 bin/time_daemon
 bin/usb_uicc_client
 bin/wcnss_filter
-etc/firmware/a225_pfp.fw
-etc/firmware/a225_pm4.fw
-etc/firmware/a225p5_pm4.fw
-etc/firmware/a300_pfp.fw
-etc/firmware/a300_pm4.fw
-etc/firmware/a330_pfp.fw
-etc/firmware/a330_pm4.fw
 etc/firmware/a420_pfp.fw
 etc/firmware/a420_pm4.fw
 etc/firmware/alipay.b00
