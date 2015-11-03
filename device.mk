@@ -84,6 +84,11 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/cyanogenmod.hardware.fingerprint.xml:system/etc/permissions/cyanogenmod.hardware.fingerprint.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
+# Adreno driver dependencies
+PRODUCT_PACKAGES += \
+    libboringssl-compat \
+    libstlport
+
 # ANT+
 PRODUCT_PACKAGES += \
     AntHalService \
@@ -119,10 +124,6 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing
-
-# BoringSSL compatability wrapper
-PRODUCT_PACKAGES += \
-    libboringssl-compat
 
 # Charger
 PRODUCT_PACKAGES += \
