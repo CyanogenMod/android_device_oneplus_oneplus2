@@ -28,6 +28,7 @@ persist.radio.sib16_support=1
 persist.radio.sw_mbn_update=0
 persist.radio.start_ota_daemon=1
 persist.radio.rat_on=combine
+persist.data.qmi.adb_logmask=0
 
 # Audio
 audio.offload.video=true
