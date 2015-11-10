@@ -310,18 +310,45 @@ on boot
     chmod 0664 /sys/class/graphics/fb0/idle_time
 
     # setup permissions for fb1 related nodes
+    chown system graphics /sys/class/graphics/fb0/idle_time
+    chown system graphics /sys/class/graphics/fb0/dynamic_fps
+    chown system graphics /sys/class/graphics/fb0/dyn_pu
+    chown system graphics /sys/class/graphics/fb0/modes
+    chown system graphics /sys/class/graphics/fb0/mode
+
+    chmod 0664 /sys/devices/virtual/graphics/fb0/idle_time
+    chmod 0664 /sys/devices/virtual/graphics/fb0/dynamic_fps
+    chmod 0664 /sys/devices/virtual/graphics/fb0/dyn_pu
+    chmod 0664 /sys/devices/virtual/graphics/fb0/modes
+    chmod 0664 /sys/devices/virtual/graphics/fb0/mode
+
     chown system graphics /sys/class/graphics/fb1/hpd
-    chown system graphics /sys/class/graphics/fb1/hdcp/tp
+    chown system graphics /sys/class/graphics/fb1/res_info
     chown system graphics /sys/class/graphics/fb1/vendor_name
     chown system graphics /sys/class/graphics/fb1/product_description
     chown system graphics /sys/class/graphics/fb1/video_mode
     chown system graphics /sys/class/graphics/fb1/format_3d
+    chown system graphics /sys/class/graphics/fb1/s3d_mode
+    chown system graphics /sys/class/graphics/fb1/cec/enable
+    chown system graphics /sys/class/graphics/fb1/cec/logical_addr
+    chown system graphics /sys/class/graphics/fb1/cec/rd_msg
+    chown system graphics /sys/class/graphics/fb1/pa
+    chown system graphics /sys/class/graphics/fb1/cec/wr_msg
+    chown system graphics /sys/class/graphics/fb1/hdcp/tp
+
     chmod 0664 /sys/devices/virtual/graphics/fb1/hpd
-    chmod 0664 /sys/devices/virtual/graphics/fb1/hdcp/tp
+    chmod 0664 /sys/devices/virtual/graphics/fb1/res_info
     chmod 0664 /sys/devices/virtual/graphics/fb1/vendor_name
     chmod 0664 /sys/devices/virtual/graphics/fb1/product_description
     chmod 0664 /sys/devices/virtual/graphics/fb1/video_mode
     chmod 0664 /sys/devices/virtual/graphics/fb1/format_3d
+    chmod 0664 /sys/devices/virtual/graphics/fb1/s3d_mode
+    chmod 0664 /sys/devices/virtual/graphics/fb1/cec/enable
+    chmod 0664 /sys/devices/virtual/graphics/fb1/cec/logical_addr
+    chmod 0664 /sys/devices/virtual/graphics/fb1/cec/rd_msg
+    chmod 0664 /sys/devices/virtual/graphics/fb1/pa
+    chmod 0664 /sys/devices/virtual/graphics/fb1/cec/wr_msg
+    chmod 0664 /sys/devices/virtual/graphics/fb1/hdcp/tp
 
     # Allow access for CCID command/response timeout configuration
     chown system system /sys/module/ccid_bridge/parameters/bulk_msg_timeout
