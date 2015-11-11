@@ -94,7 +94,6 @@ etc/permissions/qcrilhook.xml
 framework/com.google.widevine.software.drm.jar
 lib/hw/camera.msm8994.so
 lib/hw/lights.msm8994.so
-lib/libcnefeatureconfig.so
 lib/libdrmdecrypt.so
 lib/libmm-qcamera.so
 lib/libmmcamera_interface.so
@@ -108,7 +107,6 @@ lib/libril.so
 lib/librmnetctl.so
 lib64/hw/lights.msm8994.so
 lib64/hw/sensors.hal.tof.so
-lib64/libcnefeatureconfig.so
 lib64/libopcamera.so
 lib64/libopcameralib.so
 lib64/libparam.so

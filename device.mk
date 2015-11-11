@@ -225,6 +225,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/netmgr_config.xml:system/etc/data/netmgr_config.xml \
     $(LOCAL_PATH)/configs/qmi_config.xml:system/etc/data/qmi_config.xml
 
+# RIL
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig
+
 # Sensors
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
