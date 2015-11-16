@@ -20,6 +20,7 @@ persist.rild.nitz_short_ons_3=
 ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 ro.telephony.default_network=9
+ro.telephony.ril.config=simactivation
 ro.ril.gprsclass=10
 ro.ril.hsxpa=1
 persist.radio.multisim.config=dsds
