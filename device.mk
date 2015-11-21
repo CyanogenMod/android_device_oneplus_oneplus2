@@ -39,7 +39,7 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.class_main.sh \
+    init.qcom.power.rc \
     init.qcom.rc \
     init.qcom.sh \
     init.qcom.usb.rc \
@@ -51,9 +51,8 @@ PRODUCT_PACKAGES += \
     init.qcom.bt.sh \
     init.qcom.fm.sh \
     init.qcom.post_boot.sh \
-    init.qcom.uicc.sh \
-    msm8994_hmp.sh \
-    msm8994_tune.sh
+    init.qcom.ril.sh \
+    init.qcom.uicc.sh
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -119,10 +118,6 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing
-
-# Bluetooth
-PRODUCT_PACKAGES += \
-    bdAddrLoader
 
 # Charger
 PRODUCT_PACKAGES += \

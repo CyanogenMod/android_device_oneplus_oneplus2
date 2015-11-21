@@ -1204,12 +1204,3 @@ if [ -c /dev/coresight-stm ]; then
         fi
     fi
 fi
-
-# Start RIDL/LogKit II client
-#su -c /system/vendor/bin/startRIDL.sh &
-
-#VENDOR_EDIT
-#add by jiangyg for new governor param
-/system/bin/sh /system/etc/msm8994_tune.sh &
-/system/bin/sh /system/etc/msm8994_hmp.sh &
-#END VENDOR_EDIT
