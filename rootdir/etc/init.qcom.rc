@@ -582,43 +582,6 @@ on property:init.svc.bootanim=running
 on property:init.svc.bootanim=stopped
     start usf-post-boot
 
-service dts_configurator /system/bin/dts_configurator
-    class main
-    user system
-    group system
-    oneshot
-
-service energy-awareness /system/bin/energy-awareness
-    class main
-    user root
-    group system
-    oneshot
-
-service qcomsysd /system/bin/qcom-system-daemon
-    class main
-    user root
-    group root qcom_diag
-
-service ssr_setup /system/bin/ssr_setup
-    oneshot
-    disabled
-
-service ss_ramdump /system/bin/subsystem_ramdump
-    class main
-    user system
-    group system
-    disabled
-
-on property:persist.sys.ssr.restart_level=*
-    start ssr_setup
-
-on property:persist.sys.ssr.enable_ramdumps=1
-    write /sys/module/subsystem_restart/parameters/enable_ramdumps 1
-    start ss_ramdump
-
-on property:persist.sys.ssr.enable_ramdumps=0
-    write /sys/module/subsystem_restart/parameters/enable_ramdumps 0
-
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
 
@@ -756,10 +719,6 @@ service rfs_access /system/bin/rfs_access
    class core
    user root
    group system net_raw
-
-service tftp_server /system/bin/tftp_server
-   class core
-   user root
 
 on property:wc_transport.start_hci=true
     start start_hci_filter
@@ -1114,9 +1073,6 @@ service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usbdisk
     class late_start
     disabled
 
-on property:ro.fuse_sdcard=true
-    start sdcard
-
 service charger /charger
     class charger
 
@@ -1206,16 +1162,3 @@ service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqb
     user root
     group root
     disabled
-
-service wfdservice /system/bin/wfdservice
-    class main
-    user system
-    group graphics audio camera inet net_bt net_bt_admin net_bt_stack drmrpc bluetooth media_rw media
-    disabled
-    oneshot
-
-on property:sys.wfdservice=enable
-    start wfdservice
-
-on property:sys.wfdservice=disable
-    stop wfdservice
