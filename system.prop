@@ -91,6 +91,10 @@ ro.opengles.version=196609
 # IO Scheduler
 sys.io.scheduler=bfq
 
+# Property for vendor specific library
+ro.vendor.at_library=libqti-at.so
+ro.vendor.gt_library=libqti-gt.so
+
 # QC vendor extension
 ro.vendor.extension_library=libqti-perfd-client.so
 ro.frp.pst=/dev/block/bootdevice/by-name/config
@@ -98,6 +102,8 @@ drm.service.enabled=true
 
 # Sensors
 ro.qc.sdk.sensors.gestures=true
+ro.qc.sdk.gestures.camera=false
+ro.qc.sdk.camera.facialproc=false
 
 # Time services
 persist.timed.enable=true
