@@ -118,6 +118,8 @@ class Fpc1020Sensor {
         QSEEComApp mQseecom;
         int mFpcFd;
 
+        android::Mutex mTzLock;
+
         android::Mutex mThreadStateLock;
         // all of these are protected by mThreadStateLock
         android::sp<android::Thread> mThread;

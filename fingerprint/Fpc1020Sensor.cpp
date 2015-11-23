@@ -152,11 +152,9 @@ void Fpc1020Sensor::stopWatchdogThread()
 
 int Fpc1020Sensor::getEnrolledIds(android::Vector<uint32_t>& ids)
 {
-    if (!isIdle()) {
-        return -EINVAL;
-    }
-
     ALOGV("getEnrolledIds()");
+    android::Mutex::Autolock l(mTzLock);
+
     int ret = activate(false);
     if (ret) {
         return ret;
@@ -175,18 +173,18 @@ int Fpc1020Sensor::getEnrolledIds(android::Vector<uint32_t>& ids)
         }
     }
 
-    deactivate();
+    if (isIdle()) {
+        deactivate();
+    }
 
     return ret;
 }
 
 int Fpc1020Sensor::removeId(uint32_t id)
 {
-    if (!isIdle()) {
-        return -EINVAL;
-    }
-
     ALOGV("removeId(%d)", id);
+    android::Mutex::Autolock l(mTzLock);
+
     int ret = activate(false);
     if (ret) {
         return ret;
@@ -196,7 +194,9 @@ int Fpc1020Sensor::removeId(uint32_t id)
     req->id = id;
 
     ret = sendCommand(CLIENT_CMD_REMOVE_ID);
-    deactivate();
+    if (isIdle()) {
+        deactivate();
+    }
 
     return ret;
 }
@@ -204,6 +204,10 @@ int Fpc1020Sensor::removeId(uint32_t id)
 int Fpc1020Sensor::activate(bool connect)
 {
     int ret;
+
+    if (mQseecom.isRunning()) {
+        return 0;
+    }
 
     ret = mQseecom.start();
     if (ret) {
@@ -301,12 +305,15 @@ int Fpc1020Sensor::FingerprintThread::waitForTouchDown()
     int ret;
 
     // First wait for the sensor to become free ...
-    do {
-        ret = mSensor->sendCommand(CLIENT_CMD_WAIT_FOR_TOUCH_UP);
-        if (exitPending()) {
-            ret = -EINTR;
-        }
-    } while (ret == 0 && resp->result != 0);
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        do {
+            ret = mSensor->sendCommand(CLIENT_CMD_WAIT_FOR_TOUCH_UP);
+            if (exitPending()) {
+                ret = -EINTR;
+            }
+        } while (ret == 0 && resp->result != 0);
+    }
 
     if (ret) {
         ALOGV("Waiting for touch down failed: %d", ret);
@@ -330,7 +337,10 @@ int Fpc1020Sensor::FingerprintThread::waitForTouchDown()
 void Fpc1020Sensor::FingerprintThread::handleShutdown()
 {
     ALOGV("Shutting down thread %d", getTid());
-    mSensor->deactivate();
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        mSensor->deactivate();
+    }
     mSensor->stopWatchdogThread();
 
     android::Mutex::Autolock l(mSensor->mThreadStateLock);
@@ -352,13 +362,9 @@ int Fpc1020Sensor::FingerprintThread::adjustReturnValueForCancel(int ret)
 
 bool Fpc1020Sensor::EnrollmentThread::threadLoop()
 {
-    int ret, enrolledId, stepsRemaining = Fpc1020Sensor::EnrollmentStepCount;
+    int ret, enrolledId = 0, stepsRemaining = Fpc1020Sensor::EnrollmentStepCount;
     fingerprint_enroll_rsp_t *resp =
             (fingerprint_enroll_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
-    fingerprint_end_enroll_cmd_t *endReq =
-            (fingerprint_end_enroll_cmd_t *) mSensor->mQseecom.getSendBuffer();
-    fingerprint_end_enroll_rsp_t *endResp =
-            (fingerprint_end_enroll_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
 
     ALOGV("Started enrollment thread");
     while (!exitPending()) {
@@ -367,6 +373,8 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
             goto out;
         }
         mSensor->mAcquiredCb(mSensor->mCbData);
+
+        android::Mutex::Autolock l(mSensor->mTzLock);
         ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
         if (ret) {
             goto out;
@@ -395,18 +403,26 @@ bool Fpc1020Sensor::EnrollmentThread::threadLoop()
         }
     }
 
-    memset(endReq->unknown, 0, sizeof(endReq->unknown));
-    endReq->identifier_len = 0; // identifier unused for now
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        fingerprint_end_enroll_cmd_t *endReq =
+                (fingerprint_end_enroll_cmd_t *) mSensor->mQseecom.getSendBuffer();
+        fingerprint_end_enroll_rsp_t *endResp =
+                (fingerprint_end_enroll_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
 
-    ret = mSensor->sendCommand(CLIENT_CMD_FP_END_ENROLL);
-    if (ret) {
-        goto out;
-    }
+        memset(endReq->unknown, 0, sizeof(endReq->unknown));
+        endReq->identifier_len = 0; // identifier unused for now
 
-    ALOGD("Enrollment thread finished: result %d id 0x%08x", endResp->result, endResp->id);
-    enrolledId = endResp->id;
-    if (endResp->result != 0) {
-        ret = -EIO;
+        ret = mSensor->sendCommand(CLIENT_CMD_FP_END_ENROLL);
+        if (ret) {
+            goto out;
+        }
+
+        ALOGD("Enrollment thread finished: result %d id 0x%08x", endResp->result, endResp->id);
+        enrolledId = endResp->id;
+        if (endResp->result != 0) {
+            ret = -EIO;
+        }
     }
 
 out:
@@ -431,8 +447,7 @@ out:
 int Fpc1020Sensor::AuthenticationThread::doSingleAuthentication()
 {
     int ret;
-    fingerprint_verify_rsp_t *resp =
-            (fingerprint_verify_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
+    uint32_t id;
 
     ret = waitForTouchDown();
     if (ret) {
@@ -441,18 +456,26 @@ int Fpc1020Sensor::AuthenticationThread::doSingleAuthentication()
 
     mSensor->mAcquiredCb(mSensor->mCbData);
 
-    ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
-    if (ret) {
-        goto out;
+    {
+        android::Mutex::Autolock l(mSensor->mTzLock);
+        fingerprint_verify_rsp_t *resp =
+                (fingerprint_verify_rsp_t *) mSensor->mQseecom.getReceiveBuffer();
+
+        ret = mSensor->sendCommand(CLIENT_CMD_FP_GET_IMAGE_WITH_CAC);
+        if (ret) {
+            goto out;
+        }
+
+        ret = mSensor->sendCommand(CLIENT_CMD_VERIFY);
+        if (ret) {
+            goto out;
+        }
+
+        id = resp->id;
+        ALOGD("Authentication: got id 0x%08x certainty %d", resp->id, resp->certainty);
     }
 
-    ret = mSensor->sendCommand(CLIENT_CMD_VERIFY);
-    if (ret) {
-        goto out;
-    }
-
-    ALOGD("Authentication: got id 0x%08x certainty %d", resp->id, resp->certainty);
-    mSensor->mAuthenticateCb(resp->id != 0xffffffff, resp->id, mSensor->mCbData);
+    mSensor->mAuthenticateCb(id != 0xffffffff, id, mSensor->mCbData);
 
 out:
     ret = adjustReturnValueForCancel(ret);
