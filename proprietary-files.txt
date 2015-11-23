@@ -166,7 +166,6 @@ vendor/lib/libOmxEvrcDec.so
 vendor/lib/libOmxMux.so
 vendor/lib/libOmxQcelp13Dec.so
 vendor/lib/libOmxWmaDec.so
-vendor/lib/libOpenCL.so
 vendor/lib/libQBLAS-0.11.38.so
 vendor/lib/libQSEEComAPI.so
 vendor/lib/libRSDriver_adreno.so
@@ -492,7 +491,6 @@ vendor/lib64/libNimsWrap.so
 vendor/lib64/libOmxAacDec.so
 vendor/lib64/libOmxAmrwbplusDec.so
 vendor/lib64/libOmxWmaDec.so
-vendor/lib64/libOpenCL.so
 vendor/lib64/libQBLAS-0.11.38.so
 vendor/lib64/libQSEEComAPI.so
 vendor/lib64/libRSDriver_adreno.so
