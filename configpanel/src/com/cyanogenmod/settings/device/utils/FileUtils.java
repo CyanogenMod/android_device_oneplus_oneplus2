@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public final class FileUtils {
     private static final String TAG = "FileUtils";
@@ -66,6 +67,9 @@ public final class FileUtils {
             fos.write(value.getBytes());
             fos.flush();
             fos.close();
+        } catch (FileNotFoundException e) {
+            Log.w(TAG, "No such file " + fileName + " for writing", e);
+            return false;
         } catch (IOException e) {
             Log.e(TAG, "Could not write to file " + fileName, e);
             return false;
