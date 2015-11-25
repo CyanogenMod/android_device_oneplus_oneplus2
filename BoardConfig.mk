@@ -20,6 +20,9 @@
 # definition file).
 #
 
+# Inherit from oppo-common
+-include device/oppo/common/BoardConfigCommon.mk
+
 TARGET_OTA_ASSERT_DEVICE := OnePlus2,oneplus2
 
 BOARD_VENDOR := oneplus
@@ -128,9 +131,6 @@ TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_LIBINIT_DEFINES_FILE := device/oneplus/oneplus2/init/init_oneplus2.c
 
-# Power
-TARGET_POWERHAL_VARIANT := qcom
-
 # RPC
 TARGET_NO_RPC := true
 
@@ -178,12 +178,6 @@ BOARD_SEPOLICY_DIRS += device/oneplus/oneplus2/sepolicy
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
-
-# CM Hardware
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS += \
-    device/oneplus/oneplus2/cmhw \
-    hardware/cyanogen/cmhw
 
 # inherit from the proprietary version
 -include vendor/oneplus/oneplus2/BoardConfigVendor.mk
