@@ -285,7 +285,7 @@ int Fpc1020Sensor::scanForTouchDown()
 
 void Fpc1020Sensor::loadPersistedMetaData()
 {
-    std::ifstream stream(MetaDataFileName, std::ios::in | std::ios::binary);
+    std::ifstream stream(MetadataFileName, std::ios::in | std::ios::binary);
     size_t i = 0, count = 0;
 
     if (!stream.fail()) {
