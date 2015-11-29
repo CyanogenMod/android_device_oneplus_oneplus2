@@ -16,13 +16,18 @@
 
 package com.cyanogenmod.settings.device;
 
+<<<<<<< HEAD
 import org.cyanogenmod.internal.util.ScreenType;
 
+=======
+>>>>>>> 84ffc44... oneplus2: Use ScreenType util from cmsdk
 import java.io.File;
 
 import com.cyanogenmod.settings.device.utils.Constants;
 import com.cyanogenmod.settings.device.utils.FileUtils;
 import com.cyanogenmod.settings.device.utils.NodePreferenceActivity;
+
+import org.cyanogenmod.internal.util.ScreenType;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
