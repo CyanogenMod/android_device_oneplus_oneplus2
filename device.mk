@@ -125,6 +125,10 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing
 
+# Camera
+PRODUCT_PACKAGES += \
+    libcamera_shim
+
 # Charger
 PRODUCT_PACKAGES += \
     charger_res_images
