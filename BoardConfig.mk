@@ -175,6 +175,9 @@ BOARD_FLASH_BLOCK_SIZE := 262144
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
+# Malloc
+MALLOC_IMPL := dlmalloc
+
 # Recovery
 TARGET_RECOVERY_FSTAB := device/oneplus/oneplus2/rootdir/etc/fstab.qcom
 
