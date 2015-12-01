@@ -73,6 +73,9 @@ TARGET_USES_UNCOMPRESSED_KERNEL := true
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
+# RIL
+BOARD_PROVIDES_LIBRIL := true
+
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
@@ -176,6 +179,24 @@ TARGET_RECOVERY_FSTAB := device/oneplus/oneplus2/rootdir/etc/fstab.qcom
 include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += device/oneplus/oneplus2/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+    bluetooth_loader.te \
+    file.te \
+    healthd.te \
+    mm-qcamerad.te \
+    qseecomd.te \
+    rild.te \
+    rmt_storage.te \
+    ueventd.te \
+    sensors.te \
+    surfaceflinger.te \
+    system_app.te \
+    system_server.te \
+    wcnss_service.te \
+    file_contexts \
+    genfs_contexts \
+    property_contexts
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
