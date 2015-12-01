@@ -177,6 +177,39 @@ include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += device/oneplus/oneplus2/sepolicy
 
+BOARD_SEPOLICY_UNION += \
+    adspd.te \
+    atfwd.te \
+    bluetooth_loader.te \
+    bridge.te \
+    camera.te \
+    device.te \
+    file.te \
+    gsiffd.te \
+    healthd.te \
+    init.te \
+    init_shell.te \
+    irsc_util.te \
+    mdm_helper.te \
+    mediaserver.te \
+    mpdecision.te \
+    mm-qcamerad.te \
+    qmux.te \
+    qseecomd.te \
+    rild.te \
+    rmt_storage.te \
+    ueventd.te \
+    sensors.te \
+    surfaceflinger.te \
+    system_app.te \
+    system_server.te \
+    wcnss_service.te \
+    ueventd.te \
+    usb_uicc_daemon.te \
+    file_contexts \
+    genfs_contexts \
+    property_contexts
+
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
 
