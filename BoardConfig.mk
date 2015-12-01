@@ -142,13 +142,13 @@ TARGET_POWERHAL_VARIANT := qcom
 TARGET_NO_RPC := true
 
 # Enable dexpreopt to speed boot time
-ifeq ($(HOST_OS),linux)
-  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT_BOOT_IMG_ONLY),)
-      WITH_DEXPREOPT_BOOT_IMG_ONLY := true
-    endif
-  endif
-endif
+#ifeq ($(HOST_OS),linux)
+#  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
+#    ifeq ($(WITH_DEXPREOPT_BOOT_IMG_ONLY),)
+#      WITH_DEXPREOPT_BOOT_IMG_ONLY := true
+#    endif
+#  endif
+#endif
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
