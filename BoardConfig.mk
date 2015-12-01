@@ -141,6 +141,9 @@ TARGET_POWERHAL_VARIANT := qcom
 # RPC
 TARGET_NO_RPC := true
 
+# ART
+WITH_DEXPREOPT := false
+
 # Enable dexpreopt to speed boot time
 #ifeq ($(HOST_OS),linux)
 #  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
