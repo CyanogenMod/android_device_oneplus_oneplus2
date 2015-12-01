@@ -10,3 +10,6 @@ allow system_server firmware_file:dir search;
 allow system_server firmware_file:file { getattr open read };
 allow system_server tee_device:chr_file { open read write ioctl };
 allow system_server fingerprint_device:chr_file { open read write ioctl };
+
+allow system_server touchscreen_file:file rw_file_perms;
+
