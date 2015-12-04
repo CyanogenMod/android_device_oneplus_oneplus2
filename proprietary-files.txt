@@ -152,7 +152,6 @@ vendor/lib/libCB.so
 vendor/lib/libDivxDrm.so
 vendor/lib/libFidoCrypto.so
 vendor/lib/libFileMux.so
-vendor/lib/libFlacSwDec.so
 vendor/lib/libGPTEE.so
 vendor/lib/libI420colorconvert.so
 vendor/lib/libNimsWrap.so
@@ -478,7 +477,6 @@ vendor/lib64/libCommandSvc.so
 vendor/lib64/libDivxDrm.so
 vendor/lib64/libFidoCrypto.so
 vendor/lib64/libFileMux.so
-vendor/lib64/libFlacSwDec.so
 vendor/lib64/libGPTEE.so
 vendor/lib64/libI420colorconvert.so
 vendor/lib64/libNimsWrap.so
