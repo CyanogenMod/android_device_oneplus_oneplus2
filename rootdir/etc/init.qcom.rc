@@ -36,9 +36,6 @@ on early-fs
     mount_all /fstab.qcom
 
 on init
-    # Preload the BoringSSL wrapper
-    export LD_PRELOAD "/system/lib64/libboringssl-compat.so"
-
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
