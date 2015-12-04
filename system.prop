@@ -41,7 +41,6 @@ use.voice.path.for.pcm.voip=true
 audio.offload.multiple.enabled=true
 audio.offload.gapless.enabled=true
 mm.enable.smoothstreaming=true
-mm.enable.qcom_parser=3314291
 audio.offload.buffer.size.kb=1024
 audio.dolby.ds2.enabled=true
 audio.dolby.ds2.hardbypass=true

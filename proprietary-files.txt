@@ -150,7 +150,6 @@ vendor/lib/lib-sec-disp.so
 vendor/lib/libC2D2.so
 vendor/lib/libCB.so
 vendor/lib/libDivxDrm.so
-vendor/lib/libExtendedExtractor.so
 vendor/lib/libFidoCrypto.so
 vendor/lib/libFileMux.so
 vendor/lib/libFlacSwDec.so
@@ -360,7 +359,6 @@ vendor/lib/libmmipstreamsourcehttp.so
 vendor/lib/libmmipstreamutils.so
 vendor/lib/libmmjpeg.so
 vendor/lib/libmmosal.so
-vendor/lib/libmmparser.so
 vendor/lib/libmmqjpeg_codec.so
 vendor/lib/libmmqjpegdma.so
 vendor/lib/libmmrtpdecoder.so
@@ -478,7 +476,6 @@ vendor/lib64/libC2D2.so
 vendor/lib64/libCB.so
 vendor/lib64/libCommandSvc.so
 vendor/lib64/libDivxDrm.so
-vendor/lib64/libExtendedExtractor.so
 vendor/lib64/libFidoCrypto.so
 vendor/lib64/libFileMux.so
 vendor/lib64/libFlacSwDec.so
@@ -568,7 +565,6 @@ vendor/lib64/libmmipstreamnetwork.so
 vendor/lib64/libmmipstreamsourcehttp.so
 vendor/lib64/libmmipstreamutils.so
 vendor/lib64/libmmosal.so
-vendor/lib64/libmmparser.so
 vendor/lib64/libmmrtpdecoder.so
 vendor/lib64/libmmrtpencoder.so
 vendor/lib64/libmmwfdinterface.so
