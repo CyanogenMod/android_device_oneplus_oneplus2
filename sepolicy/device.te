@@ -1,5 +1,7 @@
 type adspd_device, dev_type;
 
+type drm_block_device, dev_type;
+
 type efs_block_device, dev_type;
 type mdm_helper_device, dev_type;
 type fingerprint_device, dev_type;
