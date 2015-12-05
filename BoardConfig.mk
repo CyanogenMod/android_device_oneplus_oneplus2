@@ -203,6 +203,7 @@ BOARD_SEPOLICY_UNION += \
     surfaceflinger.te \
     system_app.te \
     system_server.te \
+    tee.te \
     wcnss_service.te \
     ueventd.te \
     usb_uicc_daemon.te \
