@@ -45,7 +45,6 @@ service qcom-usb-sh /system/bin/sh /init.qcom.usb.sh
 
 # MTP
 on property:sys.usb.config=mtp
-    setprop sys.usb.cdrom /system/etc/usb_drivers.iso
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor 2A70
     write /sys/class/android_usb/android0/idProduct F003
@@ -56,7 +55,6 @@ on property:sys.usb.config=mtp
 
 on property:sys.usb.config=mtp,adb
     stop adbd
-    setprop sys.usb.cdrom /system/etc/usb_drivers.iso
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor 2A70
     write /sys/class/android_usb/android0/idProduct 9011
