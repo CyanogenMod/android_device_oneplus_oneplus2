@@ -24,8 +24,9 @@
 
 /dev/i2c-6                                                      u:object_r:audio_device:s0
 
-/sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/gesture_list       u:object_r:touchscreen_file:s0
-/sys/devices/soc.0/f9924000.i2c/i2c-2/2-004a/en_gesture         u:object_r:touchscreen_file:s0
+/sys/devices/soc.0/tri_state_key.82/keyCode_top                 u:object_r:touchscreen_file:s0
+/sys/devices/soc.0/tri_state_key.82/keyCode_middle              u:object_r:touchscreen_file:s0
+/sys/devices/soc.0/tri_state_key.82/keyCode_bottom              u:object_r:touchscreen_file:s0
 
 /dev/fpc1020                                                    u:object_r:fingerprint_device:s0
 /data/misc/fp(/.*)?                                             u:object_r:fingerprint_data:s0
