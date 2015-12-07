@@ -117,7 +117,6 @@ lib/libqomx_core.so
 lib/libril.so
 lib/librmnetctl.so
 lib64/hw/lights.msm8994.so
-lib64/hw/sensors.hal.tof.so
 lib64/libcnefeatureconfig.so
 lib64/libopcamera.so
 lib64/libopcameralib.so
