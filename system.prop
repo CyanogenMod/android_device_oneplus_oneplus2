@@ -2,8 +2,8 @@
 
 ro.build.product=OnePlus2
 ro.product.device=OnePlus2
-ro.build.description=OnePlus2-user 5.1.1 LMY47V 21 dev-keys
-ro.build.fingerprint=OnePlus/OnePlus2/OnePlus2:5.1.1/LMY47V/1436933040:user/release-keys
+ro.build.description=OnePlus2-eng 6.0 MDB08M dev-keys
+ro.build.fingerprint=OnePlus/OnePlus2/OnePlus2:6.0/MDB08M/regalstreak:eng/release-keys
 
 # RIL
 rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
