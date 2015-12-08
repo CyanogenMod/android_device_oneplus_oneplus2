@@ -173,7 +173,6 @@ vendor/lib/libSecureUILib.so
 vendor/lib/libStDrvInt.so
 vendor/lib/libSubSystemShutdown.so
 vendor/lib/libTimeService.so
-vendor/lib/libWVStreamControlAPI_L3.so
 vendor/lib/libacdb-fts.so
 vendor/lib/libacdbloader.so
 vendor/lib/libacdbmapper.so
