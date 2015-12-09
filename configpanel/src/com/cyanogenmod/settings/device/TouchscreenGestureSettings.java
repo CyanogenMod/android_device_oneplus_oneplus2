@@ -16,7 +16,7 @@
 
 package com.cyanogenmod.settings.device;
 
-import com.android.internal.util.cm.ScreenType;
+import org.cyanogenmod.internal.util.ScreenType;
 
 import java.io.File;
 
