@@ -156,6 +156,12 @@ int Fpc1020Sensor::getEnrolledFingerprints(android::Vector<EnrolledFingerprint>&
 int Fpc1020Sensor::removeId(EnrolledFingerprint& fp)
 {
     ALOGV("removeId(%d)", fp.fid);
+
+    if (fp.fid == 0) {
+        // Fingerprint ID 0 means 'clear all fingerprints'
+        return clearEnrolledFingerprints();
+    }
+
     ssize_t index = mFpMetadata.indexOfKey(fp.fid);
     if (index >= 0) {
         fp.gid = mFpMetadata.valueAt(index).gid;
@@ -576,6 +582,9 @@ int Fpc1020Sensor::AuthenticationThread::doSingleAuthentication()
         FingerprintMetadata meta = mSensor->mFpMetadata.valueAt(index);
         EnrolledFingerprint fp(id, meta.gid);
         mSensor->mAuthenticateCb(&fp, meta.userId, mSensor->mCbData);
+
+        // we're seemingly supposed to go to idle state after a successful authentication
+        requestExit();
     }
 
 out:
