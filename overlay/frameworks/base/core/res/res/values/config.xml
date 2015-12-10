@@ -121,6 +121,7 @@
             64 - Volume rocker
          For example, a device with Home, Back and Menu keys would set this
          config to 7. -->
+         <add-resource type="integer" name="config_deviceHardwareKeys"> </add-resource>
     <integer name="config_deviceHardwareKeys">83</integer>
 
     <!-- Hardware keys present on the device with the ability to wake, stored as a bit field.
@@ -300,6 +301,11 @@
     <!-- Flag indicating whether the we should enable the automatic brightness in Settings.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">true</bool>
+     <!-- Performance profiles -->
+     <add-resource type="string" name="config_perf_profile_prop"> </add-resource>
+    <string name="config_perf_profile_prop">powerhal</string>
+    <add-resource type="string" name="config_perf_profile_default_entry"> </add-resource>
+    <string name="config_perf_profile_default_entry">1</string>
 
     <!-- Performance profiles -->
     <string name="config_perf_profile_prop">powerhal</string>

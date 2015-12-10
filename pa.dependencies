@@ -1,0 +1,32 @@
+[
+  {
+        "remote":      "github",
+        "repository":  "CyanogenMod/android_device_qcom_common",
+        "target_path": "device/qcom/common",
+        "revision":    "cm-12.1"
+    },
+  {
+        "remote":      "github",
+        "repository":  "CyanogenMod/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9",
+        "target_path": "prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9",
+        "revision":    "cm-12.1"
+  },
+  {
+        "remote":      "github",
+        "repository":  "CyanogenMod/android_device_oppo_common",
+        "target_path": "device/oppo/common",
+        "revision":    "cm-12.1"
+  },
+  {
+        "remote":      "github",
+        "repository":  "CyanogenMod/android_kernel_oneplus_msm8994",
+        "target_path": "kernel/oneplus/msm8994",
+        "revision":    "cm-12.1"
+    },
+    {
+        "remote":      "blobs",
+        "repository":  "proprietary_vendor_oneplus",
+        "target_path": "vendor/oneplus",
+        "revision":    "cm-12.1"
+    }
+]
