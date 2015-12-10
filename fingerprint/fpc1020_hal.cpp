@@ -190,11 +190,13 @@ static int fingerprint_remove(struct fingerprint_device *dev,
         return -EINVAL;
     }
     Fpc1020Sensor::EnrolledFingerprint fp(fid, gid);
-    int ret = to_impl(dev)->removeId(fp);
+    int ret = device->impl->removeId(fp);
     if (ret != 0) {
         ALOGE("Removing enrolled fingerprint failed: %d", ret);
         return ret;
     }
+
+    device->impl->goToIdleState();
 
     fingerprint_notify_t notify = fingerprint_get_notify(dev);
     if (notify) {
