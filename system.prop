@@ -61,9 +61,6 @@ persist.speaker.prot.enable=false
 persist.spkr.cal.duration=0
 qcom.hw.aac.encoder=true
 
-# CNE
-persist.cne.feature=1
-
 # GPS
 persist.gps.qc_nlp_in_use=1
 persist.loc.nlp_name=com.qualcomm.location
@@ -90,10 +87,6 @@ ro.opengles.version=196609
 # IO Scheduler
 sys.io.scheduler=bfq
 
-# Property for vendor specific library
-ro.vendor.at_library=libqti-at.so
-ro.vendor.gt_library=libqti-gt.so
-
 # QC vendor extension
 ro.vendor.extension_library=libqti-perfd-client.so
 ro.frp.pst=/dev/block/bootdevice/by-name/config
@@ -108,5 +101,4 @@ ro.qc.sdk.camera.facialproc=false
 persist.timed.enable=true
 
 # Video
-media.stagefright.log-uri=1
 vidc.enc.dcvs.extra-buff-count=2

@@ -51,8 +51,7 @@ PRODUCT_PACKAGES += \
     init.qcom.bt.sh \
     init.qcom.fm.sh \
     init.qcom.post_boot.sh \
-    init.qcom.ril.sh \
-    init.qcom.uicc.sh
+    init.qcom.ril.sh
 
 # Permissions
 PRODUCT_COPY_FILES += \
