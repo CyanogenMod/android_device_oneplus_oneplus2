@@ -1,8 +1,0 @@
-allow mpdecision self:capability { dac_override net_admin fsetid chown };
-
-allow mpdecision power_control_device:chr_file w_file_perms;
-allow mpdecision mpdecision_socket:dir rw_dir_perms;
-allow mpdecision mpdecision_socket:sock_file { create_file_perms unlink };
-
-r_dir_file(mpdecision, system_server)
-r_dir_file(mpdecision, mediaserver)

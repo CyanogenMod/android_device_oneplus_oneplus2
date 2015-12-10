@@ -1,1 +1,0 @@
-allow init_shell bluetooth_loader_exec:file execute_no_trans;
