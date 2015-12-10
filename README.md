@@ -8,9 +8,6 @@ Add this to your localmanifest
   <project path="kernel/oneplus/msm8994" name="regalstreak/android_kernel_oneplus_msm8994" remote="github" revision="cm-13.0" />
   <project path="vendor/oneplus" name="regalstreak/android_vendor_oneplus" remote="github" revision="cm-13.0" />
   <project path="device/qcom/common" name="CyanogenMod/android_device_qcom_common" remote="github" revision="cm-13.0" />
-  <project path="hardware/sony/thermanager" name="CyanogenMod/android_hardware_sony_thermanager" remote="github" revision="cm-13.0" />
-  <project path="hardware/sony/timekeep" name="CyanogenMod/android_hardware_sony_timekeep" remote="github" revision="cm-13.0" />
-</manifest>
 ```
 
 ###Building
