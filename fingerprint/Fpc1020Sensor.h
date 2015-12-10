@@ -51,7 +51,9 @@ class Fpc1020Sensor {
             mCbData(cbData),
             mAuthenticatorId(0)
         {
-            loadPersistedMetaData();
+            if (!loadPersistedMetaData()) {
+                clearEnrolledFingerprints();
+            }
         }
 
         ~Fpc1020Sensor() {
@@ -85,7 +87,8 @@ class Fpc1020Sensor {
             return !thread || !thread->isRunning();
         }
 
-        void loadPersistedMetaData();
+        bool loadPersistedMetaData();
+        int clearEnrolledFingerprints();
         void persistMetaData();
 
         void stopWatchdogThread();
