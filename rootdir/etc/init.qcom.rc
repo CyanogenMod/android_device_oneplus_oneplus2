@@ -671,15 +671,8 @@ on property:init.svc.surfaceflinger=stopped
 on property:init.svc.surfaceflinger=running
     start ppd
 
-service wcnss-service /system/bin/wcnss_service
-    class late_start
-    user system
-    group system wifi radio
-    oneshot
-
 on property:vold.decrypt=trigger_restart_framework
     start config_bluetooth
-    start wcnss-service
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
