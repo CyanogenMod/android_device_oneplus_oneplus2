@@ -16,11 +16,6 @@
 
 package com.cyanogenmod.settings.device;
 
-<<<<<<< HEAD
-import org.cyanogenmod.internal.util.ScreenType;
-
-=======
->>>>>>> 84ffc44... oneplus2: Use ScreenType util from cmsdk
 import java.io.File;
 
 import com.cyanogenmod.settings.device.utils.Constants;
@@ -127,3 +122,4 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
                 Settings.System.getInt(getContentResolver(), KEY_HAPTIC_FEEDBACK, 1) != 0);
     }
 }
+

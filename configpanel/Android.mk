@@ -23,12 +23,8 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 LOCAL_CERTIFICATE := platform
 LOCAL_PACKAGE_NAME := ConfigPanel
 
-<<<<<<< HEAD
-LOCAL_STATIC_JAVA_LIBRARIES := org.cyanogenmod.platform.internal
-=======
 LOCAL_STATIC_JAVA_LIBRARIES := \
     org.cyanogenmod.platform.internal
->>>>>>> 84ffc44... oneplus2: Use ScreenType util from cmsdk
 
 include $(BUILD_PACKAGE)
 endif
