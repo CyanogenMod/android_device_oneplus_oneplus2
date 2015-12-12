@@ -37,7 +37,7 @@ on early-fs
 
 on init
     # Preload the BoringSSL wrapper
-    export LD_PRELOAD "/system/lib64/libboringssl-compat.so"
+    export LD_PRELOAD "libboringssl-compat.so"
 
     export LD_SHIM_LIBS "/system/lib/hw/camera.msm8994.so|/system/lib/libcamera_shim.so"
 
