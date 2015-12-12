@@ -229,6 +229,14 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/netmgr_config.xml:system/etc/data/netmgr_config.xml \
     $(LOCAL_PATH)/configs/qmi_config.xml:system/etc/data/qmi_config.xml
 
+<<<<<<< HEAD
+=======
+# RIL
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig \
+    libril_shim
+
+>>>>>>> fb7cad7... Missing RIL symbols
 # Sensors
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf

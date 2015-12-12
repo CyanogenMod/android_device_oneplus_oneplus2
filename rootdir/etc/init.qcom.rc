@@ -36,6 +36,14 @@ on early-fs
     mount_all /fstab.qcom
 
 on init
+<<<<<<< HEAD
+=======
+    # Preload the BoringSSL wrapper
+    export LD_PRELOAD "libboringssl-compat.so"
+
+    export LD_SHIM_LIBS "/system/lib/hw/camera.msm8994.so|libcamera_shim.so:/system/lib64/libril.so|libril_shim.so"
+
+>>>>>>> fb7cad7... Missing RIL symbols
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
