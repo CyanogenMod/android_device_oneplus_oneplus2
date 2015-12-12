@@ -7,7 +7,6 @@
 -lib/libloc_ds_api.so
 -lib64/libloc_api_v02.so
 -lib64/libloc_ds_api.so
--priv-app/com.qualcomm.location/com.qualcomm.location.apk
 -vendor/lib/libmm-abl.so
 -vendor/lib/libtime_genoff.so
 -vendor/lib64/libmm-abl.so
@@ -88,7 +87,6 @@ etc/firmware/venus.b04
 etc/firmware/venus.mbn
 etc/firmware/venus.mdt
 etc/permissions/com.google.widevine.software.drm.xml
-etc/permissions/com.qualcomm.location.xml
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
 etc/usb_drivers.iso
