@@ -424,6 +424,11 @@ on post-fs-data
     mkdir /data/misc/display 0770 system graphics
     mkdir /persist/display 0770 system graphics
 
+    # use qcril.db to handle Ecc and load MBN
+    copy /system/etc/qcril.db /data/misc/radio/qcril.db
+    chown radio radio /data/misc/radio/qcril.db
+    chmod 0600 /data/misc/radio/qcril.db
+
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown system system /persist
