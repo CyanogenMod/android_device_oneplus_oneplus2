@@ -71,7 +71,7 @@ on init
     chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
 
     # Laser AF in factory mode
-    chown system system /dev/stmvl6180_ranging
+    #chown system system /dev/stmvl6180_ranging
 
     # Leds permission
     chown system system /sys/class/leds/led:flash_0/brightness
@@ -424,11 +424,6 @@ on post-fs-data
     mkdir /data/misc/display 0770 system graphics
     mkdir /persist/display 0770 system graphics
 
-    # use qcril.db to handle Ecc and load MBN
-    copy /system/etc/qcril.db /data/misc/radio/qcril.db
-    chown radio radio /data/misc/radio/qcril.db
-    chmod 0600 /data/misc/radio/qcril.db
-
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown system system /persist
@@ -679,9 +674,49 @@ on property:init.svc.surfaceflinger=stopped
 
 on property:init.svc.surfaceflinger=running
     start ppd
+    
+service wcnss-service /system/bin/wcnss_service
+    class main
+    user system
+    group system wifi diag qcom_diag radio
+    oneshot
+    
+service imsqmidaemon /system/bin/imsqmidaemon
+    class main
+    user system
+    socket ims_qmid stream 0660 system radio
+    group radio net_raw log qcom_diag
+
+service imsdatadaemon /system/bin/imsdatadaemon
+    class main
+    user system
+    socket ims_datad stream 0660 system radio
+    group system wifi radio inet net_raw log qcom_diag net_admin
+    disabled
+
+on property:sys.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon
+
+service ims_rtp_daemon /system/bin/ims_rtp_daemon
+    class main
+    user system
+    socket ims_rtpd stream 0660 system radio
+    group radio net_raw diag qcom_diag log
+    disabled
+
+service imscmservice /system/bin/imscmservice
+    class main
+    user system
+    group radio net_raw diag qcom_diag log
+    disabled
+
+on property:sys.ims.DATA_DAEMON_STATUS=1
+   start ims_rtp_daemon
+   start imscmservice
 
 on property:vold.decrypt=trigger_restart_framework
     start config_bluetooth
+    start wcnss-service
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
@@ -774,6 +809,12 @@ service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     group bluetooth net_bt_admin misc net_bt_stack qcom_diag net_bt
     disabled
     oneshot
+    
+service port-bridge /system/bin/port-bridge /dev/mhi_pipe_32 /dev/ttyGS0
+    class main
+    user radio system
+    group radio system inet
+    disabled
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
@@ -914,6 +955,9 @@ service cnss_diag /system/bin/cnss_diag --q
     group root
     disabled
     oneshot
+    
+service cnss-daemon /system/bin/cnss-daemon -n -l
+    class late_start
 
 service dhcpcd_bt-pan /system/bin/dhcpcd -BKLG
     class late_start
