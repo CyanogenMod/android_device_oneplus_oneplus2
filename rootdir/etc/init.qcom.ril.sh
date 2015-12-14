@@ -8,6 +8,7 @@ start ipacm-diag
 start ipacm
 
 datamode=`getprop persist.data.mode`
+netmgr=`getprop ro.use_data_netmgrd`
 multisim=`getprop persist.radio.multisim.config`
 
 if [ "$multisim" = "dsds" ] || [ "$multisim" = "dsda" ]; then
@@ -21,9 +22,13 @@ case "$datamode" in
         ;;
     "concurrent")
         start qti
-        start netmgrd
+        if [ "$netmgr" = "true" ]; then
+            start netmgrd
+        fi
         ;;
     *)
-        start netmgrd
+        if [ "$netmgr" = "true" ]; then
+            start netmgrd
+        fi
         ;;
 esac
