@@ -206,6 +206,27 @@ int Fpc1020Sensor::activate(bool connect)
         return ret;
     }
 
+    if (mFpClockFd < 0) {
+        mFpClockFd = open("/sys/devices/virtual/fpsensor/fpc1020/clock_enable", O_WRONLY);
+        if (mFpClockFd < 0) {
+            ret = -errno;
+            ALOGE("Failed opening FP clock enable: %d", ret);
+            goto out;
+        }
+    }
+
+    if (mFpApTzFd < 0) {
+        mFpApTzFd = open("/sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch", O_WRONLY);
+        if (mFpApTzFd < 0) {
+            ret = -errno;
+            ALOGE("Failed opening FP ap tz switch: %d", ret);
+            goto out;
+        }
+    }
+
+    write(mFpClockFd, "1", 1);
+    write(mFpApTzFd, "0", 1);
+
     if (mFpcFd < 0) {
         mFpcFd = open("/dev/fpc1020", O_RDWR);
         if (mFpcFd < 0) {
@@ -250,6 +271,16 @@ void Fpc1020Sensor::deactivate()
             ALOGW("Failed to release TZ app: %d", ret);
         }
         mQseecom.stop();
+    }
+    if (mFpClockFd >= 0) {
+        write(mFpClockFd, "0", 1);
+        close(mFpClockFd);
+        mFpClockFd = -1;
+    }
+    if (mFpApTzFd >= 0) {
+        write(mFpApTzFd, "1", 1);
+        close(mFpApTzFd);
+        mFpApTzFd = -1;
     }
     if (mFpcFd >= 0) {
         close(mFpcFd);
