@@ -97,7 +97,7 @@ BOARD_CHARGER_DISABLE_INIT_BLANK := true
 EXTENDED_FONT_FOOTPRINT := true
 
 # GPS
-TARGET_GPS_HAL_PATH := device/oneplus/oneplus2/gps
+USE_DEVICE_SPECIFIC_GPS := true
 TARGET_NO_RPC := true
 
 # Graphics
