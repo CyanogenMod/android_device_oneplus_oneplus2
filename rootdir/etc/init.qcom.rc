@@ -36,14 +36,11 @@ on early-fs
     mount_all /fstab.qcom
 
 on init
-<<<<<<< HEAD
-=======
     # Preload the BoringSSL wrapper
     export LD_PRELOAD "libboringssl-compat.so"
 
     export LD_SHIM_LIBS "/system/lib/hw/camera.msm8994.so|libcamera_shim.so:/system/lib64/libril.so|libril_shim.so"
 
->>>>>>> fb7cad7... Missing RIL symbols
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
@@ -55,23 +52,23 @@ on init
 
     # Add for fpc fingerprints permission
     chmod -h 777 /dev/qseecom
- #   chown system system /dev/fpc1020
- #   chmod 0660 /dev/fpc1020
+    chown system system /dev/fpc1020
+    chmod 0660 /dev/fpc1020
 
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_shift
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_groups
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_start
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_count
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_mode
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_count
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_start
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_settings_mux
-  #  chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
-  #  chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
-  #  chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_shift
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_groups
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_start
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_count
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_mode
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_count
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_start
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_settings_mux
+    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
+    chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
+    chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
 
     # Laser AF in factory mode
     chown system system /dev/stmvl6180_ranging
@@ -486,31 +483,31 @@ on post-fs-data
     chmod 2770 /data/system/perfd
 
 # start camera server as daemon
-#service qcamerasvr /system/bin/mm-qcamera-daemon
-#    class late_start
-#    user camera
-#    group camera system inet input graphics
+service qcamerasvr /system/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input graphics
 
 service qseecomd /system/bin/qseecomd
     class core
     user root
     group root
 
-#service perfd /system/bin/perfd
-#    class main
-#    user root
-#    disabled
+service perfd /system/bin/perfd
+    class main
+    user root
+    disabled
 
-#service per_mgr /system/bin/pm-service
-#    class core
-#    user system
-#    group system net_raw
+service per_mgr /system/bin/pm-service
+    class core
+    user system
+    group system net_raw
 
-#service per_proxy /system/bin/pm-proxy
-#    class core
-#    user system
-#    group system net_raw
-#    disabled
+service per_proxy /system/bin/pm-proxy
+    class core
+    user system
+    group system net_raw
+    disabled
 
 on property:init.svc.per_mgr=running
     start per_proxy
@@ -521,10 +518,10 @@ on property:sys.shutdown.requested=*
 service thermal-engine /system/bin/thermal-engine
     class main
     user root
-    group root
     socket thermal-send-client stream 0666 system system
     socket thermal-recv-client stream 0660 system system
     socket thermal-recv-passive-client stream 0666 system system
+    group root
 
 service time_daemon /system/bin/time_daemon
     class late_start
@@ -536,97 +533,103 @@ service adsprpcd /system/bin/adsprpcd
     user media
     group media
 
-#service usf_tester /system/bin/usf_tester
-#    user system
-#    group system inet
-#    disabled
+service usf_tester /system/bin/usf_tester
+    user system
+    group system inet
+    disabled
 
-#service usf_epos /system/bin/usf_epos
-#    class main
-#    user system
-#    group system inet
-#    disabled
+service usf_epos /system/bin/usf_epos
+    class main
+    user system
+    group system inet
+    disabled
 
-#service usf_gesture /system/bin/usf_gesture
-#    user system
-#    group system inet
-#    disabled
+service usf_gesture /system/bin/usf_gesture
+    user system
+    group system inet
+    disabled
 
-#service usf_sync_gesture /system/bin/usf_sync_gesture
-#    user system
-#    group system inet audio
-#    disabled
+service usf_sync_gesture /system/bin/usf_sync_gesture
+    user system
+    group system inet audio
+    disabled
 
-#service usf_p2p /system/bin/usf_p2p
-#    user system
-#    group system inet
-#    disabled
+service usf_p2p /system/bin/usf_p2p
+    user system
+    group system inet
+    disabled
 
-#service usf_hovering /system/bin/usf_hovering
-#    user system
-#    group system inet
-#    disabled
+service usf_hovering /system/bin/usf_hovering
+    user system
+    group system inet
+    disabled
 
-#service usf_proximity /system/bin/usf_proximity
-#    user system
-#    group system inet
-#    disabled
+service usf_proximity /system/bin/usf_proximity
+    user system
+    group system inet
+    disabled
 
-#service usf_pairing /system/bin/usf_pairing
-#    user system
-#    group system inet
-#    disabled
+service usf_pairing /system/bin/usf_pairing
+    user system
+    group system inet
+    disabled
 
-#service usf_sw_calib /system/bin/usf_sw_calib
-#    user system
-#    group system inet
-#    disabled
+service usf_sw_calib /system/bin/usf_sw_calib
+    user system
+    group system inet
+    disabled
 
-#service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
-#    class late_start
-#    user root
-#    disabled
-#    oneshot
+service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
+    class late_start
+    user root
+    disabled
+    oneshot
 
-#on property:init.svc.bootanim=running
-#    write /sys/module/lpm_levels/system/a53/cpu0/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a53/cpu1/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a53/cpu2/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a53/cpu3/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a57/cpu4/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a57/cpu5/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a57/cpu6/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a57/cpu7/retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a57/a57-l2-retention/idle_enabled 0
-#    write /sys/module/lpm_levels/system/a53/a53-l2-retention/idle_enabled 0
-#    write /sys/module/lpm_levels/parameters/sleep_disabled 0
+on property:init.svc.bootanim=running
+    write /sys/module/lpm_levels/system/a53/cpu0/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/cpu1/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/cpu2/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/cpu3/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu4/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu5/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu6/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/cpu7/retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a57/a57-l2-retention/idle_enabled 0
+    write /sys/module/lpm_levels/system/a53/a53-l2-retention/idle_enabled 0
+    write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
-#on property:init.svc.bootanim=stopped
-#    start usf-post-boot
+on property:init.svc.bootanim=stopped
+    start usf-post-boot
+
+service energy-awareness /system/bin/energy-awareness
+    class main
+    user root
+    group system
+    oneshot
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
 
 # corefile limit and ETB enabling
-#on property:persist.debug.trace=1
-#    mkdir /data/core 0777 root root
-#    write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
-#    write /sys/devices/system/cpu/cpu1/online 1
-#    write /sys/devices/system/cpu/cpu2/online 1
-#    write /sys/devices/system/cpu/cpu3/online 1
-#    write /sys/bus/coresight/devices/coresight-etm0/enable 0
-#    write /sys/bus/coresight/devices/coresight-etm1/enable 0
-#    write /sys/bus/coresight/devices/coresight-etm2/enable 0
-#    write /sys/bus/coresight/devices/coresight-etm3/enable 0
-#    write /sys/bus/coresight/devices/coresight-etm0/reset 1
-#    write /sys/bus/coresight/devices/coresight-etm1/reset 1
-#    write /sys/bus/coresight/devices/coresight-etm2/reset 1
-#    write /sys/bus/coresight/devices/coresight-etm3/reset 1
-#    write /sys/bus/coresight/devices/coresight-etm0/enable 1
-#    write /sys/bus/coresight/devices/coresight-etm1/enable 1
-#    write /sys/bus/coresight/devices/coresight-etm2/enable 1
-#    write /sys/bus/coresight/devices/coresight-etm3/enable 1
-#    write /sys/module/coresight_event/parameters/event_abort_enable 1
+on property:persist.debug.trace=1
+    mkdir /data/core 0777 root root
+    write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+    write /sys/bus/coresight/devices/coresight-etm0/enable 0
+    write /sys/bus/coresight/devices/coresight-etm1/enable 0
+    write /sys/bus/coresight/devices/coresight-etm2/enable 0
+    write /sys/bus/coresight/devices/coresight-etm3/enable 0
+    write /sys/bus/coresight/devices/coresight-etm0/reset 1
+    write /sys/bus/coresight/devices/coresight-etm1/reset 1
+    write /sys/bus/coresight/devices/coresight-etm2/reset 1
+    write /sys/bus/coresight/devices/coresight-etm3/reset 1
+    write /sys/bus/coresight/devices/coresight-etm0/enable 1
+    write /sys/bus/coresight/devices/coresight-etm1/enable 1
+    write /sys/bus/coresight/devices/coresight-etm2/enable 1
+    write /sys/bus/coresight/devices/coresight-etm3/enable 1
+    write /sys/module/coresight_event/parameters/event_abort_enable 1
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
@@ -668,48 +671,8 @@ on property:init.svc.surfaceflinger=stopped
 on property:init.svc.surfaceflinger=running
     start ppd
 
-service wcnss-service /system/bin/wcnss_service
-    class main
-    user system
-    group system wifi diag qcom_diag radio
-    oneshot
-
-#service imsqmidaemon /system/bin/imsqmidaemon
-#    class main
-#    user system
-#    socket ims_qmid stream 0660 system radio
-#    group radio net_raw log qcom_diag
-
-#service imsdatadaemon /system/bin/imsdatadaemon
-#    class main
-#    user system
-#    socket ims_datad stream 0660 system radio
-#    group system wifi radio inet net_raw log qcom_diag net_admin
-#    disabled
-
-#on property:sys.ims.QMI_DAEMON_STATUS=1
-#    start imsdatadaemon
-
-#service ims_rtp_daemon /system/bin/ims_rtp_daemon
-#    class main
-#    user system
-#    socket ims_rtpd stream 0660 system radio
-#    group radio net_raw diag qcom_diag log
-#    disabled
-
-#service imscmservice /system/bin/imscmservice
-#    class main
-#    user system
-#    group radio net_raw diag qcom_diag log
-#    disabled
-
-#on property:sys.ims.DATA_DAEMON_STATUS=1
-#   start ims_rtp_daemon
-#   start imscmservice
-
 on property:vold.decrypt=trigger_restart_framework
     start config_bluetooth
-    start wcnss-service
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
@@ -717,10 +680,6 @@ on property:persist.env.fastdorm.enabled=true
 service cnd /system/bin/cnd
     class late_start
     socket cnd stream 660 root inet
-
-service dpmd /system/bin/dpmd
-    class late_start
-    socket dpmd stream 660 root system
 
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
@@ -730,7 +689,6 @@ service irsc_util /system/bin/irsc_util "/etc/sec_config"
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
-    group system
 
 service rfs_access /system/bin/rfs_access
    class core
@@ -780,12 +738,12 @@ on property:bluetooth.hciattach=true
 on property:bluetooth.hciattach=false
     setprop bluetooth.status off
 
-#service bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
-#    class late_start
-#    user bluetooth
-#    group bluetooth net_bt_admin inet
-#    disabled
-#    oneshot
+service bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
+    class late_start
+    user bluetooth
+    group bluetooth net_bt_admin inet
+    disabled
+    oneshot
 
 service bt-sap /system/bin/sapd 15
     user bluetooth
@@ -794,12 +752,12 @@ service bt-sap /system/bin/sapd 15
     disabled
     oneshot
 
-#service btsnoop /system/bin/btsnoop
-#   user bluetooth
-#   group bluetooth net_bt_admin sdcard_rw sdcard_r
-#   class late_start
-#   disabled
-#   oneshot
+service btsnoop /system/bin/btsnoop
+   user bluetooth
+   group bluetooth net_bt_admin sdcard_rw sdcard_r
+   class late_start
+   disabled
+   oneshot
 
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
@@ -808,22 +766,16 @@ service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     disabled
     oneshot
 
-service port-bridge /system/bin/port-bridge /dev/mhi_pipe_32 /dev/ttyGS0
-    class main
-    user radio system
-    group radio system inet
-    disabled
-
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
     class main
-    user radio
-    group radio audio bluetooth gps nfc qcom_diag diag
+    user root
+    group radio audio bluetooth gps nfc qcom_diag
+    disabled
 
 service netmgrd /system/bin/netmgrd
     class main
-    user root
-    group radio
+    disabled
 
 service ipacm-diag /system/bin/ipacm-diag
     class main
@@ -954,9 +906,6 @@ service cnss_diag /system/bin/cnss_diag --q
     disabled
     oneshot
 
-service cnss-daemon /system/bin/cnss-daemon -n -l
-    class late_start
-
 service dhcpcd_bt-pan /system/bin/dhcpcd -BKLG
     class late_start
     disabled
@@ -987,11 +936,6 @@ service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
-service loc_launcher /system/bin/loc_launcher
-    #loc_launcher will start as root and set its uid to gps
-    class late_start
-    group gps inet net_raw qcom_diag net_admin wifi diag
-
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     class late_start
     user root
@@ -999,17 +943,17 @@ service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     disabled
     oneshot
 
-#service drmdiag /system/bin/drmdiagapp
-#    class late_start
-#     user root
-#     disabled
-#     oneshot
+service drmdiag /system/bin/drmdiagapp
+    class late_start
+     user root
+     disabled
+     oneshot
 
-#on property:drmdiag.load=1
-#    start drmdiag
+on property:drmdiag.load=1
+    start drmdiag
 
-#on property:drmdiag.load=0
-#    stop drmdiag
+on property:drmdiag.load=0
+    stop drmdiag
 
 service qcom-sh /system/bin/sh /init.qcom.sh
     class late_start
@@ -1063,24 +1007,6 @@ service rild2-wrapper /system/bin/sh /system/etc/init.qcom.ril.sh
     group root
     oneshot
 
-service usb_uicc_enable /system/bin/sh /system/etc/init.qcom.uicc.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-
-service usb_uicc_daemon /system/bin/usb_uicc_client
-    class main
-    user system
-    group system log net_raw
-    oneshot
-
-on property:sys.usb_uicc.enabled=1
-    start usb_uicc_enable
-
-on property:sys.usb_uicc.enabled=0
-    start usb_uicc_enable
-
 service profiler_daemon /system/bin/profiler_daemon
     class late_start
     user root
@@ -1095,29 +1021,6 @@ service ssr_diag /system/bin/ssr_diag
     user system
     group system
     disabled
-
-# Define fastmmi
-service fastmmi /system/bin/mmi
-    user root
-    group root
-    disabled
-
-on mmi
-    start fastmmisrv
-
-on ffbm
-    trigger early-fs
-    trigger fs
-    trigger post-fs
-    trigger post-fs-data
-
-    # Load properties from /system/ + /factory after fs mount. Place
-    # this in another action so that the load will be scheduled after the prior
-    # issued fs triggers have completed.
-    trigger load_all_props_action
-
-    trigger early-boot
-    trigger mmi
 
 service hvdcp /system/bin/hvdcp
     class core
@@ -1145,34 +1048,10 @@ on property:sys.qbcharger.enable=true
 on property:sys.qbcharger.enable=false
     stop qbcharger
 
-service diag_mdlog_start /system/bin/diag_mdlog
-    class late_start
-    user shell
-    group system qcom_diag sdcard_rw sdcard_r media_rw
-    disabled
-    oneshot
-
-service diag_mdlog_stop /system/bin/diag_mdlog -k
-    class late_start
-    user shell
-    group system qcom_diag sdcard_rw sdcard_r media_rw
-    disabled
-    oneshot
-
-service qlogd /system/xbin/qlogd
-    socket qlogd stream 0662 system system
-    class main
-    disabled
-
-on property:persist.sys.qlogd=1
-    start qlogd
-
-on property:persist.sys.qlogd=0
-    stop qlogd
-
 service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     socket msm_irqbalance seqpacket 660 root system
     class core
     user root
     group root
     disabled
+
