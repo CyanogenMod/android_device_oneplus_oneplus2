@@ -42,6 +42,8 @@ class Fpc1020Sensor {
         Fpc1020Sensor(AcquiredCb acquiredCb, EnrollmentProgressCb enrollmentCb,
                 AuthenticateResultCb authenticateCb, ErrorCb errorCb, void *cbData) :
             mQseecom("fingerprints", 512),
+            mFpClockFd(-1),
+            mFpApTzFd(-1),
             mFpcFd(-1),
             mCancelledDueToTimeout(false),
             mAcquiredCb(acquiredCb),
@@ -139,6 +141,8 @@ class Fpc1020Sensor {
 
     private:
         QSEEComApp mQseecom;
+        int mFpClockFd;
+        int mFpApTzFd;
         int mFpcFd;
 
         android::Mutex mThreadStateLock;

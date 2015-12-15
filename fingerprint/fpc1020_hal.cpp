@@ -139,7 +139,7 @@ static uint64_t fingerprint_get_auth_id(struct fingerprint_device *dev)
 
 static int fingerprint_set_active_group(struct fingerprint_device *dev,
                                         uint32_t gid,
-                                        const char * __unused path)
+                                        const char *path __unused)
 {
     fpc1020_device_t *device = (fpc1020_device_t *) dev;
     device->gid = gid;
