@@ -107,6 +107,3 @@ ro.qc.sdk.camera.facialproc=false
 
 # Time services
 persist.timed.enable=true
-
-# Debug
-debug.db.uid 100000
