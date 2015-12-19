@@ -145,6 +145,8 @@ class Fpc1020Sensor {
         int mFpApTzFd;
         int mFpcFd;
 
+        android::Mutex mTzLock;
+
         android::Mutex mThreadStateLock;
         // all of these are protected by mThreadStateLock
         android::sp<android::Thread> mThread;
@@ -177,3 +179,4 @@ class Fpc1020Sensor {
 };
 
 #endif // FINGERPRINT_FPC1020_SENSOR_H
+
