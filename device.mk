@@ -222,6 +222,10 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_BOOT_JARS += qcmediaplayer
 
+# Camera
+PRODUCT_PACKAGES += \
+    libcamera_shim
+
 # Power
 PRODUCT_PACKAGES += \
     power.msm8994
