@@ -101,6 +101,9 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/oneplus/oneplus2/bluetooth
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 
+# BoringSSL
+TARGET_REQUIRES_B64_COMPAT := true
+
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
