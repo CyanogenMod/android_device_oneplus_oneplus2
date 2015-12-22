@@ -54,6 +54,12 @@ on enable-low-power
     write /sys/devices/soc.0/qcom,bcl.62/hotplug_soc_mask 240
     write /sys/devices/soc.0/qcom,bcl.62/mode "enable"
 
+    # Configure foreground and background cpuset
+    write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 4-7
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-3
+
     # Enable low power modes
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
