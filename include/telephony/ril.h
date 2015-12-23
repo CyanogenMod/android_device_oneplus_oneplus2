@@ -730,6 +730,8 @@ typedef enum {
     PDP_FAIL_TETHERED_CALL_ACTIVE = -6,   /* data call was disconnected by modem because tethered
                                              mode was up on same APN/data profile - no retry until
                                              tethered call is off */
+    PDP_FAIL_IPV4_CALL_THROTTLED = -7,
+    PDP_FAIL_IPV6_CALL_THROTTLED = -8,
 
     PDP_FAIL_ERROR_UNSPECIFIED = 0xffff,  /* retry silently */
 } RIL_DataCallFailCause;
