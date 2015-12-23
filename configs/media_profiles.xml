@@ -41,17 +41,6 @@
   <!ATTLIST Camera previewFrameRate CDATA #REQUIRED>
   <!ELEMENT EncoderOutputFileFormat EMPTY>
   <!ATTLIST EncoderOutputFileFormat name (mp4|3gp) #REQUIRED>
-  <!ELEMENT VideoEncoderCap EMPTY>
-  <!ATTLIST VideoEncoderCap name (h264|h263|m4v|wmv) #REQUIRED>
-  <!ATTLIST VideoEncoderCap enabled (true|false) #REQUIRED>
-  <!ATTLIST VideoEncoderCap minBitRate CDATA #REQUIRED>
-  <!ATTLIST VideoEncoderCap maxBitRate CDATA #REQUIRED>
-  <!ATTLIST VideoEncoderCap minFrameWidth CDATA #REQUIRED>
-  <!ATTLIST VideoEncoderCap maxFrameWidth CDATA #REQUIRED>
-  <!ATTLIST VideoEncoderCap minFrameHeight CDATA #REQUIRED>
-  <!ATTLIST VideoEncoderCap maxFrameHeight CDATA #REQUIRED>
-  <!ATTLIST VideoEncoderCap minFrameRate CDATA #REQUIRED>
-  <!ATTLIST VideoEncoderCap maxFrameRate CDATA #REQUIRED>
   <!ELEMENT AudioEncoderCap EMPTY>
   <!ATTLIST AudioEncoderCap name (amrnb|amrwb|aac|wma) #REQUIRED>
   <!ATTLIST AudioEncoderCap enabled (true|false) #REQUIRED>
