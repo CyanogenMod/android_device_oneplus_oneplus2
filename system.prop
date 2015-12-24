@@ -93,6 +93,7 @@ ro.frp.pst=/dev/block/bootdevice/by-name/config
 drm.service.enabled=true
 
 # Sensors
+camera.disable_zsl_mode=1
 ro.qc.sdk.sensors.gestures=true
 ro.qc.sdk.gestures.camera=false
 ro.qc.sdk.camera.facialproc=false
