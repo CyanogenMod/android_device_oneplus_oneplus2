@@ -50,6 +50,16 @@ on init
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
+    # Slow Motion Scheduling Group
+    mkdir /dev/cpuctl/smsg
+    chown system system /dev/cpuctl/smsg/tasks
+    chmod 0666 /dev/cpuctl/smsg/tasks
+    write /dev/cpuctl/smsg/cpu.shares 52
+    write /dev/cpuctl/smsg/cpu.cfs_period_us 33333
+    write /dev/cpuctl/smsg/cpu.cfs_quota_us 47408
+    write /dev/cpuctl/smsg/cpu.cfs_quota_us_per_task 5926
+    write /dev/cpuctl/smsg/cpu.upmigrate_discourage 1
+
     # Add for fpc fingerprints permission
     chmod -h 777 /dev/qseecom
     chown system system /dev/fpc1020
@@ -76,8 +86,15 @@ on init
     # Leds permission
     chown system system /sys/class/leds/led:flash_0/brightness
     chown system system /sys/class/leds/led:flash_1/brightness
+
+    # Torch
     chown system system /sys/class/leds/led:torch_0/brightness
+    chmod 0666 /sys/class/leds/led:torch_0/brightness
     chown system system /sys/class/leds/led:torch_1/brightness
+    chmod 0666 /sys/class/leds/led:torch_1/brightness
+
+    # Scheduler
+    chown system system /sys/module/cpu_boost/parameters/sysctl_thermal_aware_scheduling
 
     # Vibrator permissions
     chown system system /sys/devices/virtual/timed_output/vibrator/vmax_mv
@@ -165,6 +182,11 @@ on init
     restorecon /sys/class/leds/red/blink
     restorecon /sys/class/leds/green/blink
     restorecon /sys/class/leds/blue/blink
+
+    # Enable cgroup_freezer
+    mkdir /sys/fs/cgroup/freezer 0750 root system
+    mount cgroup none /sys/fs/cgroup/freezer  freezer
+    chmod 777 /sys/fs/cgroup/freezer
 
     # Wifi ftm test
     chown system system /system/bin/wifi_ftm
