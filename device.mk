@@ -14,11 +14,7 @@
 # limitations under the License.
 #
 
-ifneq ($(QCPATH),)
-$(call inherit-product-if-exists, $(QCPATH)/common/config/device-vendor.mk)
-endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
@@ -157,15 +153,19 @@ PRODUCT_PACKAGES += \
 
 # GPS
 PRODUCT_PACKAGES += \
-    gps.msm8994 \
-    flp.conf \
-    gps.conf \
-    izat.conf \
-    lowi.conf \
-    msap.conf \
-    quipc.conf \
-    sap.conf \
-    xtwifi.conf
+    $(LOCAL_PATH)/configs/flp.conf:system/etc/flp.conf \
+    $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
+    $(LOCAL_PATH)/configs/izat.conf:system/etc/izat.conf \
+    $(LOCAL_PATH)/configs/lowi.conf:system/etc/lowi.conf \
+    $(LOCAL_PATH)/configs/msap.conf:system/etc/msap.conf \
+    $(LOCAL_PATH)/configs/quipc.conf:system/etc/quipc.conf \
+    $(LOCAL_PATH)/configs/sap.conf:system/etc/sap.conf \
+    $(LOCAL_PATH)/configs/xtwifi.conf:system/etc/xtwifi.conf
+
+# IPv6
+PRODUCT_PACKAGES += \
+    ebtables \
+    ethertypes
 
 # IRQ
 PRODUCT_COPY_FILES += \
@@ -234,15 +234,20 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.msm8994
 
-# Qualcomm
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/dsi_config.xml:system/etc/data/dsi_config.xml \
-    $(LOCAL_PATH)/configs/netmgr_config.xml:system/etc/data/netmgr_config.xml \
-    $(LOCAL_PATH)/configs/qmi_config.xml:system/etc/data/qmi_config.xml
+# QMI
+PRODUCT_PACKAGES += \
+    dsi_config.xml \
+    netmgr_config.xml \
+    qmi_config.xml
+
+# RIL
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig \
+    libxml2
 
 # Sensors
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
+    $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
 
 # Thermal config
 PRODUCT_COPY_FILES += \
@@ -259,8 +264,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_PACKAGES += \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
     libwpa_client \
     hostapd \
     dhcpcd.conf \
@@ -278,11 +281,8 @@ PRODUCT_PACKAGES += \
 
 # Misc dependency packages
 PRODUCT_PACKAGES += \
-    ebtables \
-    ethertypes \
     curl \
     libnl_2 \
     libbson \
     libcnefeatureconfig \
-    libtinyxml \
-    libxml2
+    libtinyxml
