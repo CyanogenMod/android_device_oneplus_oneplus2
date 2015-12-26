@@ -45,12 +45,11 @@ lib64/hw/sensors.hal.tof.so
 lib64/libopcamera.so
 lib64/libopcameralib.so
 lib/hw/camera.msm8994.so
+lib/libFNVfbEngineLib.so
 lib/libmm-qcamera.so
 lib/libmmcamera_interface.so
 lib/libmmjpeg_interface.so
-lib/liboneplus_camera.so
-lib/libopcamera.so
-lib/libopcameralib.so
+lib/libopcamerahw_interface.so
 lib/libqomx_core.so
 vendor/lib64/libmmcamera2_q3a_core.so
 vendor/lib64/libmmcamera2_sensor_debug.so
@@ -394,7 +393,6 @@ vendor/lib/libqmi_encdec.so
 vendor/lib/libsmemlog.so
 
 # Radio
--app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 -app/shutdownlistener/shutdownlistener.apk
 bin/netmgrd
 bin/qmuxd
@@ -407,6 +405,7 @@ etc/permissions/qcrilhook.xml
 -framework/qcrilhook.jar
 lib64/libparam.so
 lib64/librmnetctl.so
+-priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 vendor/lib64/libcneapiclient.so
 vendor/lib64/libconfigdb.so
 -vendor/lib64/libmdmdetect.so
