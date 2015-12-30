@@ -51,16 +51,6 @@ on init
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
-    # Slow Motion Scheduling Group
-    mkdir /dev/cpuctl/smsg
-    chown system system /dev/cpuctl/smsg/tasks
-    chown system system /dev/cpuctl/smsg/cpu.cfs_period_us
-    chown system system /dev/cpuctl/smsg/cpu.cfs_quota_us
-    chown system system /dev/cpuctl/smsg/cpu.cfs_quota_us_per_task
-    chmod 0666 /dev/cpuctl/smsg/tasks
-    write /dev/cpuctl/smsg/cpu.shares 52
-    write /dev/cpuctl/smsg/cpu.upmigrate_discourage 1
-
     # Add for fpc fingerprints permission
     chmod -h 777 /dev/qseecom
     chown system system /dev/fpc1020
@@ -255,11 +245,28 @@ on boot
 
     setprop wifi.interface wlan0
 
+    # Define TCP buffer sizes for various networks
+    # ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.wifi    524288,2097152,4194304,262144,524288,1048576
+
     setprop ro.telephony.call_ring.multiple false
 
     # Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
+
+    # Define TCP buffer sizes for various networks
+    # ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.default 4096,87380,524288,4096,16384,110208
+    setprop net.tcp.buffersize.lte     2097152,4194304,8388608,262144,524288,1048576
+    setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.hsupa   4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.hsdpa   4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.hspap   4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
+    setprop net.tcp.buffersize.evdo    4094,87380,524288,4096,16384,262144
 
     setprop net.tcp.2g_init_rwnd 10
 
