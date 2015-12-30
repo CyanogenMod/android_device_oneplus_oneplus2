@@ -102,6 +102,7 @@ drm.service.enabled=true
 ro.qc.sdk.sensors.gestures=true
 ro.qc.sdk.gestures.camera=false
 ro.qc.sdk.camera.facialproc=false
+camera.disable_zsl_mode=1
 
 # Time services
 persist.timed.enable=true
