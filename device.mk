@@ -204,23 +204,27 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
 
-# Media
-PRODUCT_PACKAGES += \
-    libc2dcolorconvert \
-    libdivxdrmdecrypt \
-    libextmedia_jni \
-    libOmxAacEnc \
-    libOmxAmrEnc \
-    libOmxCore \
-    libOmxEvrcEnc \
-    libOmxQcelp13Enc \
-    libOmxVdec \
-    libOmxVenc \
-    libqcmediaplayer \
-    libstagefrighthw \
-    libstagefright_soft_flacdec
-
-PRODUCT_BOOT_JARS += qcmediaplayer
++# OMX
+ PRODUCT_PACKAGES += \
+     libc2dcolorconvert \
+     libdashplayer \
+     libdivxdrmdecrypt \
+     libextmedia_jni \
+     libOmxAacEnc \
+     libOmxAmrEnc \
+     libOmxCore \
+     libOmxEvrcEnc \
+     libOmxQcelp13Enc \
+     libOmxSwVencMpeg4 \
+     libOmxSwVencHevc \
+     libOmxVdec \
+     libOmxVdecHevc \
+     libOmxVenc \
+     libOmxVidcCommon \
+     libqcmediaplayer \
+     libstagefrighthw \
+     libstagefright_soft_flacdec \
+     qcmediaplayer
 
 # Camera
 PRODUCT_PACKAGES += \
