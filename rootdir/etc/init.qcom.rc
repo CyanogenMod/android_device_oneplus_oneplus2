@@ -803,10 +803,6 @@ service btsnoop /system/bin/btsnoop
    disabled
    oneshot
 
-service fingerprintd /system/bin/fingerprintd
-    class late_start
-    user system
-
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
     user root
