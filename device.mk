@@ -201,27 +201,23 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
-# OMX
- PRODUCT_PACKAGES += \
-     libc2dcolorconvert \
-     libdashplayer \
-     libdivxdrmdecrypt \
-     libextmedia_jni \
-     libOmxAacEnc \
-     libOmxAmrEnc \
-     libOmxCore \
-     libOmxEvrcEnc \
-     libOmxQcelp13Enc \
-     libOmxSwVencMpeg4 \
-     libOmxSwVencHevc \
-     libOmxVdec \
-     libOmxVdecHevc \
-     libOmxVenc \
-     libOmxVidcCommon \
-     libqcmediaplayer \
-     libstagefrighthw \
-     libstagefright_soft_flacdec \
-     qcmediaplayer
+# Media
+PRODUCT_PACKAGES += \
+    libc2dcolorconvert \
+    libdivxdrmdecrypt \
+    libextmedia_jni \
+    libOmxAacEnc \
+    libOmxAmrEnc \
+    libOmxCore \
+    libOmxEvrcEnc \
+    libOmxQcelp13Enc \
+    libOmxVdec \
+    libOmxVenc \
+    libqcmediaplayer \
+    libstagefrighthw \
+    libstagefright_soft_flacdec
+
+PRODUCT_BOOT_JARS += qcmediaplayer
 
 # Camera
 PRODUCT_PACKAGES += \
