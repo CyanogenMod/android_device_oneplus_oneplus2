@@ -51,16 +51,6 @@ on init
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
-    # Slow Motion Scheduling Group
-    mkdir /dev/cpuctl/smsg
-    chown system system /dev/cpuctl/smsg/tasks
-    chown system system /dev/cpuctl/smsg/cpu.cfs_period_us
-    chown system system /dev/cpuctl/smsg/cpu.cfs_quota_us
-    chown system system /dev/cpuctl/smsg/cpu.cfs_quota_us_per_task
-    chmod 0666 /dev/cpuctl/smsg/tasks
-    write /dev/cpuctl/smsg/cpu.shares 52
-    write /dev/cpuctl/smsg/cpu.upmigrate_discourage 1
-
     # Add for fpc fingerprints permission
     chmod -h 777 /dev/qseecom
     chown system system /dev/fpc1020
