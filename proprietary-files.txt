@@ -312,6 +312,9 @@ vendor/lib/egl/libq3dtools_esx.so
 etc/firmware/a420_pfp.fw
 etc/firmware/a420_pm4.fw
 
+# IPA
+bin/ipacm-diag
+
 # Listen
 vendor/lib/hw/sound_trigger.primary.msm8994.so
 

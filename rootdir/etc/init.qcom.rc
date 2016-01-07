@@ -390,6 +390,7 @@ on post-fs-data
     # Create folder for mm-qcamera-daemon
     mkdir /data/camera 0770 media camera
 
+    # Create directory for IPA
     mkdir /data/misc/ipa 0700 net_admin net_admin
 
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
@@ -791,13 +792,11 @@ service ipacm-diag /system/bin/ipacm-diag
     user system
     socket ipacm_log_file dgram 660 system net_admin
     group net_admin qcom_diag
-    disabled
 
 service ipacm /system/bin/ipacm
     class main
     user net_admin
     group net_admin inet
-    disabled
 
 service qti /system/vendor/bin/qti
     class main
