@@ -355,15 +355,8 @@ vendor/lib64/libperipheral_client.so
 vendor/lib/libperipheral_client.so
 
 # Postprocessing
-bin/mm-pp-daemon
-vendor/lib64/libdisp-aba.so
--vendor/lib64/libmm-abl.so
-vendor/lib64/libmm-abl-oem.so
 vendor/lib64/libmm-als.so
 vendor/lib64/libmm-qdcm.so
-vendor/lib/libdisp-aba.so
--vendor/lib/libmm-abl.so
-vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-als.so
 vendor/lib/libmm-qdcm.so
 
