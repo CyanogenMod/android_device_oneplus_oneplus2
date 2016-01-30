@@ -197,17 +197,20 @@ vendor/lib/libmmcamera_ov5648_eeprom.so
 
 # DRM
 bin/qseecomd
-lib/libdrmdecrypt.so
+lib/drm/libdrmwvmplugin.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
 vendor/lib64/libQSEEComAPI.so
 vendor/lib64/librpmb.so
 vendor/lib64/libssd.so
+vendor/lib/libdrmfs.so
+vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
 vendor/lib/libwvdrm_L1.so
 vendor/lib/libwvm.so
+vendor/lib/librpmb.so
+vendor/lib/libssd.so
 vendor/lib/libWVStreamControlAPI_L1.so
-vendor/lib/drm/libdrmwvmplugin.so
 vendor/lib/mediadrm/libwvdrmengine.so
 
 # Fingerprint
