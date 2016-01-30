@@ -97,6 +97,10 @@ BOARD_HEALTHD_CUSTOM_CHARGER_RES := oneplus/oneplus2/charger/images
 # Font
 EXTENDED_FONT_FOOTPRINT := true
 
+# GPS
+TARGET_NO_RPC := true
+USE_DEVICE_SPECIFIC_GPS := true
+
 # Graphics
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_USES_ION := true
