@@ -1,5 +1,4 @@
 LOCAL_PATH := $(call my-dir)
-include $(CLEAR_VARS)
 
 # Device init scripts
 
@@ -66,25 +65,4 @@ LOCAL_MODULE		:= init.qcom.bt.sh
 LOCAL_MODULE_TAGS	:= optional eng
 LOCAL_MODULE_CLASS	:= ETC
 LOCAL_SRC_FILES		:= etc/init.qcom.bt.sh
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE		:= init.qcom.fm.sh
-LOCAL_MODULE_TAGS	:= optional eng
-LOCAL_MODULE_CLASS	:= ETC
-LOCAL_SRC_FILES		:= etc/init.qcom.fm.sh
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE		:= init.qcom.post_boot.sh
-LOCAL_MODULE_TAGS	:= optional eng
-LOCAL_MODULE_CLASS	:= ETC
-LOCAL_SRC_FILES		:= etc/init.qcom.post_boot.sh
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE		:= init.qcom.ril.sh
-LOCAL_MODULE_TAGS	:= optional eng
-LOCAL_MODULE_CLASS	:= ETC
-LOCAL_SRC_FILES		:= etc/init.qcom.ril.sh
 include $(BUILD_PREBUILT)
