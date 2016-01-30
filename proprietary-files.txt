@@ -55,6 +55,7 @@ vendor/lib64/libmmcamera2_sensor_debug.so
 vendor/lib64/libmmcamera2_stats_algorithm.so
 vendor/lib/libfastcvadsp_stub.so
 vendor/lib/libflash_pmic.so
+vendor/lib/libimage_stability.so
 vendor/lib/libjpegdhw.so
 vendor/lib/libjpegdmahw.so
 vendor/lib/libjpegehw.so
@@ -222,7 +223,8 @@ etc/firmware/fingerprints.b03
 etc/firmware/fingerprints.mdt
 
 # GPS
-bin/location-mq
+bin/loc_launcher
+vendor/bin/slim_ap_daemon
 etc/permissions/com.qualcomm.location.xml
 lib64/hw/gps.default.so
 lib/hw/gps.default.so
