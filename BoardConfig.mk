@@ -121,9 +121,6 @@ TARGET_LIBINIT_DEFINES_FILE := device/oneplus/oneplus2/init/init_oneplus2.cpp
 # Keymaster app checking
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
-# Malloc
-MALLOC_IMPL := dlmalloc
-
 # Power
 TARGET_POWERHAL_VARIANT := qcom
 
