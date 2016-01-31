@@ -17,6 +17,7 @@
 #ifndef FINGERPRINT_FPC1020_SENSOR_H
 #define FINGERPRINT_FPC1020_SENSOR_H
 
+#include <utils/KeyedVector.h>
 #include <utils/Thread.h>
 #include <utils/Vector.h>
 #include "QSEEComApp.h"
@@ -24,24 +25,38 @@
 
 class Fpc1020Sensor {
     public:
+        struct EnrolledFingerprint {
+            uint32_t fid;
+            uint32_t gid;
+            EnrolledFingerprint() :
+                fid(0), gid(0) {}
+            EnrolledFingerprint(uint32_t f, uint32_t g) :
+                fid(f), gid(g) {}
+        };
+
         typedef void (*AcquiredCb) (void *data);
-        typedef void (*EnrollmentProgressCb) (uint32_t id, int stepsRemaining, void *data);
-        typedef void (*AuthenticateResultCb) (bool success, uint32_t id, void *data);
+        typedef void (*EnrollmentProgressCb) (const EnrolledFingerprint *fp, int stepsRemaining, void *data);
+        typedef void (*AuthenticateResultCb) (const EnrolledFingerprint *fp, uint32_t userId, void *data);
         typedef void (*ErrorCb) (int result, void *data);
 
         Fpc1020Sensor(AcquiredCb acquiredCb, EnrollmentProgressCb enrollmentCb,
                 AuthenticateResultCb authenticateCb, ErrorCb errorCb, void *cbData) :
             mQseecom("fingerprints", 512),
+            mFpClockFd(-1),
+            mFpApTzFd(-1),
             mFpcFd(-1),
-            mWakeupEnabled(false),
-            mWaitingForWakeup(false),
             mCancelledDueToTimeout(false),
             mAcquiredCb(acquiredCb),
             mEnrollmentCb(enrollmentCb),
             mAuthenticateCb(authenticateCb),
             mErrorCb(errorCb),
-            mCbData(cbData)
-        {}
+            mCbData(cbData),
+            mAuthenticatorId(0)
+        {
+            if (!loadPersistedMetaData()) {
+                clearEnrolledFingerprints();
+            }
+        }
 
         ~Fpc1020Sensor() {
             if (!isIdle()) {
@@ -49,16 +64,20 @@ class Fpc1020Sensor {
             }
         }
 
-        int startAuthentication(bool inWakeupMode = false);
-        int startEnrollment(unsigned int timeout);
-        int setWakeupMode(bool enable);
+        int startAuthentication();
+        int startEnrollment(unsigned int timeout, uint32_t userId, uint32_t gid);
         int goToIdleState();
 
-        int getEnrolledIds(android::Vector<uint32_t>& ids);
-        int removeId(uint32_t id);
+        int getEnrolledFingerprints(android::Vector<EnrolledFingerprint>& fps);
+        int removeId(EnrolledFingerprint& fp);
+        uint64_t getAuthenticatorId() {
+            return mAuthenticatorId;
+        }
 
-    public:
-        static const int EnrollmentStepCount = 20;
+    private:
+        static const unsigned int EnrollmentStepCount = 20;
+        static const uint32_t MetadataFileVersion = 1;
+        static constexpr const char * MetadataFileName = "/data/misc/fp/metadata";
 
     private:
         bool isIdle() {
@@ -69,6 +88,10 @@ class Fpc1020Sensor {
             android::Thread *thread = mThread.get();
             return !thread || !thread->isRunning();
         }
+
+        bool loadPersistedMetaData();
+        int clearEnrolledFingerprints();
+        void persistMetaData();
 
         void stopWatchdogThread();
         int activate(bool connect);
@@ -89,10 +112,12 @@ class Fpc1020Sensor {
 
         class EnrollmentThread : public FingerprintThread {
             public:
-                EnrollmentThread(Fpc1020Sensor *sensor) :
-                    FingerprintThread(sensor) {}
+                EnrollmentThread(Fpc1020Sensor *sensor, uint32_t userId, uint32_t gid) :
+                    FingerprintThread(sensor), mUserId(userId), mGid(gid) {}
             private:
                 virtual bool threadLoop();
+                uint32_t mUserId;
+                uint32_t mGid;
         };
 
         class AuthenticationThread : public FingerprintThread {
@@ -116,13 +141,15 @@ class Fpc1020Sensor {
 
     private:
         QSEEComApp mQseecom;
+        int mFpClockFd;
+        int mFpApTzFd;
         int mFpcFd;
+
+        android::Mutex mTzLock;
 
         android::Mutex mThreadStateLock;
         // all of these are protected by mThreadStateLock
         android::sp<android::Thread> mThread;
-        bool mWakeupEnabled;
-        bool mWaitingForWakeup;
         bool mCancelledDueToTimeout;
 
         android::Mutex mTimeoutLock;
@@ -136,9 +163,20 @@ class Fpc1020Sensor {
         ErrorCb mErrorCb;
         void * mCbData;
 
+        struct FingerprintMetadata {
+            uint32_t gid;
+            uint32_t userId;
+            FingerprintMetadata() : gid(0), userId(0) {}
+            FingerprintMetadata(uint32_t g, uint32_t u) : gid(g), userId(u) {}
+        };
+
+        uint64_t mAuthenticatorId;
+        android::KeyedVector<uint32_t, FingerprintMetadata> mFpMetadata;
+
         friend class EnrollmentThread;
         friend class AuthenticationThread;
         friend class TimeoutWatchdogThread;
 };
 
 #endif // FINGERPRINT_FPC1020_SENSOR_H
+

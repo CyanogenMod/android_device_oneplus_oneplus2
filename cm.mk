@@ -19,3 +19,6 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 # Inherit oneplus2-specific vendor tree
 $(call inherit-product-if-exists, vendor/oneplus/oneplus2/oneplus2-vendor.mk)
+
+BUILD_FINGERPRINT=OnePlus/OnePlus2/oneplus2:6.0.1/MMB29M/2431559:userdebug/dev-keys
+PRIVATE_BUILD_DESC="oneplus2-userdebug 6.0.1 MMB29M 2431559 dev-keys"

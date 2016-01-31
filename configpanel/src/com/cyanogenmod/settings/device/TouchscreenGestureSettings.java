@@ -16,13 +16,13 @@
 
 package com.cyanogenmod.settings.device;
 
-import com.android.internal.util.cm.ScreenType;
-
 import java.io.File;
 
 import com.cyanogenmod.settings.device.utils.Constants;
 import com.cyanogenmod.settings.device.utils.FileUtils;
 import com.cyanogenmod.settings.device.utils.NodePreferenceActivity;
+
+import org.cyanogenmod.internal.util.ScreenType;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -122,3 +122,4 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
                 Settings.System.getInt(getContentResolver(), KEY_HAPTIC_FEEDBACK, 1) != 0);
     }
 }
+

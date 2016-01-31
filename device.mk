@@ -28,6 +28,8 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1920
 TARGET_SCREEN_WIDTH := 1080
+SCREEN_RATIO_PROPORTIONATE := true
+TARGET_SCREEN_ASPECT_RATIO := 16by9
 
 # Haters gonna hate..
 PRODUCT_CHARACTERISTICS := nosdcard
@@ -54,6 +56,10 @@ PRODUCT_PACKAGES += \
     init.qcom.ril.sh \
     init.qcom.uicc.sh
 
+# RIL
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig
+
 # Permissions
 PRODUCT_COPY_FILES += \
     external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml \
@@ -64,6 +70,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.camera.full.xml:system/etc/permissions/android.hardware.camera.full.xml \
     frameworks/native/data/etc/android.hardware.camera.raw.xml:system/etc/permissions/android.hardware.camera.raw.xml \
+    frameworks/native/data/etc/android.hardware.fingerprint.xml:system/etc/permissions/android.hardware.fingerprint.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.hdmi.cec.xml:system/etc/permissions/android.hardware.hdmi.cec.xml \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
@@ -145,19 +152,19 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint sensor
 PRODUCT_PACKAGES += \
-    fingerprint.msm8994
+    fingerprint.msm8994 \
+    fingerprintd
 
 # GPS
 PRODUCT_PACKAGES += \
-    gps.msm8994 \
-    flp.conf \
-    gps.conf \
-    izat.conf \
-    lowi.conf \
-    msap.conf \
-    quipc.conf \
-    sap.conf \
-    xtwifi.conf
+    $(LOCAL_PATH)/configs/flp.conf:system/etc/flp.conf \
+    $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
+    $(LOCAL_PATH)/configs/izat.conf:system/etc/izat.conf \
+    $(LOCAL_PATH)/configs/lowi.conf:system/etc/lowi.conf \
+    $(LOCAL_PATH)/configs/msap.conf:system/etc/msap.conf \
+    $(LOCAL_PATH)/configs/quipc.conf:system/etc/quipc.conf \
+    $(LOCAL_PATH)/configs/sap.conf:system/etc/sap.conf \
+    $(LOCAL_PATH)/configs/xtwifi.conf:system/etc/xtwifi.conf
 
 # IRQ
 PRODUCT_COPY_FILES += \
@@ -198,7 +205,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
     libdivxdrmdecrypt \
-    libdashplayer \
     libextmedia_jni \
     libOmxAacEnc \
     libOmxAmrEnc \
@@ -206,14 +212,17 @@ PRODUCT_PACKAGES += \
     libOmxEvrcEnc \
     libOmxQcelp13Enc \
     libOmxVdec \
-    libOmxVdecHevc \
     libOmxVenc \
     libqcmediaplayer \
     libstagefrighthw \
-    libstagefright_soft_flacdec \
-    qcmediaplayer
+    libstagefright_soft_flacdec
 
 PRODUCT_BOOT_JARS += qcmediaplayer
+
+# Camera
+PRODUCT_PACKAGES += \
+    libcamera_shim \
+    Snap
 
 # Power
 PRODUCT_PACKAGES += \
@@ -268,6 +277,5 @@ PRODUCT_PACKAGES += \
     curl \
     libnl_2 \
     libbson \
-    libcnefeatureconfig \
     libtinyxml \
     libxml2
