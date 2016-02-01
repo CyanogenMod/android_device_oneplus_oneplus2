@@ -88,6 +88,7 @@
     <ctl name="MultiMedia1 Mixer SLIM_0_TX" value="0" />
     <ctl name="MultiMedia1 Mixer SLIM_4_TX" value="0" />
     <ctl name="MultiMedia1 Mixer SEC_AUX_PCM_UL_TX" value="0" />
+    <ctl name="MultiMedia3 Mixer SLIM_0_TX" value="0" />
     <ctl name="HDMI Mixer MultiMedia1" value="0" />
     <ctl name="HDMI Mixer MultiMedia2" value="0" />
     <ctl name="HDMI Mixer MultiMedia3" value="0" />
@@ -402,6 +403,23 @@
     <!-- afe-proxy end-->
     <ctl name="AFE_PCM_RX Port Mixer PRI_MI2S_TX" value="0" />
 
+    <!-- surround sound record -->
+    <ctl name="Input Num Channel" value="0" />
+    <ctl name="Output Num Channel" value="0" />
+    <ctl name="Out Channel1" id="0" value="0" />
+    <ctl name="Out Channel1" id="1" value="0" />
+    <ctl name="Out Channel1" id="2" value="0" />
+    <ctl name="Out Channel2" id="0" value="0" />
+    <ctl name="Out Channel2" id="1" value="0" />
+    <ctl name="Out Channel2" id="2" value="0" />
+    <ctl name="Out Channel3" id="0" value="0" />
+    <ctl name="Out Channel3" id="1" value="0" />
+    <ctl name="Out Channel3" id="2" value="0" />
+    <ctl name="Out Channel4" id="0" value="0" />
+    <ctl name="Out Channel4" id="1" value="0" />
+    <ctl name="Out Channel4" id="2" value="0" />
+    <!-- surround sound record end -->
+
     <!-- ADSP testfwk -->
     <ctl name="SLIMBUS_DL_HL Switch" value="0" />
     <!-- ADSP testfwk end-->
@@ -421,18 +439,10 @@
         <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia1" value="1" />
     </path>
     <!-- #ENDIF VENDOR_EDIT-->
-
-    <path name="deep-buffer-playback voice-speaker">
-        <ctl name="deep-buffer-playback speaker" />
-    </path>
     
     <!--wangdongdong@MultiMedia.AudioDrv,2015-03-30,add for speaker and headphone play ring-->
     <path name="deep-buffer-playback speaker-and-headphones">
         <ctl name="SLIMBUS_0_RX Audio Mixer MultiMedia1" value="1" />
-        <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia1" value="1" />
-    </path>
-
-    <path name="deep-buffer-playback headphones">
         <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia1" value="1" />
     </path>
     
@@ -490,10 +500,6 @@
         <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia5" value="1" />
     </path>
     <!-- #ENDIF EVNDOR_EDIT -->
-
-    <path name="low-latency-playback voice-speaker">
-        <path name="low-latency-playback speaker" />
-    </path>
     
     <!--wangdongdong@MultiMedia.AudioDrv,2015-03-30,add for speaker and headphone play ring-->
     <path name="low-latency-playback speaker-and-headphones">
@@ -501,9 +507,6 @@
         <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia5" value="1" />
     </path>
 
-    <path name="low-latency-playback headphones">
-        <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia5" value="1" />
-    </path>
     
     <path name="low-latency-playback speaker-protected">
         <path name="low-latency-playback" />
@@ -538,6 +541,61 @@
     <path name="low-latency-playback speaker-and-usb-headphones">
         <path name="low-latency-playback usb-headphones" />
         <path name="low-latency-playback" />
+    </path>
+
+    <path name="audio-ull-playback">
+        <ctl name="SLIMBUS_0_RX Audio Mixer MultiMedia3" value="1" />
+    </path>
+
+<!-- #ifdef VENDOR_EDIT-->
+<!-- lifei@MultiMedia.AudioDrv 2015-12-22 These are audio route (FE to BE) specific mixer settings  -->
+    <path name="audio-ull-playback speaker">
+        <ctl name="QUAT_MI2S_RX Audio Mixer MultiMedia3" value="1" />
+    </path>
+<!-- #ENDIF EVNDOR_EDIT -->
+
+    <path name="audio-ull-playback speaker-protected">
+        <path name="audio-ull-playback" />
+    </path>
+
+    <path name="audio-ull-playback headphones">
+      <path name="audio-ull-playback" />
+    </path>
+
+    <path name="audio-ull-playback speaker-and-headphones">
+        <path name="audio-ull-playback" />
+        <path name="audio-ull-playback headphones" />
+    </path>
+
+    <path name="audio-ull-playback hdmi">
+        <ctl name="HDMI Mixer MultiMedia3" value="1" />
+    </path>
+
+    <path name="audio-ull-playback bt-sco">
+        <ctl name="SEC_AUX_PCM_RX Audio Mixer MultiMedia3" value="1" />
+    </path>
+
+    <path name="audio-ull-playback bt-sco-wb">
+        <ctl name="AUX PCM SampleRate" value="16000" />
+        <path name="audio-ull-playback bt-sco" />
+    </path>
+
+    <path name="audio-ull-playback speaker-and-hdmi">
+        <path name="audio-ull-playback hdmi" />
+        <path name="audio-ull-playback" />
+    </path>
+
+    <path name="audio-ull-playback afe-proxy">
+        <ctl name="AFE_PCM_RX Audio Mixer MultiMedia3" value="1" />
+    </path>
+
+    <path name="audio-ull-playback usb-headphones">
+        <path name="audio-ull-playback afe-proxy" />
+    </path>
+
+    <path name="audio-ull-playback speaker-and-usb-headphones">
+        <path name="audio-ull-playback usb-headphones" />
+        <path name="audio-ull-playback" />
     </path>
 
     <path name="multi-channel-playback hdmi">
@@ -934,6 +992,21 @@
         <ctl name="MultiMedia1 Mixer SLIM_0_TX" value="1" />
     </path>
 
+    <path name="audio-record-3mic-ssr">
+        <ctl name="Input Num Channel" value="3" />
+        <ctl name="Output Num Channel" value="4" />
+        <ctl name="Out Channel1" id="0" value="16384" />
+        <ctl name="Out Channel1" id="1" value="0" />
+        <ctl name="Out Channel1" id="2" value="0" />
+        <ctl name="Out Channel2" id="0" value="0" />
+        <ctl name="Out Channel2" id="1" value="16384" />
+        <ctl name="Out Channel2" id="2" value="0" />
+        <ctl name="Out Channel3" id="0" value="0" />
+        <ctl name="Out Channel3" id="1" value="0" />
+        <ctl name="Out Channel3" id="2" value="16384" />
+        <ctl name="MultiMedia3 Mixer SLIM_0_TX" value="1" />
+    </path>
+
     <path name="audio-record usb-headset-mic">
         <ctl name="MultiMedia1 Mixer AFE_PCM_TX" value="1" />
     </path>
@@ -1008,7 +1081,6 @@
         <ctl name="QUAT_MI2S_RX_Voice Mixer CSVoice" value="1" />
         <ctl name="Voice_Tx Mixer SLIM_0_TX_Voice" value="1" />
     </path>
-
     <!-- guangyi.guo@MultiMedia.AudioDrv,2015/4/26,add for 14049 voice2 call speaker -->
     <path name="voice2-call speaker">
     <!-- zhiguang.su@MultiMedia.AudioDrv,2015/6/03,add for EC ref -->
@@ -1563,13 +1635,13 @@
 
    <!-- #ifdef VENDOR_EDIT-->
    <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-    <!-- <path name="speaker-fluid">  -->
+    <path name="speaker-fluid">
     <!--    <ctl name="SLIM RX1 MUX" value="AIF1_PB" /> -->
      <!--    <ctl name="SLIM_0_RX Channels" value="One" /> -->
      <!--    <ctl name="RX8 MIX1 INP1" value="RX1" /> -->
      <!--    <ctl name="RX8 Digital Volume" value="84" /> -->
      <!--    <ctl name="COMP0 Switch" value="1" /> -->
-    <!-- </path> -->
+    </path>
 <!-- #endif VENDOR_EDIT-->
 
     <path name="speaker-liquid">
@@ -1668,16 +1740,12 @@
         <ctl name="SLIM0_RX_VI_FB_RCH_MUX"  value="SLIM4_TX" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-
-    <!-- <path name="speaker-protected-fluid"> -->
-    <!--    <ctl name="AIF4_VI Mixer SPKR_VI_1" value="1" /> -->
-    <!--    <path name="speaker-fluid" /> -->
-    <!--    <ctl name="VI_FEED_TX Channels" value="One" /> -->
-    <!--    <ctl name="SLIM0_RX_VI_FB_LCH_MUX"  value="SLIM4_TX" /> -->
-   <!-- </path> -->
-<!-- #endif VENDOR_EDIT-->
+    <path name="speaker-protected-fluid">
+        <ctl name="AIF4_VI Mixer SPKR_VI_1" value="1" />
+        <path name="speaker-fluid" />
+        <ctl name="VI_FEED_TX Channels" value="One" />
+        <ctl name="SLIM0_RX_VI_FB_LCH_MUX"  value="SLIM4_TX" />
+    </path>
 
     <path name="vi-feedback">
     </path>
@@ -1697,17 +1765,13 @@
         <ctl name="SLIM0_RX_VI_FB_LCH_MUX"  value="SLIM4_TX" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
+    <path name="voice-speaker-protected-fluid">
+        <ctl name="AIF4_VI Mixer SPKR_VI_1" value="1" />
+        <path name="speaker-fluid" />
+        <ctl name="VI_FEED_TX Channels" value="One" />
+        <ctl name="SLIM0_RX_VI_FB_LCH_MUX"  value="SLIM4_TX" />
+    </path>
 
-    <!-- <path name="voice-speaker-protected-fluid"> -->
-    <!--    <ctl name="AIF4_VI Mixer SPKR_VI_1" value="1" /> -->
-    <!--    <path name="speaker-fluid" /> -->
-    <!--    <ctl name="VI_FEED_TX Channels" value="One" /> -->
-    <!--    <ctl name="SLIM0_RX_VI_FB_LCH_MUX"  value="SLIM4_TX" /> -->
-    <!-- </path> -->
-    <!-- #endif VENDOR_EDIT-->
-    
     <path name="handset">
         <ctl name="SLIM RX1 MUX" value="AIF1_PB" />
         <ctl name="SLIM_0_RX Channels" value="One" />
@@ -1723,10 +1787,8 @@
     <path name="handset-mic">
     <!-- #ifdef VENDOR_EDIT-->
     <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/19,add for 14049 mic -->
-    
         <path name="adc3" />
-    <!-- #ENDIF-->
-	
+	 <!-- #ENDIF-->
     </path>
 
     <path name="handset-mic-db">
@@ -1746,6 +1808,19 @@
     <path name="handset-mic-sbc">
         <path name="adc5" />
         <ctl name="ADC5 Volume" value="20" />
+    </path>
+
+    <path name="three-mic">
+        <ctl name="AIF1_CAP Mixer SLIM TX7" value="1" />
+        <ctl name="AIF1_CAP Mixer SLIM TX8" value="1" />
+        <ctl name="AIF1_CAP Mixer SLIM TX9" value="1" />
+        <ctl name="SLIM_0_TX Channels" value="Three" />
+        <ctl name="SLIM TX7 MUX" value="DEC9" />
+        <ctl name="DEC9 MUX" value="DMIC5" />
+        <ctl name="SLIM TX8 MUX" value="DEC7" />
+        <ctl name="DEC7 MUX" value="DMIC1" />
+        <ctl name="SLIM TX9 MUX" value="DEC10" />
+        <ctl name="DEC10 MUX" value="DMIC3" />
     </path>
 
     <path name="anc-handset">
@@ -1783,7 +1858,6 @@
     </path>
 
     <path name="voice-handset">
-        <path name="sidetone-handset" />
         <path name="handset" />
     </path>
 
@@ -1791,20 +1865,13 @@
         <path name="handset" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/4/21,the original path is not used  -->    
     <path name="voice-speaker">
-       <!-- zhiguang.su@MultiMedia.AudioDrv,2015/4/28,reverse for original  -->
-         <path name="speaker-mono" />
+        <path name="speaker-mono" />
     </path>
-   <!-- #endif VENDOR_EDIT-->
- 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-    <!-- <path name="voice-speaker-fluid"> -->
-    <!--     <path name="speaker-fluid" /> -->
-    <!-- </path> -->
-    <!-- #endif VENDOR_EDIT-->
+
+    <path name="voice-speaker-fluid">
+        <path name="speaker-fluid" />
+    </path>
 
     <path name="voice-speaker-db">
         <ctl name="SLIM RX1 MUX" value="AIF1_PB" />
@@ -1833,12 +1900,6 @@
 
     <path name="voice-headset-mic">
         <path name="headset-mic" />
-    <!-- #ifndef VENDOR_EDIT -->
-    <!-- Kangjirui@MultMedia.Audio, 2015/05/03, Remove for avoid pop noise -->
-    <!--
-        <path name="sidetone-headphones" />
-    -->
-    <!-- #endif //VENDOR_EDIT -->
         <ctl name="ADC2 Volume" value="13" />
     </path>
 
@@ -1849,15 +1910,11 @@
         <ctl name="COMP0 Switch" value="1" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-
-   <!-- <path name="speaker-and-headphones-fluid"> -->
-    <!--    <path name="headphones" /> -->
-    <!--    <ctl name="RX8 MIX1 INP1" value="RX1" /> -->
-    <!--    <ctl name="COMP0 Switch" value="1" /> -->
-    <!-- </path> -->
-    <!-- #endif VENDOR_EDIT-->
+    <path name="speaker-and-headphones-fluid">
+        <path name="headphones" />
+        <ctl name="RX8 MIX1 INP1" value="RX1" />
+        <ctl name="COMP0 Switch" value="1" />
+    </path>
 
     <path name="speaker-and-headphones-liquid">
         <path name="headphones" />
@@ -1927,16 +1984,11 @@
         <ctl name="COMP0 Switch" value="1" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-
-    <!--<path name="speaker-and-anc-headphones-fluid"> -->
-    <!--    <path name="anc-headphones" /> -->
-    <!--    <ctl name="RX8 MIX1 INP1" value="RX1" /> -->
-    <!--    <ctl name="COMP0 Switch" value="1" /> -->
-    <!-- </path> -->
-    <!-- #endif VENDOR_EDIT-->
-
+    <path name="speaker-and-anc-headphones-fluid">
+        <path name="anc-headphones" />
+        <ctl name="RX8 MIX1 INP1" value="RX1" />
+        <ctl name="COMP0 Switch" value="1" />
+    </path>
 
     <path name="anc-fb-headphones">
         <path name="anc-headphones" />
@@ -1949,15 +2001,11 @@
         <ctl name="COMP0 Switch" value="1" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-
-    <!--<path name="speaker-and-anc-fb-headphones-fluid"> -->
-    <!--    <path name="anc-fb-headphones" /> -->
-    <!--    <ctl name="RX8 MIX1 INP1" value="RX1" /> -->
-    <!--    <ctl name="COMP0 Switch" value="1" /> -->
-    <!-- </path> -->
-    <!-- #endif VENDOR_EDIT-->
+    <path name="speaker-and-anc-fb-headphones-fluid">
+        <path name="anc-fb-headphones" />
+        <ctl name="RX8 MIX1 INP1" value="RX1" />
+        <ctl name="COMP0 Switch" value="1" />
+    </path>
 
     <path name="voice-anc-headphones">
         <ctl name="ANC Function" value="ON" />
@@ -1980,8 +2028,6 @@
         <ctl name="IIR1 Enable Band4" value="1" />
         <ctl name="IIR1 Enable Band5" value="1" />
         <ctl name="IIR1 INP1 Volume" value="54" />
-        <ctl name="RX1 MIX2 INP1" value="IIR1" />
-        <ctl name="RX2 MIX2 INP1" value="IIR1" />
         <ctl name="CLASS_H_DSM MUX" value="DSM_HPHL_RX1" />
         <ctl name="HPHL DAC Switch" value="1" />
         <ctl name="RX1 Digital Volume" value="84" />
@@ -2009,8 +2055,6 @@
         <ctl name="IIR1 Enable Band4" value="1" />
         <ctl name="IIR1 Enable Band5" value="1" />
         <ctl name="IIR1 INP1 Volume" value="54" />
-        <ctl name="RX1 MIX2 INP1" value="IIR1" />
-        <ctl name="RX2 MIX2 INP1" value="IIR1" />
         <ctl name="CLASS_H_DSM MUX" value="DSM_HPHL_RX1" />
         <ctl name="HPHL DAC Switch" value="1" />
         <ctl name="RX1 Digital Volume" value="81" />
@@ -2040,28 +2084,20 @@
         <path name="usb-headphones" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-
-   <!-- <path name="speaker-and-usb-headphones-fluid"> -->
-   <!--     <path name="speaker-fluid" /> -->
-   <!--     <path name="usb-headphones" /> -->
-   <!-- </path> -->
-   <!-- #endif VENDOR_EDIT-->
+    <path name="speaker-and-usb-headphones-fluid">
+        <path name="speaker-fluid" />
+        <path name="usb-headphones" />
+    </path>
 
     <path name="speaker-and-hdmi">
         <path name="speaker" />
         <path name="hdmi" />
     </path>
 
-   <!-- #ifdef VENDOR_EDIT-->
-   <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/5,deleted unused path,which cause phone breakdown when power up  -->    	
-
-   <!-- <path name="speaker-and-hdmi-fluid"> -->
-   <!--     <path name="speaker-fluid" /> -->
-   <!--     <path name="hdmi" /> -->
-   <!-- </path> -->
-   <!-- #endif VENDOR_EDIT-->
+    <path name="speaker-and-hdmi-fluid">
+        <path name="speaker-fluid" />
+        <path name="hdmi" />
+    </path>
 
     <path name="voice-rec-mic">
         <path name="handset-mic" />
@@ -2120,7 +2156,7 @@
         <ctl name="DEC10 MUX" value="DMIC3" />
         <ctl name="IIR1 INP1 MUX" value="DEC7" />
     </path>
-
+    <!-- Dual MIC devices -->
     <!-- #ifdef VENDOR_EDIT-->
     <!-- zhiguang.su@MultiMedia.AudioDrv,2015/3/24,change for 14049 config  -->
     <!-- lifei@MultiMedia.AudioDrv,2015/4/01,change for 14049 config for voice mic no sound  -->
@@ -2132,8 +2168,6 @@
     <path name="speaker-dmic-endfire">
 				<path name="dmic-endfire" />
     </path>
-
-<!-- #endif VENDOR_EDIT-->
 
     <path name="dmic-endfire-liquid">
         <path name="handset-dmic-endfire" />
