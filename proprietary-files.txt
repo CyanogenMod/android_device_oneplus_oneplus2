@@ -40,6 +40,7 @@ vendor/lib64/libbtnv.so
 vendor/lib/libbtnv.so
 
 # Camera
+bin/mm-qcamera-app
 bin/mm-qcamera-daemon
 lib64/libopcamera.so
 lib64/libopcameralib.so
@@ -55,7 +56,6 @@ vendor/lib64/libmmcamera2_sensor_debug.so
 vendor/lib64/libmmcamera2_stats_algorithm.so
 vendor/lib/libfastcvadsp_stub.so
 vendor/lib/libflash_pmic.so
-vendor/lib/libimage_stability.so
 vendor/lib/libjpegdhw.so
 vendor/lib/libjpegdmahw.so
 vendor/lib/libjpegehw.so
@@ -95,7 +95,6 @@ vendor/lib/libmmqjpegdma.so
 vendor/lib/liboemcamera.so
 vendor/lib/libois_rohm_bu63165gwl.so
 vendor/lib/libqomx_jpegdec.so
-vendor/lib/libqomx_jpegenc.so
 vendor/lib/libqomx_jpegenc_pipe.so
 
 # Camera actuators
@@ -328,6 +327,14 @@ vendor/lib/libOmxEvrcDec.so
 vendor/lib/libOmxQcelp13Dec.so
 vendor/lib/libOmxWmaDec.so
 vendor/lib/libSHIMDivxDrm.so
+vendor/lib64/libDivxDrm.so
+vendor/lib64/libI420colorconvert.so
+vendor/lib64/libmmosal.so
+vendor/lib64/libmm-color-convertor.so
+vendor/lib64/libOmxAacDec.so
+vendor/lib64/libOmxAmrwbplusDec.so
+vendor/lib64/libOmxWmaDec.so
+vendor/lib64/libSHIMDivxDrm.so
 
 # Media firmware
 etc/firmware/venus.b00
