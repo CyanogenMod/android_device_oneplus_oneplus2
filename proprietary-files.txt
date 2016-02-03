@@ -196,6 +196,14 @@ vendor/lib/libmmcamera_ov13860_eeprom.so
 vendor/lib/libmmcamera_ov5648.so
 vendor/lib/libmmcamera_ov5648_eeprom.so
 
+# Keystore
+vendor/lib64/hw/keystore.msm8994.so
+vendor/lib/hw/keystore.msm8994.so
+
+# Gatekeeper
+vendor/lib64/hw/gatekeeper.msm8994.so
+vendor/lib/hw/gatekeeper.msm8994.so
+
 # DRM
 bin/qseecomd
 vendor/lib64/libdrmfs.so
