@@ -2,21 +2,13 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
-LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
+LOCAL_SHARED_LIBRARIES := liblog libcutils libgui libbinder libutils libui
 
 LOCAL_SRC_FILES := \
-    camera_shim.cpp \
-    gui/SensorManager.cpp \
-    ui/GraphicBuffer.cpp \
-    ui/GraphicBufferAllocator.cpp \
-    ui/GraphicBufferMapper.cpp
-
-LOCAL_SHARED_LIBRARIES := \
-    libbinder libcutils libgui libhardware liblog libsync libui libutils
+    camera_shim.c
 
 LOCAL_MODULE := libcamera_shim
-LOCAL_MODULE_TAGS := optional
-LOCAL_MULTILIB := 32
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_32_BIT_ONLY := true
 
 include $(BUILD_SHARED_LIBRARY)
