@@ -1,4 +1,5 @@
 # Fingerprint sensor
+allow tee fingerprint_dir:dir rw_dir_perms;
 allow tee fingerprint_data:dir create_dir_perms;
 allow tee fingerprint_data:dir rw_dir_perms;
 allow tee fingerprint_data:file create_file_perms;

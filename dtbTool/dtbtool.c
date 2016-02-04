@@ -710,7 +710,7 @@ struct chipInfo_t *getChipInfo(const char *filename, int *num, uint32_t msmversi
 }
 
 /* Get the version-id based on dtb files */
-int GetVersionInfo(const char *filename)
+uint32_t GetVersionInfo(const char *filename)
 {
     const char str1[] = "dtc -I dtb -O dts \"";
     const char str2[] = "\" 2>&1";
@@ -719,7 +719,7 @@ int GetVersionInfo(const char *filename)
     size_t line_size;
     FILE *pfile;
     int llen;
-    int v = 1;
+    uint32_t v = 1;
 
     line_size = 1024;
     line = (char *)malloc(line_size);
@@ -768,86 +768,77 @@ int GetVersionInfo(const char *filename)
     return v;
 }
 
-/* Extract 'qcom,msm-id' 'qcom,board-id' parameter from DTB
-   v1 format:
-      qcom,msm-id = <x y z> [, <x2 y2 z2> ...];
-   v2 format:
-      qcom,msm-id = <x z> [, <x2 z2> ...;
-      qcom,board-id = <y y'> [, <y2 y2'> ...;
-   Fields:
-      x  = chipset
-      y  = platform
-      y' = subtype
-      z  = soc rev
- */
-int main(int argc, char **argv)
+static int find_dtb(const char *path, uint32_t *version)
 {
-    char buf[COPY_BLK];
-    struct chipInfo_t *chip, *t_chip;
     struct dirent *dp;
-    FILE *pInputFile;
-    char *filename;
-    int padding;
-    uint8_t *filler = NULL;
-    int numBytesRead = 0;
-    int totBytesRead = 0;
-    int out_fd;
     int flen;
-    int rc = RC_SUCCESS;
-    int dtb_count = 0, dtb_offset = 0;
-    size_t wrote = 0, expected = 0;
+    char *filename;
+    struct chipInfo_t *chip, *t_chip;
     struct stat st;
-    uint32_t version = QCDT_VERSION;
     int num;
-    uint32_t dtb_size;
-    int msmversion = 0;
+    int rc = RC_SUCCESS;
+    uint32_t msmversion = 0;
+    int dtb_count = 0;
 
-    log_info("DTB combiner:\n");
-
-    if (parse_commandline(argc, argv) != RC_SUCCESS) {
-        print_help();
-        return RC_ERROR;
-    }
-
-    log_info("  Input directory: '%s'\n", input_dir);
-    log_info("  Output file: '%s'\n", output_file);
-
-    DIR *dir = opendir(input_dir);
+    DIR *dir = opendir(path);
     if (!dir) {
-        log_err("Failed to open input directory '%s'\n", input_dir);
+        log_err("Failed to open input directory '%s'\n", path);
         return RC_ERROR;
     }
-
-    filler = (uint8_t *)malloc(page_size);
-    if (!filler) {
-        log_err("Out of memory\n");
-        closedir(dir);
-        return RC_ERROR;
-    }
-    memset(filler, 0, page_size);
 
     /* Open the .dtb files in the specified path, decompile and
        extract "qcom,msm-id" parameter
      */
     while ((dp = readdir(dir)) != NULL) {
-        if ((dp->d_type == DT_REG)) {
+        if (dp->d_type == DT_UNKNOWN) {
+            struct stat statbuf;
+            char name[PATH_MAX];
+            snprintf(name, sizeof(name), "%s%s%s",
+                     path,
+                     (path[strlen(path) - 1] == '/' ? "" : "/"),
+                     dp->d_name);
+            if (!stat(name, &statbuf)) {
+                if (S_ISREG(statbuf.st_mode)) {
+                    dp->d_type = DT_REG;
+                } else if (S_ISDIR(statbuf.st_mode)) {
+                    dp->d_type = DT_DIR;
+                }
+            }
+        }
+
+        if (dp->d_type == DT_DIR) {
+            char name[PATH_MAX];
+            if (dp->d_name[0] == '.') {
+                continue;
+            }
+            snprintf(name, sizeof(name), "%s%s%s%s",
+                     path,
+                     (path[strlen(path) - 1] == '/' ? "" : "/"),
+                     dp->d_name,
+                     "/");
+            log_info("Searching subdir: %s ... \n", name);
+            dtb_count += find_dtb(name, version);
+        } else if (dp->d_type == DT_REG) {
             flen = strlen(dp->d_name);
             if ((flen > 4) &&
                 (strncmp(&dp->d_name[flen-4], ".dtb", 4) == 0)) {
                 log_info("Found file: %s ... \n", dp->d_name);
 
-                flen = strlen(input_dir) + strlen(dp->d_name) + 1;
+                flen = strlen(path) + strlen(dp->d_name) + 1;
                 filename = (char *)malloc(flen);
                 if (!filename) {
                     log_err("Out of memory\n");
                     rc = RC_ERROR;
                     break;
                 }
-                strncpy(filename, input_dir, flen);
+                strncpy(filename, path, flen);
                 strncat(filename, dp->d_name, flen);
 
                 /* To identify the version number */
                 msmversion = GetVersionInfo(filename);
+                if (*version < msmversion) {
+                    *version = msmversion;
+                }
 
                 num = 1;
                 chip = getChipInfo(filename, &num, msmversion);
@@ -910,7 +901,7 @@ int main(int argc, char **argv)
                 for (t_chip = chip->t_next; t_chip; t_chip = t_chip->t_next) {
                     rc = chip_add(t_chip);
                     if (rc != RC_SUCCESS) {
-                        log_err("... duplicate info, skipped (chipset %u, rev: %u, platform: %u, subtype %u:\n",
+                        log_err("... duplicate info, skipped (chipset %u, rev: %u, platform: %u, subtype: %u\n",
                              t_chip->chipset, t_chip->revNum, t_chip->platform, t_chip->subtype);
                         continue;
                     }
@@ -920,6 +911,69 @@ int main(int argc, char **argv)
         }
     }
     closedir(dir);
+    return dtb_count;
+}
+
+/* Extract 'qcom,msm-id' 'qcom,board-id' parameter from DTB
+   v1 format:
+      qcom,msm-id = <x y z> [, <x2 y2 z2> ...];
+   v2 format:
+      qcom,msm-id = <x z> [, <x2 z2> ...;
+      qcom,board-id = <y y'> [, <y2 y2'> ...;
+   Fields:
+      x  = chipset
+      y  = platform
+      y' = subtype
+      z  = soc rev
+ */
+int main(int argc, char **argv)
+{
+    char buf[COPY_BLK];
+    struct chipInfo_t *chip, *t_chip;
+    struct dirent *dp;
+    FILE *pInputFile;
+    char *filename;
+    int padding;
+    uint8_t *filler = NULL;
+    int numBytesRead = 0;
+    int totBytesRead = 0;
+    int out_fd;
+    int flen;
+    int rc = RC_SUCCESS;
+    int dtb_count = 0, dtb_offset = 0;
+    size_t wrote = 0, expected = 0;
+    struct stat st;
+    uint32_t version = QCDT_VERSION;
+    int num;
+    uint32_t dtb_size;
+    int msmversion = 0;
+
+    log_info("DTB combiner:\n");
+
+    if (parse_commandline(argc, argv) != RC_SUCCESS) {
+        print_help();
+        return RC_ERROR;
+    }
+
+    log_info("  Input directory: '%s'\n", input_dir);
+    log_info("  Output file: '%s'\n", output_file);
+
+    DIR *dir = opendir(input_dir);
+    if (!dir) {
+        log_err("Failed to open input directory '%s'\n", input_dir);
+        return RC_ERROR;
+    }
+
+    filler = (uint8_t *)malloc(page_size);
+    if (!filler) {
+        log_err("Out of memory\n");
+        closedir(dir);
+        return RC_ERROR;
+    }
+    memset(filler, 0, page_size);
+
+    dtb_count = find_dtb(input_dir, &version);
+
     log_info("=> Found %d unique DTB(s)\n", dtb_count);
 
     if (!dtb_count)
