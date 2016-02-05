@@ -61,6 +61,8 @@ public class KeyHandler implements DeviceKeyHandler {
 
     private static final String KEY_GESTURE_HAPTIC_FEEDBACK =
             "touchscreen_gesture_haptic_feedback";
+    private static final String KEY_NOTIFICATION_SLIDER_HAPTIC_FEEDBACK =
+            "notification_slider_haptic_feedback";
 
     private static final String ACTION_DISMISS_KEYGUARD =
             "com.android.keyguard.action.DISMISS_KEYGUARD_SECURELY";
@@ -71,9 +73,10 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final int GESTURE_V_SCANCODE = 252;
     private static final int GESTURE_LTR_SCANCODE = 253;
     private static final int GESTURE_GTR_SCANCODE = 254;
-    private static final int MODE_MUTE = 600;
-    private static final int MODE_DO_NOT_DISTURB = 601;
-    private static final int MODE_NORMAL = 602;
+    private static final int MODE_TOTAL_SILENCE = 600;
+    private static final int MODE_ALARMS_ONLY = 601;
+    private static final int MODE_PRIORITY_ONLY = 602;
+    private static final int MODE_NONE = 603;
 
     private static final int GESTURE_WAKELOCK_DURATION = 3000;
 
@@ -83,9 +86,10 @@ public class KeyHandler implements DeviceKeyHandler {
         GESTURE_V_SCANCODE,
         GESTURE_LTR_SCANCODE,
         GESTURE_GTR_SCANCODE,
-        MODE_MUTE,
-        MODE_DO_NOT_DISTURB,
-        MODE_NORMAL
+        MODE_TOTAL_SILENCE,
+        MODE_ALARMS_ONLY,
+        MODE_PRIORITY_ONLY,
+        MODE_NONE
     };
 
     private final Context mContext;
@@ -105,6 +109,8 @@ public class KeyHandler implements DeviceKeyHandler {
     private NotificationManager mNotificationManager;
 
     private boolean mNotificationSliderVibrate;
+    private int mNotificationSliderPosition;
+    private Thread mNotificationThread;
 
     public KeyHandler(Context context) {
         mContext = context;
@@ -228,31 +234,50 @@ public class KeyHandler implements DeviceKeyHandler {
                 dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT);
                 doHapticFeedback();
                 break;
-            case MODE_MUTE:
-            case MODE_DO_NOT_DISTURB:
-            case MODE_NORMAL:
-                int zenMode = Global.ZEN_MODE_OFF;
-                if (scanCode == MODE_MUTE) {
-                    zenMode = Global.ZEN_MODE_NO_INTERRUPTIONS;
-                } else if (scanCode == MODE_DO_NOT_DISTURB) {
-                    zenMode = Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
-                }
-                mNotificationManager.setZenMode(zenMode, null, null);
-                if (mNotificationSliderVibrate) {
-                    doHapticFeedback();
-                }
-                mNotificationSliderVibrate = true;
-                break;
             }
         }
+    }
+
+    private void setNotification(int scanCode) {
+        int zenMode = Global.ZEN_MODE_OFF;
+        if (scanCode == MODE_TOTAL_SILENCE) {
+            zenMode = Global.ZEN_MODE_NO_INTERRUPTIONS;
+        } else if (scanCode == MODE_ALARMS_ONLY) {
+            zenMode = Global.ZEN_MODE_ALARMS;
+        } else if (scanCode == MODE_PRIORITY_ONLY) {
+            zenMode = Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
+        }
+        mNotificationManager.setZenMode(zenMode, null, null);
+        doHapticFeedback(true);
     }
 
     public boolean handleKeyEvent(KeyEvent event) {
         if (event.getAction() != KeyEvent.ACTION_UP) {
             return false;
         }
+        int scanCode;
         boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, event.getScanCode());
-        if (isKeySupported && !mEventHandler.hasMessages(GESTURE_REQUEST)) {
+        if ((scanCode = event.getScanCode()) >= MODE_TOTAL_SILENCE && scanCode <= MODE_NONE) {
+            mGestureWakeLock.acquire(GESTURE_WAKELOCK_DURATION);
+            mNotificationSliderPosition = scanCode;
+            if (mNotificationThread == null) {
+                mNotificationThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(500);
+                            mNotificationThread = null;
+                            setNotification(mNotificationSliderPosition);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                mNotificationThread.start();
+            } else {
+                setNotification(scanCode);
+            }
+        } else if (isKeySupported && !mEventHandler.hasMessages(GESTURE_REQUEST)) {
             Message msg = getMessageForKeyEvent(event);
             boolean defaultProximity = mContext.getResources().getBoolean(
                 org.cyanogenmod.platform.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault);
@@ -325,11 +350,21 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     private void doHapticFeedback() {
+        doHapticFeedback(false);
+    }
+
+    private void doHapticFeedback(boolean notificationslider) {
         if (mVibrator == null) {
             return;
         }
-        boolean enabled = Settings.System.getInt(mContext.getContentResolver(),
-                KEY_GESTURE_HAPTIC_FEEDBACK, 1) != 0;
+        boolean enabled;
+        if (notificationslider) {
+            enabled = Settings.System.getInt(mContext.getContentResolver(),
+                    KEY_NOTIFICATION_SLIDER_HAPTIC_FEEDBACK, 1) != 0;
+        } else {
+            enabled = Settings.System.getInt(mContext.getContentResolver(),
+                    KEY_GESTURE_HAPTIC_FEEDBACK, 1) != 0;
+        }
         if (enabled) {
             mVibrator.vibrate(50);
         }

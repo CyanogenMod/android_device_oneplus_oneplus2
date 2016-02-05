@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014-2015 The CyanogenMod Project
+     Licensed under the Apache License, Version 2.0 (the "License"
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">OnePlusControl</string>
+
+    <string name="swap_button_title">Swap buttons</string>
+    <string name="swap_button_summary">Swap the order of recent and back buttons</string>
+
+    <!-- Notification slider -->
+    <string name="notification_slider">Notification slider</string>
+    <string name="action">Action</string>
+
+    <string name="slider_top">Top slider</string>
+    <string name="slider_middle">Middle slider</string>
+    <string name="slider_bottom">Bottom slider</string>
+    <string name="total_silence">Total silence</string>
+    <string name="alarms_only">Alarms only</string>
+    <string name="priority_only">Priority only</string>
+    <string name="none">None</string>
+
+    <!-- Haptic feedback  -->
+    <string name="haptic_feedback">Haptic feedback</string>
+    <string name="haptic_feedback_summary">Vibrate when the notifciation slider got moved</string>
+</resources>

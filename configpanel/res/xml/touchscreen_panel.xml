@@ -17,11 +17,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
-        android:key="key_swap"
-        android:title="@string/key_swap_title"
-        android:summary="@string/key_swap_summary" />
-
-    <SwitchPreference
         android:key="touchscreen_gesture_camera"
         android:title="@string/touchscreen_camera_gesture_title"
         android:summary="@string/touchscreen_camera_gesture_summary" />
@@ -35,35 +30,6 @@
         android:key="touchscreen_gesture_flashlight"
         android:title="@string/touchscreen_flashlight_gesture_title"
         android:summary="@string/touchscreen_flashlight_gesture_summary" />
-
-    <PreferenceCategory
-        android:title="@string/notification_slider" >
-
-        <ListPreference
-            android:key="keycode_slider_top"
-            android:dialogTitle="@string/action"
-            android:title="@string/slider_top"
-            android:entries="@array/notification_slider_action_entries"
-            android:entryValues="@array/notification_slider_action_entries"
-            android:persistent="false" />
-
-        <ListPreference
-            android:key="keycode_slider_middle"
-            android:dialogTitle="@string/action"
-            android:title="@string/slider_middle"
-            android:entries="@array/notification_slider_action_entries"
-            android:entryValues="@array/notification_slider_action_entries"
-            android:persistent="false" />
-
-        <ListPreference
-            android:key="keycode_slider_bottom"
-            android:dialogTitle="@string/action"
-            android:title="@string/slider_bottom"
-            android:entries="@array/notification_slider_action_entries"
-            android:entryValues="@array/notification_slider_action_entries"
-            android:persistent="false" />
-
-    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/touchscreen_extras">

@@ -16,28 +16,19 @@
 
 package com.cyanogenmod.settings.device;
 
-import java.io.File;
-
-import com.cyanogenmod.settings.device.utils.Constants;
-import com.cyanogenmod.settings.device.utils.FileUtils;
 import com.cyanogenmod.settings.device.utils.NodePreferenceActivity;
 
 import org.cyanogenmod.internal.util.ScreenType;
 
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 
 public class TouchscreenGestureSettings extends NodePreferenceActivity {
 
-    private static final String NAV_SWITCH_NODE = "/proc/nav_switch";
     private static final String KEY_HAPTIC_FEEDBACK = "touchscreen_gesture_haptic_feedback";
 
-    private ListPreference mSliderTop;
-    private ListPreference mSliderMiddle;
-    private ListPreference mSliderBottom;
     private SwitchPreference mHapticFeedback;
 
     @Override
@@ -45,41 +36,8 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.touchscreen_panel);
 
-        SwitchPreference mKeySwap = (SwitchPreference) findPreference(Constants.KEY_SWAP_KEY);
-        String nav_switch = FileUtils.readOneLine(NAV_SWITCH_NODE);
-        if (nav_switch != null && nav_switch.contains(":0"))
-            mKeySwap.setEnabled(false);
-
-        mSliderTop = (ListPreference) findPreference("keycode_slider_top");
-        mSliderMiddle = (ListPreference) findPreference("keycode_slider_middle");
-        mSliderBottom = (ListPreference) findPreference("keycode_slider_bottom");
-
-        if (!new File(Constants.KEYCODE_SLIDER_TOP).exists()
-                || !new File(Constants.KEYCODE_SLIDER_MIDDLE).exists()
-                || !new File(Constants.KEYCODE_SLIDER_BOTTOM).exists()) {
-            mSliderTop.setEnabled(false);
-            mSliderMiddle.setEnabled(false);
-            mSliderBottom.setEnabled(false);
-            return;
-        }
-
-        setSummary(mSliderTop, Constants.KEYCODE_SLIDER_TOP);
-        setSummary(mSliderMiddle, Constants.KEYCODE_SLIDER_MIDDLE);
-        setSummary(mSliderBottom, Constants.KEYCODE_SLIDER_BOTTOM);
-
         mHapticFeedback = (SwitchPreference) findPreference(KEY_HAPTIC_FEEDBACK);
         mHapticFeedback.setOnPreferenceChangeListener(this);
-    }
-
-    private void setSummary(ListPreference preference, String file) {
-        String[] notiactions = getResources().getStringArray(R.array.notification_slider_action_entries);
-
-        String keyCode = FileUtils.readOneLine(file);
-        if (keyCode == null) return;
-        int value = Integer.parseInt(keyCode);
-        preference.setSummary(notiactions[value - 600]);
-        preference.setValueIndex(value - 600);
-        preference.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -89,24 +47,7 @@ public class TouchscreenGestureSettings extends NodePreferenceActivity {
             Settings.System.putInt(getContentResolver(), KEY_HAPTIC_FEEDBACK, value ? 1 : 0);
             return true;
         }
-
-        if (preference instanceof SwitchPreference) {
-            return super.onPreferenceChange(preference, newValue);
-        }
-
-        String file = null;
-        int value = ((ListPreference) preference).findIndexOfValue((String) newValue);
-        if (preference == mSliderTop) file = Constants.KEYCODE_SLIDER_TOP;
-        else if (preference == mSliderMiddle) file = Constants.KEYCODE_SLIDER_MIDDLE;
-        else if (preference == mSliderBottom) file = Constants.KEYCODE_SLIDER_BOTTOM;
-        if (file == null) return false;
-
-        FileUtils.writeLine(file, String.valueOf(value + 600));
-        String[] notiactions = getResources().getStringArray(R.array.notification_slider_action_entries);
-        preference.setSummary(notiactions[value]);
-
-        Constants.savePreferenceInt(this, preference.getKey(), value);
-        return true;
+        return super.onPreferenceChange(preference, newValue);
     }
 
     @Override
