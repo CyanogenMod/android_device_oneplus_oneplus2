@@ -489,6 +489,12 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     user camera
     group camera system inet input graphics
 
+service laserinit /system/bin/laser_init
+    class late_start
+    user root
+    group root
+    oneshot
+
 service qseecomd /system/bin/qseecomd
     class core
     user root
