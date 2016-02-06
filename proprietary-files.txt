@@ -213,18 +213,6 @@ vendor/lib/libssd.so
 vendor/lib/libWVStreamControlAPI_L1.so
 vendor/lib/mediadrm/libwvdrmengine.so
 
-# Fingerprint
-etc/firmware/alipay.b00
-etc/firmware/alipay.b01
-etc/firmware/alipay.b02
-etc/firmware/alipay.b03
-etc/firmware/alipay.mdt
-etc/firmware/fingerprints.b00
-etc/firmware/fingerprints.b01
-etc/firmware/fingerprints.b02
-etc/firmware/fingerprints.b03
-etc/firmware/fingerprints.mdt
-
 # GPS
 bin/location-mq
 bin/loc_launcher
