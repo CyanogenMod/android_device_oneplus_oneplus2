@@ -88,6 +88,7 @@ BOARD_HAS_QCA_BT_ROME := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_BTNV := true
+QCOM_BT_USE_SMD_TTY := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
@@ -140,8 +141,8 @@ TARGET_NO_RPC := true
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
   ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT_BOOT_IMG_ONLY),)
-      WITH_DEXPREOPT_BOOT_IMG_ONLY := true
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
     endif
   endif
 endif
