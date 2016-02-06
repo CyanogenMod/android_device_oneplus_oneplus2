@@ -107,7 +107,6 @@ fi
 baseband=`getprop ro.baseband`
 echo 1  > /sys/class/android_usb/f_mass_storage/lun/nofua
 usb_config=`getprop persist.sys.usb.config`
-echo "BEFORE: $usb_config" > /dev/kmsg
 case "$usb_config" in
     "" | "adb" | "none") #USB persist config not set, select default configuration
       case "$esoc_link" in
@@ -147,7 +146,9 @@ case "$usb_config" in
                             setprop persist.sys.usb.config diag,adb
                         ;;
                         "msm8994" | "msm8992")
-                            setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
+                            #[BSP-66]-Anderson-Disable_set_the_property.
+                            #This will ause BSP-66 issue and cause all the port enable in default.
+                            #setprop persist.sys.usb.config diag,serial_smd,serial_tty,rmnet_ipa,mass_storage,adb
                         ;;
                         "msm8909")
                             setprop persist.sys.usb.config diag,serial_smd,rmnet_qti_bam,adb
@@ -164,6 +165,8 @@ case "$usb_config" in
     * ) ;; #USB persist config exists, do nothing
 esac
 
+#VENDOR_EDIT
+#echo boot mode to kmsg
 boot_mode=`getprop ro.boot.ftm_mode`
 echo "boot_mode: $boot_mode" > /dev/kmsg
 case "$boot_mode" in
@@ -175,6 +178,8 @@ esac
 
 usb_config=`getprop persist.sys.usb.config`
 echo "AFTER: $usb_config" > /dev/kmsg
+#VENDOR_EDIT end
+
 #
 # Do target specific things
 #
