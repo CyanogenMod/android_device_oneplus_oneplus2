@@ -28,7 +28,7 @@ persist.radio.apm_sim_not_pwdn=1
 persist.radio.sib16_support=1
 
 # Audio
-av.offload.enable=true
+audio.offload.video=true
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
