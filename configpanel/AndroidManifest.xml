@@ -47,7 +47,7 @@
 
         <receiver android:name=".Startup" >
             <intent-filter>
-                <action android:name="android.intent.action.PRE_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="cyanogenmod.intent.action.GESTURE_CAMERA" />
             </intent-filter>
         </receiver>
