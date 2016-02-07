@@ -30,16 +30,7 @@ on init
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
 
 on charger
-    mkdir /dev/usb-ffs 0770 shell shell
-    mkdir /dev/usb-ffs/adb 0770 shell shell
-    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
-    write /sys/class/android_usb/android0/f_ffs/aliases adb
-    setprop persist.sys.usb.config adb
-    #add by david.liu@oneplus.tw 2015/12/21, improve the performance of charging
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
-    write /sys/devices/system/cpu/cpu1/online 0
-    write /sys/devices/system/cpu/cpu2/online 0
-    write /sys/devices/system/cpu/cpu3/online 0
+    setprop persist.sys.usb.config mass_storage
 
 on fs
     mkdir /dev/usb-ffs 0770 shell shell
