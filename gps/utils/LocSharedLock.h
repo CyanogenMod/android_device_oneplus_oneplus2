@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -26,42 +26,33 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-#ifndef __MSG_TASK__
-#define __MSG_TASK__
+#ifndef __LOC_SHARED_LOCK__
+#define __LOC_SHARED_LOCK__
 
-#include <stdbool.h>
-#include <ctype.h>
-#include <string.h>
+#include <stddef.h>
 #include <pthread.h>
 
-namespace loc_core {
-
-struct LocMsg {
-    inline LocMsg() {}
-    inline virtual ~LocMsg() {}
-    virtual void proc() const = 0;
-    inline virtual void log() const {}
-};
-
-class MsgTask {
+// This is a utility created for use cases such that there are more than
+// one client who need to share the same lock, but it is not predictable
+// which of these clients is to last to go away. This shared lock deletes
+// itself when the last client calls its drop() method. To add a cient,
+// this share lock's share() method has to be called, so that the obj
+// can maintain an accurate client count.
+class LocSharedLock {
+    uint32_t mRef;
+    pthread_mutex_t mMutex;
+    inline ~LocSharedLock() { pthread_mutex_destroy(&mMutex); }
 public:
-    typedef void* (*tStart)(void*);
-    typedef pthread_t (*tCreate)(const char* name, tStart start, void* arg);
-    typedef int (*tAssociate)();
-    MsgTask(tCreate tCreator, const char* threadName);
-    MsgTask(tAssociate tAssociator, const char* threadName);
-    ~MsgTask();
-    void sendMsg(const LocMsg* msg) const;
-    void associate(tAssociate tAssociator) const;
-
-private:
-    const void* mQ;
-    tAssociate mAssociator;
-    MsgTask(const void* q, tAssociate associator);
-    static void* loopMain(void* copy);
-    void createPThread(const char* name);
+    // first client to create this LockSharedLock
+    inline LocSharedLock() : mRef(1) { pthread_mutex_init(&mMutex, NULL); }
+    // following client(s) are to *share()* this lock created by the first client
+    inline LocSharedLock* share() { mRef++; return this; }
+    // whe a client no longer needs this shared lock, drop() shall be called.
+    inline void drop() { if (0 == --mRef) delete this; }
+    // locking the lock to enter critical section
+    inline void lock() { pthread_mutex_lock(&mMutex); }
+    // unlocking the lock to leave the critical section
+    inline void unlock() { pthread_mutex_unlock(&mMutex); }
 };
 
-} // namespace loc_core
-
-#endif //__MSG_TASK__
+#endif //__LOC_SHARED_LOCK__

@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2013,2015 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -26,40 +26,42 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-#ifndef IZAT_PROXY_BASE_H
-#define IZAT_PROXY_BASE_H
-#include <gps_extended.h>
-#include <MsgTask.h>
+#ifndef __MSG_TASK__
+#define __MSG_TASK__
 
-namespace loc_core {
+#include <LocThread.h>
 
-class LocApiBase;
-class LocAdapterBase;
-class ContextBase;
-
-class LBSProxyBase {
-    friend class ContextBase;
-    inline virtual LocApiBase*
-        getLocApi(const MsgTask* msgTask,
-                  LOC_API_ADAPTER_EVENT_MASK_T exMask,
-                  ContextBase* context) const {
-        return NULL;
-    }
-protected:
-    inline LBSProxyBase() {}
-public:
-    inline virtual ~LBSProxyBase() {}
-    inline virtual void requestUlp(LocAdapterBase* adapter,
-                                   unsigned long capabilities) const {}
-    inline virtual bool hasAgpsExtendedCapabilities() const { return false; }
-    inline virtual bool hasCPIExtendedCapabilities() const { return false; }
-    inline virtual void modemPowerVote(bool power) const {}
-    virtual void injectFeatureConfig(ContextBase* context) const {}
-    inline virtual IzatDevId_t getIzatDevId() const { return 0; }
+struct LocMsg {
+    inline LocMsg() {}
+    inline virtual ~LocMsg() {}
+    virtual void proc() const = 0;
+    inline virtual void log() const {}
 };
 
-typedef LBSProxyBase* (getLBSProxy_t)();
+class MsgTask : public LocRunnable {
+    const void* mQ;
+    LocThread* mThread;
+    friend class LocThreadDelegate;
+protected:
+    virtual ~MsgTask();
+public:
+    MsgTask(LocThread::tCreate tCreator, const char* threadName = NULL, bool joinable = true);
+    MsgTask(const char* threadName = NULL, bool joinable = true);
+    // this obj will be deleted once thread is deleted
+    void destroy();
+    void sendMsg(const LocMsg* msg) const;
+    // Overrides of LocRunnable methods
+    // This method will be repeated called until it returns false; or
+    // until thread is stopped.
+    virtual bool run();
 
-} // namespace loc_core
+    // The method to be run before thread loop (conditionally repeatedly)
+    // calls run()
+    virtual void prerun();
 
-#endif // IZAT_PROXY_BASE_H
+    // The method to be run after thread loop (conditionally repeatedly)
+    // calls run()
+    inline virtual void postrun() {}
+};
+
+#endif //__MSG_TASK__

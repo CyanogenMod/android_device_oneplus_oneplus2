@@ -245,3 +245,17 @@ detected:
     LOC_LOGD("HAL: %s returned %d", __FUNCTION__, gTarget);
     return gTarget;
 }
+
+/*Reads the property ro.lean to identify if this is a lean target
+  Returns:
+  0 if not a lean and mean target
+  1 if this is a lean and mean target
+*/
+int loc_identify_lean_target()
+{
+    int ret = 0;
+    char lean_target[PROPERTY_VALUE_MAX];
+    property_get("ro.lean", lean_target, "");
+    LOC_LOGD("%s:%d]: lean target: %s\n", __func__, __LINE__, lean_target);
+    return !(strncmp(lean_target, "true", PROPERTY_VALUE_MAX));
+}

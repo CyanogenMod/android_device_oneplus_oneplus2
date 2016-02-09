@@ -715,12 +715,10 @@ void LocApiRpc::reportPosition(const rpc_loc_parsed_position_s_type *location_re
                 }
 
                 // Speed
-                if ((location_report_ptr->valid_mask & RPC_LOC_POS_VALID_SPEED_HORIZONTAL) &&
-                    (location_report_ptr->valid_mask & RPC_LOC_POS_VALID_SPEED_VERTICAL))
+                if (location_report_ptr->valid_mask & RPC_LOC_POS_VALID_SPEED_HORIZONTAL)
                 {
                     location.gpsLocation.flags    |= GPS_LOCATION_HAS_SPEED;
-                    location.gpsLocation.speed = sqrt(location_report_ptr->speed_horizontal * location_report_ptr->speed_horizontal +
-                                          location_report_ptr->speed_vertical * location_report_ptr->speed_vertical);
+                    location.gpsLocation.speed = location_report_ptr->speed_horizontal;
                 }
 
                 // Heading

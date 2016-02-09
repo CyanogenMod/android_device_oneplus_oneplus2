@@ -137,7 +137,6 @@ typedef struct loc_eng_data_s
 
     loc_ext_parser location_ext_parser;
     loc_ext_parser sv_ext_parser;
-    loc_shutdown_cb shutdown_cb;
 } loc_eng_data_s_type;
 
 /* GPS.conf support */

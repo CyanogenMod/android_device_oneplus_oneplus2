@@ -299,13 +299,6 @@ struct LocEngReportGpsMeasurement : public LocMsg {
     virtual void log() const;
 };
 
-struct LocEngShutdown : public LocMsg {
-    LocEngAdapter* mAdapter;
-    LocEngShutdown(LocEngAdapter* adapter);
-    virtual void proc() const;
-    void locallog() const;
-    virtual void log() const;
-};
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

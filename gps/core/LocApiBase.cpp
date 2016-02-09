@@ -489,16 +489,23 @@ enum loc_api_adapter_err LocApiBase::
 DEFAULT_IMPL(LOC_API_ADAPTER_ERR_SUCCESS)
 
 enum loc_api_adapter_err LocApiBase::
-   getWwanZppFix(GpsLocation & zppLoc)
+   getWwanZppFix(GpsLocation& zppLoc)
 DEFAULT_IMPL(LOC_API_ADAPTER_ERR_SUCCESS)
 
 enum loc_api_adapter_err LocApiBase::
-   getBestAvailableZppFix(GpsLocation & zppLoc)
-DEFAULT_IMPL(LOC_API_ADAPTER_ERR_SUCCESS)
+   getBestAvailableZppFix(GpsLocation& zppLoc)
+{
+   memset(&zppLoc, 0, sizeof(zppLoc));
+   DEFAULT_IMPL(LOC_API_ADAPTER_ERR_SUCCESS)
+}
 
 enum loc_api_adapter_err LocApiBase::
    getBestAvailableZppFix(GpsLocation & zppLoc, LocPosTechMask & tech_mask)
-DEFAULT_IMPL(LOC_API_ADAPTER_ERR_SUCCESS)
+{
+   memset(&zppLoc, 0, sizeof(zppLoc));
+   memset(&tech_mask, 0, sizeof(tech_mask));
+   DEFAULT_IMPL(LOC_API_ADAPTER_ERR_SUCCESS)
+}
 
 int LocApiBase::
     initDataServiceClient()
