@@ -426,12 +426,14 @@ etc/firmware/tp/14049/14049_FW_S3320_jdi.img
 lib/hw/sensors.msm8994.so
 lib64/hw/sensors.msm8994.so
 vendor/lib/hw/activity_recognition.msm8994.so
+vendor/lib/libdataitems.so
 vendor/lib/libsensor1.so
 vendor/lib/libsensor_reg.so
 vendor/lib/libsensor_thresh.so
 vendor/lib/libsensor_user_cal.so
 vendor/lib/sensors.ssc.so
 vendor/lib64/hw/activity_recognition.msm8994.so
+vendor/lib64/libdataitems.so
 vendor/lib64/libsensor1.so
 vendor/lib64/libsensor_reg.so
 vendor/lib64/libsensor_thresh.so
