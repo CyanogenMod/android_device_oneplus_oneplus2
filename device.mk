@@ -167,16 +167,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/fpc1020.kl:system/usr/keylayout/fpc1020.kl \
     $(LOCAL_PATH)/keylayout/synaptics.kl:system/usr/keylayout/synaptics.kl
 
-# Keyhandler
+# OnePlusControl
 PRODUCT_PACKAGES += \
-    ConfigPanel \
-    OnePlusControl \
-    com.cyanogenmod.keyhandler
-
-PRODUCT_SYSTEM_SERVER_JARS += com.cyanogenmod.keyhandler
-
-# never dexopt the keyhandler
-$(call add-product-dex-preopt-module-config,com.cyanogenmod.keyhandler,disable)
+    OnePlusControl
 
 # Keymaster
 PRODUCT_PACKAGES += \
