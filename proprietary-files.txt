@@ -198,28 +198,24 @@ vendor/lib/libmmcamera_ov5648_eeprom.so
 
 # DRM
 bin/qseecomd
-lib/drm/libdrmwvmplugin.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
 vendor/lib64/libQSEEComAPI.so
-vendor/lib64/libQSM.so
 vendor/lib64/librpmb.so
 vendor/lib64/libssd.so
 vendor/lib/libdrmfs.so
 vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
-vendor/lib/libQSM.so
 vendor/lib/librpmb.so
 vendor/lib/libssd.so
 vendor/lib/libwvdrm_L1.so
-vendor/lib/libwvm.so
 vendor/lib/librpmb.so
 vendor/lib/libssd.so
 vendor/lib/libWVStreamControlAPI_L1.so
 vendor/lib/mediadrm/libwvdrmengine.so
 
 # GPS
-bin/location-mq
+bin/loc_launcher
 etc/permissions/com.qualcomm.location.xml
 lib/hw/gps.default.so
 -lib64/libloc_api_v02.so
@@ -240,7 +236,6 @@ vendor/lib64/libquipc_os_api.so
 vendor/lib64/libulp2.so
 vendor/lib64/libxtadapter.so
 vendor/lib64/libxtwifi_ulp_adaptor.so
-vendor/lib64/libxtwifi_zpp_adaptor.so
 vendor/lib/hw/flp.default.so
 vendor/lib/libalarmservice_jni.so
 vendor/lib/libgeofence.so
@@ -253,7 +248,6 @@ vendor/lib/libquipc_os_api.so
 vendor/lib/libulp2.so
 vendor/lib/libxtadapter.so
 vendor/lib/libxtwifi_ulp_adaptor.so
-vendor/lib/libxtwifi_zpp_adaptor.so
 
 # Graphics
 vendor/lib64/libC2D2.so
@@ -342,7 +336,7 @@ etc/firmware/venus.mdt
 # Perf
 bin/energy-awareness
 bin/msm_irqbalance
-bin/perfd
+vendor/bin/perfd
 vendor/lib64/libqti-perfd-client.so
 vendor/lib/libqti-perfd-client.so
 
