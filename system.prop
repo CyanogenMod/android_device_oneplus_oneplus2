@@ -54,7 +54,7 @@ ro.bluetooth.a4wp=true
 ro.bluetooth.wipower=true
 
 # Camera
-persist.camera.cpp.duplication
+persist.camera.cpp.duplication=false
 
 # CEC
 ro.hdmi.device_type=4
