@@ -333,6 +333,12 @@ etc/firmware/venus.b04
 etc/firmware/venus.mbn
 etc/firmware/venus.mdt
 
+# Other
+vendor/lib64/liblocationservice_glue.so
+vendor/lib/liblocationservice_glue.so
+vendor/lib64/libflp.so
+vendor/lib/libflp.so
+
 # Perf
 bin/energy-awareness
 bin/msm_irqbalance
