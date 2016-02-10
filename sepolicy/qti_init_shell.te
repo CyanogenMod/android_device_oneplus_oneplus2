@@ -1,0 +1,5 @@
+allow qti_init_shell bluetooth_loader_exec:file read;
+allow qti_init_shell kmsg_device:chr_file write;
+allow qti_init_shell bluetooth_loader_exec:file open;
+allow qti_init_shell kmsg_device:chr_file open;
+
