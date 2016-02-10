@@ -167,10 +167,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/fpc1020.kl:system/usr/keylayout/fpc1020.kl \
     $(LOCAL_PATH)/keylayout/synaptics.kl:system/usr/keylayout/synaptics.kl
 
-# OnePlusControl
-PRODUCT_PACKAGES += \
-    OnePlusControl
-
 # Keymaster
 PRODUCT_PACKAGES += \
     keystore.msm8994
