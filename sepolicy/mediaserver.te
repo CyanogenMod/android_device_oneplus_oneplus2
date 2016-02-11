@@ -13,3 +13,6 @@ allow mediaserver audio_cutback_data_file:sock_file write;
 
 # TODO b/17015082
 allow mediaserver shell_data_file:dir search;
+
+allow mediaserver sensorservice_service:service_manager find;
+allow mediaserver system_server:unix_stream_socket read;

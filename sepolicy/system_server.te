@@ -17,3 +17,5 @@ allow system_server fingerprint_device:chr_file { open read write ioctl };
 
 allow system_server touchscreen_file:file rw_file_perms;
 allow system_server persist_file:file { read create };
+allow system_server persist_file:file { write open };
+allow system_server persist_file:file getattr;
