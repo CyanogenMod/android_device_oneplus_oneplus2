@@ -27,3 +27,9 @@ allow camera system_data_file:sock_file unlink;
 
 # TODO b/17015082
 allow camera shell_data_file:dir search;
+
+allow camera sensorservice_service:service_manager find;
+allow camera persist_file:dir search;
+allow camera persist_data_file:dir search;
+allow camera persist_data_file:file r_file_perms;
+allow camera { mediaserver surfaceflinger }:fd use;
