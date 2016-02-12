@@ -197,8 +197,8 @@ vendor/lib/libmmcamera_ov5648.so
 vendor/lib/libmmcamera_ov5648_eeprom.so
 
 # Keystore
-vendor/lib64/hw/keystore.msm8994.so
-vendor/lib/hw/keystore.msm8994.so
+-vendor/lib64/hw/keystore.msm8994.so
+-vendor/lib/hw/keystore.msm8994.so
 
 # Gatekeeper
 vendor/lib64/hw/gatekeeper.msm8994.so
