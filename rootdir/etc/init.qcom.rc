@@ -33,13 +33,14 @@ on early-init
     mount debugfs debugfs /sys/kernel/debug
 
 on early-fs
-    mount_all /fstab.qcom
-
-on init
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
+    symlink /system/vendor/firmware /firmware/image
 
+    mount_all /fstab.qcom
+
+on init
     chmod 0644 /proc/cmdline
 
     # Support legacy paths
