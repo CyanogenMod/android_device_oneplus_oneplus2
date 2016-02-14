@@ -312,10 +312,6 @@ vendor/lib/egl/libq3dtools_esx.so
 etc/firmware/a420_pfp.fw
 etc/firmware/a420_pm4.fw
 
-# Lights
-lib64/hw/lights.msm8994.so
-lib/hw/lights.msm8994.so
-
 # Listen
 vendor/lib/hw/sound_trigger.primary.msm8994.so
 
