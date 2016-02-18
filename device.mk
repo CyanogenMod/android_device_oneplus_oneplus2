@@ -122,6 +122,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     charger_res_images
 
+# Connectivity Engine support (CNE)
+PRODUCT_PACKAGES += \
+    cneapiclient \
+    com.quicinc.cne \
+    libcnefeatureconfig \
+    services-ext
+
 # Display
 PRODUCT_PACKAGES += \
     copybit.msm8994 \
@@ -221,7 +228,6 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    libcnefeatureconfig \
     librmnetctl \
     libxml2
 
