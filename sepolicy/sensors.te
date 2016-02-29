@@ -1,2 +1,6 @@
-allow sensors persist_file:file rw_file_perms;
-allow sensors self:capability { net_raw };
+allow sensors cam_sysfs:file getattr;
+allow sensors input_device:dir search;
+allow sensors input_device:chr_file { link getattr relabelfrom };
+allow sensors device:dir { write add_name };
+allow sensors device:chr_file { relabelto };
+allow sensors stm_sensor:chr_file relabelto;

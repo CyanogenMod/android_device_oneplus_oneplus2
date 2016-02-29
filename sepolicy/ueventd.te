@@ -1,5 +1,0 @@
-allow ueventd { firmware_file }:dir r_dir_perms;
-allow ueventd { firmware_file }:file r_file_perms;
-
-allow ueventd sdcard_external:dir search;
-allow ueventd sdcard_external:file { read getattr open };

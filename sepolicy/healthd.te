@@ -1,6 +1,0 @@
-allow healthd rtc_device:chr_file rw_file_perms;
-allow healthd sysfs_battery_supply:dir search;
-allow healthd sysfs_battery_supply:file { read open };
-allow healthd sysfs_usb_supply:dir search;
-allow healthd sysfs_usb_supply:file { read open };
-r_dir_file(healthd, sysfs_thermal);

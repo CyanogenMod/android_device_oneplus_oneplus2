@@ -36,7 +36,7 @@ on early-fs
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
-    symlink /system/vendor/firmware /firmware/image
+    symlink /vendor/firmware /firmware/image
 
     mount_all /fstab.qcom
 
