@@ -5,3 +5,5 @@ allow mm-qcamerad persist_file:dir { search };
 allow mm-qcamerad cam_proc:file { open read write };
 allow mm-qcamerad cam_sysfs:file { open read write };
 allow mm-qcamerad system_file:file execmod;
+allow mm-qcamerad sensors_socket:sock_file read;
+allow mm-qcamerad stm_sensor:chr_file { read open ioctl };

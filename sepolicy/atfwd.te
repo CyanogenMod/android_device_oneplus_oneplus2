@@ -1,3 +1,0 @@
-# Creates/Talks to qmuxd via the qmux_radio socket.
-allow atfwd qmuxd_socket:dir rw_dir_perms;
-allow atfwd qmuxd_socket:sock_file create_file_perms;

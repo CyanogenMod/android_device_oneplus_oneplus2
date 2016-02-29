@@ -1,21 +1,7 @@
-# for CMHardwareService access to TapToWake
-allow system_server proc_touchpanel:file rw_file_perms;
-allow system_server proc_touchpanel:dir { search };
-
-allow system_server persist_file:dir rw_dir_perms;
+allow system_server persist_file:dir { read write };
+allow system_server proc:file write;
+allow system_server proc_touchpanel:dir search;
+allow system_server proc_touchpanel:file { write open getattr };
 allow system_server sensors_persist_file:dir search;
 allow system_server sensors_persist_file:file r_file_perms;
-
-# timerfd
-allow system_server rtc_device:chr_file rw_file_perms;
-
-# Fingerprint sensor
-allow system_server firmware_file:dir search;
-allow system_server firmware_file:file { getattr open read };
-allow system_server tee_device:chr_file { open read write ioctl };
-allow system_server fingerprint_device:chr_file { open read write ioctl };
-
-allow system_server touchscreen_file:file rw_file_perms;
-allow system_server persist_file:file { read create };
-allow system_server persist_file:file { write open };
-allow system_server persist_file:file getattr;
+allow system_server stm_sensor:chr_file { read write open ioctl };

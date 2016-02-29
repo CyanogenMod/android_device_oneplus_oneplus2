@@ -14,6 +14,6 @@
 /dev/block/bootdevice/by-name/cache                   /cache            f2fs    rw,discard,nosuid,nodev,noatime,nodiratime,inline_xattr                                                         wait
 /dev/block/bootdevice/by-name/cache                   /cache            ext4    nosuid,nodev,barrier=1,noauto_da_alloc,discard,errors=panic                                                     wait
 /dev/block/bootdevice/by-name/persist                 /persist          ext4    nosuid,nodev,barrier=1                                                                                          wait
-/dev/block/bootdevice/by-name/bluetooth               /bt_firmware      vfat    ro,shortname=lower,uid=1002,gid=1002,dmask=222,fmask=333                                                        wait
+/dev/block/bootdevice/by-name/bluetooth               /bt_firmware      vfat    ro,shortname=lower,uid=1002,gid=1002,dmask=222,fmask=333,context=u:object_r:bt_firmware_file:s0                 wait
 
 /devices/soc.0/f9200000.ssusb/f9200000.dwc3/xhci-hcd* auto              auto    defaults                                                                                                        voldmanaged=usbdisk:auto

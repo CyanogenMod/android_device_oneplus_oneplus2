@@ -1,2 +1,0 @@
-allow init fingerprint_sysfs:file getattr;
-allow init fingerprint_sysfs:file setattr;
