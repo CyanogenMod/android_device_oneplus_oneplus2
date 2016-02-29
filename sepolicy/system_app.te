@@ -1,3 +1,2 @@
 allow system_app proc_touchpanel:dir search;
-allow system_app proc_touchpanel:file rw_file_perms;
-allow system_app touchscreen_file:file rw_file_perms;
+allow system_app proc_touchpanel:file { write read open getattr };

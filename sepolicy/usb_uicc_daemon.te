@@ -1,2 +1,0 @@
-allow usb_uicc_daemon system_prop:property_service set;
-

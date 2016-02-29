@@ -36,7 +36,7 @@ on early-fs
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
-    symlink /system/vendor/firmware /firmware/image
+    symlink /vendor/firmware /firmware/image
 
     mount_all /fstab.qcom
 
@@ -79,6 +79,7 @@ on init
 
     # Laser AF in factory mode
     chown system system /dev/stmvl6180_ranging
+    restorecon /system/bin/laser_init
 
     # Leds permission
     chown system system /sys/class/leds/led:flash_0/brightness

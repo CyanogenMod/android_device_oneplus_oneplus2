@@ -1,0 +1,10 @@
+type laser_init, domain;
+type laser_init_exec, exec_type, file_type;
+
+init_daemon_domain(laser_init);
+
+allow laser_init cam_sysfs:file getattr;
+allow laser_init input_device:dir search;
+allow laser_init input_device:chr_file { relabelfrom getattr link };
+allow laser_init device:dir { write add_name };
+allow laser_init stm_sensor:chr_file relabelto;
