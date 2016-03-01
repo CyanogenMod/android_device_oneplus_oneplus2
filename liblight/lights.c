@@ -110,10 +110,10 @@ char const*const GREEN_BLINK_FILE
 char const*const BLUE_BLINK_FILE
         = "/sys/class/leds/blue/blink";
 
-#define RAMP_SIZE 8
+#define RAMP_SIZE 11
 static int BRIGHTNESS_RAMP[RAMP_SIZE]
-        = { 0, 12, 25, 37, 50, 72, 85, 100 };
-#define RAMP_STEP_DURATION 50
+        = { 0, 5, 10, 15, 20, 29, 40, 50, 60, 75, 100 };
+#define RAMP_STEP_DURATION 20
 
 /**
  * device methods
@@ -217,16 +217,14 @@ static char*
 get_scaled_duty_pcts(int brightness)
 {
     char *buf = malloc(5 * RAMP_SIZE * sizeof(char));
-    char *pad = "";
     int i = 0;
 
     memset(buf, 0, 5 * RAMP_SIZE * sizeof(char));
 
     for (i = 0; i < RAMP_SIZE; i++) {
         char temp[5] = "";
-        snprintf(temp, sizeof(temp), "%s%d", pad, (BRIGHTNESS_RAMP[i] * brightness / 255));
+        snprintf(temp, sizeof(temp), "%x ", (BRIGHTNESS_RAMP[i] * brightness / 255));
         strcat(buf, temp);
-        pad = ",";
     }
     ALOGV("%s: brightness=%d duty=%s", __func__, brightness, buf);
     return buf;
