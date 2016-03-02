@@ -93,7 +93,7 @@ PRODUCT_PACKAGES += \\
     libqmiservices
 
 PRODUCT_PACKAGES += \\
-    keystore.msm8994
+    keystore.\$(TARGET_BOARD_PLATFORM)
 
 \$(call inherit-product, vendor/$VENDOR/$DEVICE/$DEVICE-vendor-blobs.mk)
 EOF
