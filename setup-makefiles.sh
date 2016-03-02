@@ -84,8 +84,11 @@ PRODUCT_PACKAGES += \\
     libdiag \\
     libdsutils \\
     libmdmdetect \\
+    libwpa_qmi_eap_proxy \\
+    libidl \\
     libqcci_legacy \\
     libqmi \\
+    libqmi_cci \\
     libqmi_client_qmux \\
     libqmiservices
 
@@ -295,6 +298,32 @@ LOCAL_PROPRIETARY_MODULE := true
 include \$(BUILD_PREBUILT)
 
 include \$(CLEAR_VARS)
+LOCAL_MODULE := libwpa_qmi_eap_proxy
+LOCAL_MODULE_OWNER := $VENDOR
+LOCAL_SRC_FILES := proprietary/lib64/libwpa_qmi_eap_proxy.so
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := \$(TARGET_OUT_SHARED_LIBRARIES)
+LOCAL_MULTILIB := 64
+LOCAL_PROPRIETARY_MODULE := true
+include \$(BUILD_PREBUILT)
+
+include \$(CLEAR_VARS)
+LOCAL_MODULE := libidl
+LOCAL_MODULE_OWNER := $VENDOR
+LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libidl.so
+LOCAL_SRC_FILES_32 := proprietary/vendor/lib/libidl.so
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH_64 := \$(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
+LOCAL_MODULE_PATH_32 := \$(2ND_TARGET_OUT_VENDOR_SHARED_LIBRARIES)
+LOCAL_MULTILIB := both
+LOCAL_PROPRIETARY_MODULE := true
+include \$(BUILD_PREBUILT)
+
+include \$(CLEAR_VARS)
 LOCAL_MODULE := libqcci_legacy
 LOCAL_MODULE_OWNER := $VENDOR
 LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libqcci_legacy.so
@@ -314,6 +343,20 @@ LOCAL_MODULE_OWNER := $VENDOR
 LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libqmi.so
 LOCAL_SRC_FILES_32 := proprietary/vendor/lib/libqmi.so
 LOCAL_ADDITIONAL_DEPENDENCIES := libdiag libqmi_client_qmux libdsutils libmdmdetect
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH_64 := \$(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
+LOCAL_MODULE_PATH_32 := \$(2ND_TARGET_OUT_VENDOR_SHARED_LIBRARIES)
+LOCAL_MULTILIB := both
+LOCAL_PROPRIETARY_MODULE := true
+include \$(BUILD_PREBUILT)
+
+include \$(CLEAR_VARS)
+LOCAL_MODULE := libqmi_cci
+LOCAL_MODULE_OWNER := $VENDOR
+LOCAL_SRC_FILES_64 := proprietary/vendor/lib64/libqmi_cci.so
+LOCAL_SRC_FILES_32 := proprietary/vendor/lib/libqmi_cci.so
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_SUFFIX := .so
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
