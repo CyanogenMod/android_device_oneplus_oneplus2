@@ -477,6 +477,14 @@ vendor/lib/libsensor_thresh.so
 vendor/lib/libsensor_user_cal.so
 vendor/lib/sensors.ssc.so
 
+# Smart camera
+vendor/lib/libchromaflash.so
+vendor/lib/libmmcamera_chromaflash_lib.so
+vendor/lib/libmmcamera_optizoom_lib.so
+vendor/lib/libmmcamera_ubifocus_lib.so
+vendor/lib/liboptizoom.so
+vendor/lib/libubifocus.so
+
 # Thermal
 vendor/lib64/libthermalclient.so
 vendor/lib64/libthermalioctl.so
