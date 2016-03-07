@@ -529,6 +529,11 @@ on property:init.svc.per_mgr=running
 on property:sys.shutdown.requested=*
     stop per_proxy
 
+service fingerprintd /system/bin/fingerprintd
+    class late_start
+    user system
+    group system input
+
 service thermal-engine /system/vendor/bin/thermal-engine
     class main
     user root

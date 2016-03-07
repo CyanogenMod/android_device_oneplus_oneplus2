@@ -261,6 +261,13 @@ vendor/lib/libssd.so
 vendor/lib/libwvdrm_L1.so
 vendor/lib/mediadrm/libwvdrmengine.so
 
+# Fingerprint sensor
+etc/firmware/fingerprints.b00
+etc/firmware/fingerprints.b01
+etc/firmware/fingerprints.b02
+etc/firmware/fingerprints.b03
+etc/firmware/fingerprints.mdt
+
 # GPS
 bin/loc_launcher
 bin/lowi-server
