@@ -326,8 +326,6 @@ Only the three quirks included above are recognized at this point:
             <Feature name="secure-playback" required="true" />
             <Limit name="concurrent-instances" max="6" />
         </MediaCodec>
-        <!-- Audio Software  -->
-        <MediaCodec name="OMX.qti.audio.decoder.flac" type="audio/flac" />
     </Decoders>
     <Include href="media_codecs_google_video.xml" />
 </MediaCodecs>
