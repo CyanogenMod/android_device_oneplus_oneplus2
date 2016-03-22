@@ -350,9 +350,6 @@
 
     <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
 
-    <!-- Our modem doesn't support this query yet -->
-    <string name="config_radio_access_family">GSM|WCDMA|LTE</string>
-
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
 
