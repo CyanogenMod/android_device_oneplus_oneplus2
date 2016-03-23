@@ -1,0 +1,1 @@
+allow qmuxd property_socket:sock_file write;
