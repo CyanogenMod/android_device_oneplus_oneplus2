@@ -252,14 +252,6 @@ vendor/lib64/libdrmtime.so
 vendor/lib64/librpmb.so
 vendor/lib64/libssd.so
 vendor/lib/libQSEEComAPI.so
-vendor/lib/libWVStreamControlAPI_L1.so
-vendor/lib/libdrmfs.so
-vendor/lib/libdrmtime.so
-vendor/lib/liboemcrypto.so
-vendor/lib/librpmb.so
-vendor/lib/libssd.so
-vendor/lib/libwvdrm_L1.so
-vendor/lib/mediadrm/libwvdrmengine.so
 
 # Fingerprint sensor
 etc/firmware/fingerprints.b00
