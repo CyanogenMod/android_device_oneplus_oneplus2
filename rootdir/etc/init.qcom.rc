@@ -35,7 +35,6 @@ on early-fs
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
-    symlink /vendor/firmware /firmware/image
 
     mount_all /fstab.qcom
 
@@ -58,23 +57,16 @@ on init
 
     # Add for fpc fingerprints permission
     chmod -h 777 /dev/qseecom
-    chown system system /dev/fpc1020
-    chmod 0660 /dev/fpc1020
-
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_shift
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_groups
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_start
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_count
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_mode
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_count
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_start
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_settings_mux
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
-    chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
-    chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
+    chmod 0664 /sys/bus/spi/devices/spi12.0/irq
+    chown system system /sys/bus/spi/devices/spi12.0/irq
+    chmod 0660 /sys/bus/spi/devices/spi12.0/report_home
+    chown system system /sys/bus/spi/devices/spi12.0/report_home
+    chmod 0660 /sys/devices/soc/soc:fpc_fpc1020/update_info
+    chown system system /sys/devices/soc/soc:fpc_fpc1020/update_info
+    chmod 0660 /sys/bus/spi/devices/spi12.0/screen_state
+    chown system system /sys/bus/spi/devices/spi12.0/screen_state
+    chmod 0660 /sys/bus/spi/devices/spi12.0/clk_enable
+    chown system system /sys/bus/spi/devices/spi12.0/clk_enable
 
     # Laser AF in factory mode
     chown system system /dev/stmvl6180_ranging
@@ -377,8 +369,14 @@ on post-fs-data
     mkdir /data/misc/sfs/sfs 0700 system system
     mkdir /data/misc/sfs/tz 0700 system system
     mkdir /data/misc/dts 0770 media audio
-    mkdir /data/misc/fp 0700 system system
     mkdir /data/oemnvitems 0771 radio radio
+
+    # Fingerint
+    mkdir /data/misc/fp 0700 system system
+    mkdir /data/fpc_images 0770 system system
+    mkdir /data/fpc_images/verify 0770 system system
+    mkdir /data/fpc_images/enroll 0770 system system
+    mkdir /data/fpc 0770 system system
 
     # Create directory for TZ Apps
     mkdir /data/misc/qsee 0770 system system
@@ -531,7 +529,7 @@ on property:sys.shutdown.requested=*
 service fingerprintd /system/bin/fingerprintd
     class late_start
     user system
-    group system input
+    group system
 
 service thermal-engine /system/vendor/bin/thermal-engine
     class main
