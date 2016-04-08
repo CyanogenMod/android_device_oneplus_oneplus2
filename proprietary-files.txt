@@ -442,7 +442,6 @@ vendor/lib/libsmemlog.so
 vendor/lib/libconnctrl.so
 
 # Radio
--app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 -app/shutdownlistener/shutdownlistener.apk
 bin/netmgrd
 bin/qmuxd
@@ -454,6 +453,7 @@ etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar
 -framework/qcrilhook.jar
 lib64/libparam.so
+-priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 vendor/lib64/libconfigdb.so
 -vendor/lib64/libmdmdetect.so
 vendor/lib64/libnetmgr.so
