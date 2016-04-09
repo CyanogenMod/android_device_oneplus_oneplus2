@@ -1,0 +1,2 @@
+allow ueventd vfat:dir search;
+allow ueventd vfat:file { read open };

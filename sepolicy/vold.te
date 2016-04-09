@@ -1,1 +1,1 @@
-allow vold proc_touchpanel:dir read;
+allow vold proc_touchpanel:dir { read open };
