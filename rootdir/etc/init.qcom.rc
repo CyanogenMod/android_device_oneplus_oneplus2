@@ -45,8 +45,6 @@ on early-fs
 on init
     chmod 0644 /proc/cmdline
 
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
     # Slow Motion Scheduling Group
