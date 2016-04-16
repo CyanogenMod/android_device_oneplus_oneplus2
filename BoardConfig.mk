@@ -153,6 +153,9 @@ TARGET_RIL_VARIANT := caf
 # RPC
 TARGET_NO_RPC := true
 
+# Sensors
+USE_SENSOR_MULTI_HAL := true
+
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
   ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)

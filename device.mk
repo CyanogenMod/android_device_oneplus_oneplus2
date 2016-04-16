@@ -206,6 +206,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.msm8994
 
+# QMI
+PRODUCT_PACKAGES += \
+    dsi_config.xml \
+    netmgr_config.xml \
+    qmi_config.xml
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.qcom.bt.sh
@@ -219,18 +225,15 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.sh \
     ueventd.qcom.rc
 
-# QMI
-PRODUCT_PACKAGES += \
-    dsi_config.xml \
-    netmgr_config.xml \
-    qmi_config.xml
-
 # RIL
 PRODUCT_PACKAGES += \
     librmnetctl \
     libxml2
 
 # Sensors
+PRODUCT_PACKAGES += \
+    sensors.msm8994
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensors/hals.conf:system/etc/sensors/hals.conf \
     $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
