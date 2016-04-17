@@ -396,15 +396,6 @@
 
     <integer name="config_buttonBrightnessSettingDefault">60</integer>
 
-    <!-- enable doze -->
-    <bool name="config_enableAutoPowerModes">true</bool>
-
-    <!-- Doze settings -->
-    <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
-    <integer name="config_screenBrightnessDoze">10</integer>
-    <bool name="config_dozeAfterScreenOff">true</bool>
-    <bool name="config_powerDecoupleInteractiveModeFromDisplay">true</bool>
-
     <!-- Older rotation sensors are not setting event.timestamp correctly. Setting to
          true will use SystemClock.elapsedRealtimeNanos() to set timestamp. -->
     <bool name="config_useSystemClockforRotationSensor">true</bool>
