@@ -33,6 +33,7 @@ persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
 ro.qc.sdk.audio.fluencetype=fluence
 ro.qc.sdk.audio.ssr=false
+persist.audio.ssr.3mic=false
 media.aac_51_output_enabled=true
 audio.offload.pcm.16bit.enable=true
 audio.offload.pcm.24bit.enable=true
@@ -45,7 +46,7 @@ audio.dolby.ds2.enabled=true
 audio.dolby.ds2.hardbypass=true
 audio.offload.passthrough=false
 persist.dpm.feature=1
-audio.deep_buffer.media=true
+tunnel.audio.encode=false
 
 # Bluetooth
 bluetooth.hfp.client=1
