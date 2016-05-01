@@ -490,7 +490,7 @@ on post-fs-data
 
 # start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
-    class late_start
+    class main
     user camera
     group camera system inet input graphics
     writepid /dev/cpuset/system-background/tasks
@@ -513,12 +513,12 @@ service perfd /system/vendor/bin/perfd
     writepid /dev/cpuset/system-background/tasks
 
 service per_mgr /system/bin/pm-service
-    class core
+    class late_start
     user system
     group system net_raw
 
 service per_proxy /system/bin/pm-proxy
-    class core
+    class late_start
     user system
     group system net_raw
     disabled
@@ -1043,7 +1043,7 @@ on property:sys.qbcharger.enable=false
 
 service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     socket msm_irqbalance seqpacket 660 root system
-    class core
+    class main
     user root
     group root
     disabled
