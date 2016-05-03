@@ -82,7 +82,7 @@ persist.hwc.mdpcomp.enable=true
 dalvik.vm.heapsize=36m
 ro.qualcomm.cabl=0
 ro.sf.lcd_density=480
-ro.opengles.version=196609
+ro.opengles.version=196610
 
 # QC vendor extension
 ro.vendor.extension_library=libqti-perfd-client.so
