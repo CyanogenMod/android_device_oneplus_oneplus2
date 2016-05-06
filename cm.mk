@@ -16,3 +16,17 @@ $(call inherit-product, device/oneplus/oneplus2/full_oneplus2.mk)
 
 # Inherit some common CM stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
+
+PRODUCT_NAME := cm_oneplus2
+PRODUCT_DEVICE := oneplus2
+PRODUCT_MANUFACTURER := OnePlus
+PRODUCT_MODEL := A2001
+RELEASE_TYPE := cm_UNOFFICIAL
+
+PRODUCT_GMS_CLIENTID_BASE := android-oneplus
+
+PRODUCT_BRAND := oneplus
+TARGET_VENDOR := oneplus
+TARGET_VENDOR_PRODUCT_NAME := oneplus2
+TARGET_VENDOR_DEVICE_NAME := A2001
+PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=oneplus2 PRODUCT_NAME=OnePlus2
