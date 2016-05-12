@@ -9,3 +9,4 @@ LOCAL_SRC_FILES := init_oneplus2.cpp
 LOCAL_MODULE := libinit_oneplus2
 
 include $(BUILD_STATIC_LIBRARY)
+
