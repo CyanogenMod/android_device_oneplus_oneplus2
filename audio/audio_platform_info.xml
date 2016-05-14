@@ -27,25 +27,15 @@
 <audio_platform_info>
     <acdb_ids>
         <device name="SND_DEVICE_OUT_SPEAKER_PROTECTED" acdb_id="124"/>
+        <device name="SND_DEVICE_OUT_VOICE_HANDSET" acdb_id="10" />
+        <device name="SND_DEVICE_OUT_VOICE_SPEAKER" acdb_id="10" />
     </acdb_ids>
-
     <backend_names>
         <device name="SND_DEVICE_OUT_SPEAKER" backend="speaker" />
         <device name="SND_DEVICE_OUT_SPEAKER_AND_HEADPHONES" backend="speaker-and-headphones" />
         <device name="SND_DEVICE_OUT_VOICE_SPEAKER" backend="speaker" />
-        <device name="SND_DEVICE_OUT_SPEAKER_AND_ANC_HEADSET" backend="speaker-and-anc-headphones" />
-        <device name="SND_DEVICE_OUT_SPEAKER_PROTECTED" backend="speaker-protected" />
     </backend_names>
-
     <bit_width_configs>
         <device name="SND_DEVICE_OUT_SPEAKER" bit_width="24"/>
     </bit_width_configs>
-
-    <pcm_ids>
-        <!-- empty -->
-    </pcm_ids>
-
-    <device_names>
-        <!-- empty -->
-    </device_names>
 </audio_platform_info>

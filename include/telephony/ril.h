@@ -1510,6 +1510,10 @@ typedef struct {
 
 } RIL_CafOpenChannelParams;
 
+typedef struct {
+    int state;
+} RIL_RfControlState;
+
 /**
  * RIL_REQUEST_GET_SIM_STATUS
  *
@@ -4578,6 +4582,16 @@ typedef struct {
  *  NO_SUCH_ELEMENT
  */
 #define RIL_REQUEST_CAF_SIM_OPEN_CHANNEL_WITH_P2 137
+
+/**
+ * RIL_REQUEST_SET_MAX_TRANSMIT_POWER
+ *
+ * Sends the request to enable or disable MAX transmit power control option
+ *
+ * "response" is void
+ */
+
+#define RIL_REQUEST_SET_MAX_TRANSMIT_POWER 139
 
 /***********************************************************************/
 
