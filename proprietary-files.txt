@@ -209,8 +209,12 @@ vendor/lib/hw/gatekeeper.msm8994.so
 bin/cnd
 etc/cne/SwimConfig.xml
 etc/cne/andsfCne.xml
+etc/permissions/ConnectivityExt.xml
 etc/permissions/cneapiclient.xml
 etc/permissions/com.quicinc.cne.xml
+framework/ConnectivityExt.jar
+framework/cneapiclient.jar
+framework/com.quicinc.cne.jar
 -priv-app/CNEService/CNEService.apk
 vendor/lib64/libNimsWrap.so
 vendor/lib64/libcne.so
