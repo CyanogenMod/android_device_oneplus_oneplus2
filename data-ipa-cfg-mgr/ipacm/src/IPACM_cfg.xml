@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ipacm_cfg.xsd">
 	<ODUCFG>
-		<Mode>router</Mode>
+		<OduMode>router</OduMode>
+		<eMBMS_offload>0</eMBMS_offload>
 	</ODUCFG>
 	<IPACM>
 		<IPACMIface>
@@ -12,10 +13,12 @@
 			<Iface>
 			   <Name>ecm0</Name>
 			   <Category>LAN</Category>
+			   <Mode>ROUTER</Mode>
 			</Iface>
 			<Iface>
 			   <Name>rmnet_data0</Name>
 			   <Category>WAN</Category>
+			   <Mode>ROUTER</Mode>
 			</Iface>
 			<Iface>
 			   <Name>rmnet_data1</Name>
@@ -48,10 +51,12 @@
 			<Iface>
 			   <Name>wlan0</Name>
 			   <Category>UNKNOWN</Category>
+			   <WlanMode>full</WlanMode>
 			</Iface>			
 			<Iface>
 			   <Name>wlan1</Name>
 			   <Category>UNKNOWN</Category>
+			   <WlanMode>full</WlanMode>
 			</Iface>
 			<Iface>
 			   <Name>eth0</Name>
@@ -62,6 +67,9 @@
 			   <Category>VIRTUAL</Category>
 		    </Iface>
 		</IPACMIface>
+		<IPPassthroughFlag>
+			<IPPassthroughMode>0</IPPassthroughMode>
+		</IPPassthroughFlag>
 		<IPACMPrivateSubnet>
 			<Subnet>
   			   <SubnetAddress>192.168.225.0</SubnetAddress>
@@ -132,6 +140,11 @@
 			<ALG>
   			   <Protocol>UDP</Protocol>
   			   <Port>137</Port>
+			   <Description>NETBIOS_NS</Description>
+		    </ALG>
+			<ALG>
+			   <Protocol>UDP</Protocol>
+			   <Port>138</Port>
 			   <Description>NETBIOS_NS</Description>
 		    </ALG>
 			<ALG>
