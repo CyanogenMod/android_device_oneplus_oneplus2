@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013, The Linux Foundation. All rights reserved.
+Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -44,6 +44,9 @@ extern "C"
 
 #define MAX_TEMP_ENTRIES 25
 
+#define IPACM_TCP_FULL_FILE_NAME  "/proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_timeout_established"
+#define IPACM_UDP_FULL_FILE_NAME   "/proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout_stream"
+
 typedef struct _nat_table_entry
 {
 	uint32_t private_ip;
@@ -52,7 +55,7 @@ typedef struct _nat_table_entry
 	uint32_t target_ip;
 	uint16_t target_port;
 
-	uint16_t public_ip;
+	uint32_t public_ip;
 	uint16_t public_port;
 
 	u_int8_t  protocol;
@@ -117,12 +120,12 @@ public:
 	int DelEntriesOnClntDiscon(uint32_t);
 	int DelEntriesOnSTAClntDiscon(uint32_t);
 
-	void UpdateTcpUdpTo(uint32_t, int proto);
+	void Read_TcpUdp_Timeout(void);
 
 	void AddTempEntry(const nat_table_entry *);
 	void CacheEntry(const nat_table_entry *);
 	void DeleteTempEntry(const nat_table_entry *);
-	void FlushTempEntries(uint32_t, bool);
+	void FlushTempEntries(uint32_t, bool, bool isDummy = false);
 };
 
 
