@@ -2,7 +2,7 @@
 
 ro.build.product=OnePlus2
 ro.product.device=OnePlus2
-ro.build.description=OnePlus2-user 6.0.1 MMB29M 258 dev-keys
+ro.build.description=OnePlus2-user 6.0.1 MMB29M 20 dev-keys
 ro.build.fingerprint=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447840800:user/release-keys
 
 # RIL
@@ -119,6 +119,3 @@ ro.qc.sdk.camera.facialproc=false
 
 # Time services
 persist.timed.enable=true
-
-# Video
-vidc.enc.dcvs.extra-buff-count=2
