@@ -700,6 +700,10 @@ service cnd /system/bin/cnd
     class late_start
     socket cnd stream 660 root inet
 
+service dpmd /system/bin/dpmd
+    class late_start
+    socket dpmd stream 660 root system
+
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
     user root
