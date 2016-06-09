@@ -1,2 +1,2 @@
-allow mediaserver system_server:unix_stream_socket read;
+allow mediaserver system_server:unix_stream_socket { read write };
 allow mediaserver sensorservice_service:service_manager find;

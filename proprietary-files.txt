@@ -40,7 +40,6 @@ vendor/lib/libbtnv.so
 vendor/lib64/libbtnv.so
 
 # Camera
-bin/laser_init
 bin/mm-qcamera-app
 bin/mm-qcamera-daemon
 lib/hw/camera.msm8994.so
@@ -51,7 +50,6 @@ lib/libmmjpeg_interface.so
 lib/libmorpho_video_refiner.so
 lib/libopcamerahw_interface.so
 lib/libqomx_core.so
-lib64/hw/sensors.hal.tof.so
 lib64/libopcamera.so
 lib64/libopcameralib.so
 vendor/lib/libfastcvadsp_stub.so

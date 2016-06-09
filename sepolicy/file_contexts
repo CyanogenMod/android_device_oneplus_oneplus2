@@ -11,8 +11,8 @@
 /system/etc/init\.qcom\.bt\.sh                                  u:object_r:bluetooth_loader_exec:s0
 
 /sys/devices/soc.0/f9928000.i2c/i2c-6/6-0029/enable_ps_sensor   u:object_r:cam_sysfs:s0
-/system/bin/laser_init                                          u:object_r:sensors_exec:s0
-/dev/stm_sensor                                                 u:object_r:stm_sensor:s0
+/sys/devices/soc.0/f9928000.i2c/i2c-6/6-0029/set_delay_ms       u:object_r:cam_sysfs:s0
+/dev/input/event2                                               u:object_r:stm_sensor:s0
 
 /dev/i2c-6                                                      u:object_r:audio_device:s0
 
