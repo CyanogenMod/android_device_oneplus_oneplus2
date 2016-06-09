@@ -72,8 +72,9 @@ on init
     chmod 0660 /sys/bus/spi/devices/spi12.0/clk_enable
     chown system system /sys/bus/spi/devices/spi12.0/clk_enable
 
-    # Laser AF in factory mode
+    # Laser AF
     chown system system /dev/stmvl6180_ranging
+    symlink /dev/input/event2 /dev/stm_sensor
 
     # Leds permission
     chown system system /sys/class/leds/led:flash_0/brightness
@@ -498,12 +499,6 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     user camera
     group camera system inet input graphics
     writepid /dev/cpuset/system-background/tasks
-
-service laserinit /system/bin/laser_init
-    class late_start
-    user root
-    group root
-    oneshot
 
 service qseecomd /system/bin/qseecomd
     class core
