@@ -1,2 +1,3 @@
 allow ueventd vfat:dir search;
 allow ueventd vfat:file { read open };
+allow ueventd stm_sensor:chr_file { create setattr };
