@@ -31,13 +31,16 @@ import init.qcom.usb.rc
 on early-init
     symlink /data/tombstones /tombstones
 
+    # Setup zram options
+    write /sys/block/zram0/comp_algorithm lz4
+
 on early-fs
     mkdir /firmware 0771 system system
     mkdir /bt_firmware 0771 system system
     mkdir /persist 0771 system system
-    symlink /vendor/firmware /firmware/image
 
     mount_all /fstab.qcom
+    swapon_all /fstab.qcom
 
 on init
     chmod 0644 /proc/cmdline
@@ -58,26 +61,20 @@ on init
 
     # Add for fpc fingerprints permission
     chmod -h 777 /dev/qseecom
-    chown system system /dev/fpc1020
-    chmod 0660 /dev/fpc1020
+    chmod 0664 /sys/bus/spi/devices/spi12.0/irq
+    chown system system /sys/bus/spi/devices/spi12.0/irq
+    chmod 0660 /sys/bus/spi/devices/spi12.0/report_home
+    chown system system /sys/bus/spi/devices/spi12.0/report_home
+    chmod 0660 /sys/devices/soc/soc:fpc_fpc1020/update_info
+    chown system system /sys/devices/soc/soc:fpc_fpc1020/update_info
+    chmod 0660 /sys/bus/spi/devices/spi12.0/screen_state
+    chown system system /sys/bus/spi/devices/spi12.0/screen_state
+    chmod 0660 /sys/bus/spi/devices/spi12.0/clk_enable
+    chown system system /sys/bus/spi/devices/spi12.0/clk_enable
 
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_register
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/diag/spi_data
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_gain
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/adc_shift
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_groups
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_col_start
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_count
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_mode
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_count
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_row_start
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/capture_settings_mux
-    chown system system /sys/bus/spi/drivers/fpc1020/spi12.0/setup/pxl_ctrl
-    chown system system /sys/devices/virtual/fpsensor/fpc1020/clock_enable
-    chown system system /sys/devices/virtual/fpsensor/fpc1020/ap_tz_switch
-
-    # Laser AF in factory mode
+    # Laser AF
     chown system system /dev/stmvl6180_ranging
+    symlink /dev/input/event2 /dev/stm_sensor
 
     # Leds permission
     chown system system /sys/class/leds/led:flash_0/brightness
@@ -122,6 +119,9 @@ on init
     # Buttons
     chown root system /proc/s1302/key_rep
     chmod 0660 /proc/s1302/key_rep
+
+    chown root system /proc/s1302/virtual_key
+    chmod 0660 /proc/s1302/virtual_key
 
     chown root system /proc/tri-state-key/keyCode_top
     chmod 0660 /proc/tri-state-key/keyCode_top
@@ -377,8 +377,14 @@ on post-fs-data
     mkdir /data/misc/sfs/sfs 0700 system system
     mkdir /data/misc/sfs/tz 0700 system system
     mkdir /data/misc/dts 0770 media audio
-    mkdir /data/misc/fp 0700 system system
     mkdir /data/oemnvitems 0771 radio radio
+
+    # Fingerint
+    mkdir /data/misc/fp 0700 system system
+    mkdir /data/fpc_images 0770 system system
+    mkdir /data/fpc_images/verify 0770 system system
+    mkdir /data/fpc_images/enroll 0770 system system
+    mkdir /data/fpc 0770 system system
 
     # Create directory for TZ Apps
     mkdir /data/misc/qsee 0770 system system
@@ -489,16 +495,10 @@ on post-fs-data
 
 # start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
-    class late_start
+    class main
     user camera
     group camera system inet input graphics
     writepid /dev/cpuset/system-background/tasks
-
-service laserinit /system/bin/laser_init
-    class late_start
-    user root
-    group root
-    oneshot
 
 service qseecomd /system/bin/qseecomd
     class core
@@ -512,12 +512,12 @@ service perfd /system/vendor/bin/perfd
     writepid /dev/cpuset/system-background/tasks
 
 service per_mgr /system/bin/pm-service
-    class core
+    class late_start
     user system
     group system net_raw
 
 service per_proxy /system/bin/pm-proxy
-    class core
+    class late_start
     user system
     group system net_raw
     disabled
@@ -531,7 +531,7 @@ on property:sys.shutdown.requested=*
 service fingerprintd /system/bin/fingerprintd
     class late_start
     user system
-    group system input
+    group system
 
 service thermal-engine /system/vendor/bin/thermal-engine
     class main
@@ -696,8 +696,12 @@ on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
 
 service cnd /system/bin/cnd
-    class late_start
+    class main
     socket cnd stream 660 root inet
+
+service dpmd /system/bin/dpmd
+    class late_start
+    socket dpmd stream 660 root system
 
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
@@ -1042,7 +1046,7 @@ on property:sys.qbcharger.enable=false
 
 service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     socket msm_irqbalance seqpacket 660 root system
-    class core
+    class main
     user root
     group root
     disabled

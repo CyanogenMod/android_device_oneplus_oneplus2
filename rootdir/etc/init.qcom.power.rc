@@ -4,6 +4,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu5/online 0
     write /sys/devices/system/cpu/cpu6/online 0
     write /sys/devices/system/cpu/cpu7/online 0
+
     # Limit A57 max freq from msm_perf module in case CPU 4 is offline
     write /sys/module/msm_performance/parameters/cpu_max_freq "4:960000 5:960000 6:960000 7:960000"
 
@@ -44,7 +45,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 384000
 
     # Insert core_ctl module and use conservative paremeters
-    insmod /system/lib/modules/msm_core_ctl.ko
+    insmod /system/lib/modules/hcube.ko
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 1
 
     # Re-enable thermal and BCL hotplug
@@ -78,6 +79,14 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms  100
     write /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster 1
     write /sys/devices/system/cpu/cpu4/core_ctl/task_thres 4
+
+    # enable H-Cube tunings for big cores
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_on 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_down_scale_on 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_thres_on 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_ro_use_gourd 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_correl_lvs "0 0 768000 1248000"
+    write /sys/devices/system/cpu/cpu4/core_ctl/hc_correl_use_pcost 1
 
     # Setting big.LITTLE scheduler parameters
     write /proc/sys/kernel/sched_migration_fixup 1

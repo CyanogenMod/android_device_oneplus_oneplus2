@@ -31,17 +31,17 @@ import org.cyanogenmod.hardware.util.FileUtils;
 
 public class KeyDisabler {
 
-    private static String CONTROL_PATH = "/proc/nav_switch";
+    private static String CONTROL_PATH = "/proc/s1302/virtual_key";
 
     public static boolean isSupported() {
         return new File(CONTROL_PATH).exists();
     }
 
     public static boolean isActive() {
-        return (FileUtils.readOneLine(CONTROL_PATH).contains(":0"));
+        return (FileUtils.readOneLine(CONTROL_PATH).contains("enabled"));
     }
 
     public static boolean setActive(boolean state) {
-        return FileUtils.writeLine(CONTROL_PATH, (state ? "0" : "1"));
+        return FileUtils.writeLine(CONTROL_PATH, (state ? "1" : "0"));
     }
 }

@@ -18,58 +18,100 @@
 -->
 
 <device name="Android">
-  <!-- All values are in mAh except as noted -->
-  <item name="none">0</item>
-  <item name="screen.on">80</item>
-  <item name="screen.full">240</item>
-  <item name="bluetooth.active">93.5</item>
-  <item name="bluetooth.on">1</item>
-  <item name="wifi.on">1</item>
-  <item name="wifi.active">115</item>
-  <item name="wifi.scan">200</item>
-  <item name="dsp.audio">30</item>
-  <item name="dsp.video">123</item>
-  <item name="gps.on">90</item>
-  <!-- The current consumed by the radio when it is scanning for a signal -->
-  <item name="radio.active">159</item>
-  <item name="radio.scanning">41</item>
-  <!-- Current consumed by the radio at different signal strengths, when paging -->
-  <array name="radio.on"> <!-- Strength 0 to BINS-1 -->
+    <!-- All values are in mAh except as noted -->
+    <item name="none">0</item>
+    <item name="screen.on">80</item>
+    <item name="screen.full">240</item>
+    <item name="bluetooth.active">93.5</item>
+    <item name="bluetooth.on">1</item>
+    <item name="wifi.on">1</item>
+    <item name="wifi.active">115</item>
+    <item name="wifi.scan">200</item>
+    <item name="dsp.audio">30</item>
+    <item name="dsp.video">123</item>
+    <item name="gps.on">90</item>
+    <!-- The current consumed by the radio when it is scanning for a signal -->
+    <item name="radio.active">159</item>
+    <item name="radio.scanning">41</item>
+    <!-- Current consumed by the radio at different signal strengths, when paging -->
+    <array name="radio.on"> <!-- Strength 0 to BINS-1 -->
         <value>3.9</value>
         <value>2.8</value>
-  </array>
-  <!-- Different CPU speeds as reported in
-       /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state -->
-  <array name="cpu.speeds">
-        <value>384000</value>
-        <value>460800</value>
-        <value>600000</value>
-        <value>672000</value>
-        <value>768000</value>
-        <value>864000</value>
-        <value>960000</value>
-        <value>1248000</value>
-        <value>1344000</value>
-        <value>1478400</value>
-        <value>1555200</value>
-  </array>
-  <!-- Power consumption when CPU is idle -->
-  <item name="cpu.idle">9</item>
-  <item name="cpu.awake">12</item>
-  <!-- Power consumption at different speeds -->
-  <array name="cpu.active">
-        <value>601</value>
-        <value>551</value>
-        <value>500</value>
-        <value>400</value>
-        <value>353</value>
-        <value>307</value>
-        <value>259</value>
-        <value>195</value>
-        <value>177</value>
-        <value>169</value>
-        <value>151</value>
-  </array>
-  <!-- This is the battery capacity in mAh -->
+    </array>
+
+    <!-- Different CPU speeds as reported in
+         /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state -->
+    <array name="cpu.speeds.cluster0">
+        <value>384000</value> <!-- 384 MHz CPU speed -->
+        <value>460800</value> <!-- 460.8 MHz CPU speed -->
+        <value>600000</value> <!-- 600 MHz CPU speed -->
+        <value>672000</value> <!-- 672 MHz CPU speed -->
+        <value>768000</value> <!-- 768 MHz CPU speed -->
+        <value>864000</value> <!-- 864 MHz CPU speed -->
+        <value>960000</value> <!-- 960 MHz CPU speed -->
+        <value>1248000</value> <!-- 1248 MHz CPU speed -->
+        <value>1344000</value> <!-- 1344 MHz CPU speed -->
+        <value>1478400</value> <!-- 1478.4 MHz CPU speed -->
+        <value>1555200</value> <!-- 1555.2 MHz CPU speed -->
+    </array>
+    <array name="cpu.speeds.cluster1">
+        <value>384000</value> <!-- 384 MHz CPU speed -->
+        <value>480000</value> <!-- 480 MHz CPU speed -->
+        <value>633600</value> <!-- 633.6 MHz CPU speed -->
+        <value>768000</value> <!-- 768 MHz CPU speed -->
+        <value>864000</value> <!-- 864 MHz CPU speed -->
+        <value>960000</value> <!-- 960 MHz CPU speed -->
+        <value>1248000</value> <!-- 1248 MHz CPU speed -->
+        <value>1344000</value> <!-- 1344 MHz CPU speed -->
+        <value>1440000</value> <!-- 1440 MHz CPU speed -->
+        <value>1536000</value> <!-- 1536 MHz CPU speed -->
+        <value>1632000</value> <!-- 1632 MHz CPU speed -->
+        <value>1766000</value> <!-- 1766 MHz CPU speed -->
+    </array>
+    <!-- Power consumption when CPU is idle -->
+    <item name="cpu.idle">5.58</item>
+    <item name="cpu.awake">4.92</item>
+    <!-- Power consumption at different speeds -->
+    <array name="cpu.active.cluster0">
+        <value>24.14</value> <!-- 384 MHz CPU speed -->
+        <value>27.2</value> <!-- 460.8 MHz CPU speed -->
+        <value>32.3</value> <!-- 600 MHz CPU speed -->
+        <value>36.94</value> <!-- 672 MHz CPU speed -->
+        <value>41.57</value> <!-- 768 MHz CPU speed -->
+        <value>49.87</value> <!-- 864 MHz CPU speed -->
+        <value>57.84</value> <!-- 960 MHz CPU speed -->
+        <value>79.8</value> <!-- 1248 MHz CPU speed -->
+        <value>88.81</value> <!-- 1344 MHz CPU speed -->
+        <value>102.4</value> <!-- 1478.4 MHz CPU speed -->
+        <value>110.9</value> <!-- 1555.2 MHz CPU speed -->
+    </array>
+    <array name="cpu.active.cluster1">
+        <value>86.83</value> <!-- 384 MHz CPU speed -->
+        <value>103.24</value> <!-- 480 MHz CPU speed -->
+        <value>129.38</value> <!-- 633.6 MHz CPU speed -->
+        <value>155.42</value> <!-- 768 MHz CPU speed -->
+        <value>177.99</value> <!-- 864 MHz CPU speed -->
+        <value>195.55</value> <!-- 960 MHz CPU speed -->
+        <value>265.09</value> <!-- 1248 MHz CPU speed -->
+        <value>292.77</value> <!-- 1344 MHz CPU speed -->
+        <value>322.13</value> <!-- 1440 MHz CPU speed -->
+        <value>348.19</value> <!-- 1536 MHz CPU speed -->
+        <value>370.18</value> <!-- 1632 MHz CPU speed -->
+        <value>405.51</value> <!-- 1766 MHz CPU speed -->
+    </array>
+    <array name="cpu.clusters.cores">
+        <value>4</value> <!-- Cluster 0 has 4 cores (cpu0, cpu1, cpu2, cpu3) -->
+        <value>4</value> <!-- Cluster 1 has 4 cores (cpu4, cpu5, cpu6, cpu7) -->
+    </array>
+
+    <!-- This is the battery capacity in mAh -->
     <item name="battery.capacity">3300</item>
+
+    <array name="wifi.batchedscan"> <!-- mA.  Current figures based on .0801 s/c and 75.48mA while scanning -->
+        <value>.0002</value> <!-- 1-8/hr -->
+        <value>.002</value>  <!-- 9-64/hr -->
+        <value>.02</value>   <!-- 65-512/hr -->
+        <value>.2</value>    <!-- 513-4,096/hr -->
+        <value>2</value>    <!-- 4097-/hr -->
+    </array>
 </device>
