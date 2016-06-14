@@ -87,10 +87,6 @@ on init
     # Scheduler
     chown system system /sys/module/cpu_boost/parameters/sysctl_thermal_aware_scheduling
 
-    # Vibrator permissions
-    chown system system /sys/devices/virtual/timed_output/vibrator/vmax_mv
-    chmod 0644 /sys/devices/virtual/timed_output/vibrator/vmax_mv
-
     # Display color calibration
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable
