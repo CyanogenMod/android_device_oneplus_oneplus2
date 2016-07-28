@@ -121,7 +121,7 @@ on init
     # for product mode flashlight
     chown system system /proc/qcom_flash
 
-    # Modify for RGB light support
+    # RGB light
     chown system system /sys/class/leds/red/pause_lo
     chown system system /sys/class/leds/blue/pause_lo
     chown system system /sys/class/leds/green/pause_lo
@@ -133,33 +133,28 @@ on init
     chown system system /sys/class/leds/red/blink
     chown system system /sys/class/leds/blue/blink
     chown system system /sys/class/leds/green/blink
+    chown system system /sys/class/leds/rgb/rgb_blink
 
-    # Modify for RGB breath effect control support
     chown system system /sys/class/leds/red/ramp_step_ms
     chown system system /sys/class/leds/blue/ramp_step_ms
     chown system system /sys/class/leds/green/ramp_step_ms
-
     chown system system /sys/class/leds/red/duty_pcts
     chown system system /sys/class/leds/blue/duty_pcts
     chown system system /sys/class/leds/green/duty_pcts
+    chown system system /sys/class/leds/red/start_idx
+    chown system system /sys/class/leds/blue/start_idx
+    chown system system /sys/class/leds/green/start_idx
 
     chmod 660 /sys/class/leds/red/ramp_step_ms
     chmod 660 /sys/class/leds/green/ramp_step_ms
     chmod 660 /sys/class/leds/blue/ramp_step_ms
-
     chmod 660 /sys/class/leds/red/duty_pcts
     chmod 660 /sys/class/leds/green/duty_pcts
     chmod 660 /sys/class/leds/blue/duty_pcts
-
-    # Add for enginerr app for sys/class selinux recon
-    restorecon /sys/class/leds/keyboard-backlight/brightness
-    restorecon /sys/class/leds/button-backlight/brightness
-    restorecon /sys/class/leds/red/brightness
-    restorecon /sys/class/leds/green/brightness
-    restorecon /sys/class/leds/blue/brightness
-    restorecon /sys/class/leds/red/blink
-    restorecon /sys/class/leds/green/blink
-    restorecon /sys/class/leds/blue/blink
+    chmod 660 /sys/class/leds/red/start_idx
+    chmod 660 /sys/class/leds/green/start_idx
+    chmod 660 /sys/class/leds/blue/start_idx
+    chmod 660 /sys/class/leds/rgb/rgb_blink
 
     # Enable cgroup_freezer
     mkdir /sys/fs/cgroup/freezer 0750 root system
@@ -998,3 +993,44 @@ service msm_irqbalance /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqb
     group root
     disabled
     writepid /dev/cpuset/system-background/tasks
+
+# such color
+on property:sys.rainbow.recovery=1
+    write /sys/class/leds/red/brightness 255
+    write /sys/class/leds/red/start_idx 0
+    write /sys/class/leds/red/duty_pcts "100,100,100,0,0,50,100"
+    write /sys/class/leds/red/pause_hi 0
+    write /sys/class/leds/red/pause_lo 0
+    write /sys/class/leds/red/ramp_step_ms 100
+    write /sys/class/leds/green/brightness 255
+    write /sys/class/leds/green/start_idx 7
+    write /sys/class/leds/green/duty_pcts "0,50,100,100,0,0,0"
+    write /sys/class/leds/green/pause_hi 0
+    write /sys/class/leds/green/pause_lo 0
+    write /sys/class/leds/green/ramp_step_ms 100
+    write /sys/class/leds/blue/brightness 255
+    write /sys/class/leds/blue/start_idx 14
+    write /sys/class/leds/blue/duty_pcts "0,0,0,0,100,100,100"
+    write /sys/class/leds/blue/pause_hi 0
+    write /sys/class/leds/blue/pause_lo 0
+    write /sys/class/leds/blue/ramp_step_ms 100
+    write /sys/class/leds/rgb/rgb_blink 1
+
+on property:sys.rainbow.recovery=0
+    write /sys/class/leds/rgb/rgb_blink 0
+
+# happy dance!
+on post-fs-data
+    write /sys/class/leds/rgb/rgb_blink 0
+    write /sys/class/leds/blue/blink 0
+    write /sys/class/leds/red/blink 0
+    write /sys/class/leds/rgb/rgb_blink 0
+    write /sys/class/leds/blue/brightness 255
+    write /sys/class/leds/green/brightness 255
+    write /sys/class/leds/red/brightness 0
+    write /sys/class/leds/green/start_idx 0
+    write /sys/class/leds/green/pause_hi 0
+    write /sys/class/leds/green/pause_lo 0
+    write /sys/class/leds/green/ramp_step_ms 50
+    write /sys/class/leds/green/duty_pcts "16,25,33,41,50,58,66,74,83,91,100"
+    write /sys/class/leds/green/blink 1
