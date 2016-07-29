@@ -29,7 +29,6 @@ persist.radio.rat_on=combine
 persist.data.qmi.adb_logmask=0
 
 # Audio
-audio.offload.video=true
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
@@ -43,11 +42,7 @@ use.voice.path.for.pcm.voip=true
 audio.offload.multiple.enabled=true
 audio.offload.gapless.enabled=true
 mm.enable.smoothstreaming=true
-audio.offload.buffer.size.kb=32
-audio.dolby.ds2.enabled=true
-audio.dolby.ds2.hardbypass=true
-audio.offload.passthrough=false
-tunnel.audio.encode=false
+audio.offload.buffer.size.kb=1024
 
 # Bluetooth
 bluetooth.hfp.client=1
@@ -87,19 +82,8 @@ ro.gps.agps_provider=1
 ro.pip.gated=0
 
 # Graphics
-debug.sf.hw=1
-debug.egl.hw=1
-debug.composition.type=c2d
 persist.hwc.mdpcomp.enable=true
-persist.mdpcomp.4k2kSplit=1
-persist.hwc.mdpcomp.maxpermixer=5
-persist.mdpcomp_perfhint=50
-debug.mdpcomp.logs=0
-persist.metadata_dynfps.disable=true
-persist.hwc.ptor.enable=true
 dalvik.vm.heapsize=36m
-dev.pm.dyn_samplingrate=1
-persist.demo.hdmirotationlock=false
 ro.qualcomm.cabl=0
 ro.sf.lcd_density=480
 ro.opengles.version=196609
