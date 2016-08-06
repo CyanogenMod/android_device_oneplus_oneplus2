@@ -14,6 +14,4 @@
 /sys/devices/soc.0/f9928000.i2c/i2c-6/6-0029/set_delay_ms       u:object_r:cam_sysfs:s0
 /dev/input/event2                                               u:object_r:stm_sensor:s0
 
-/dev/i2c-6                                                      u:object_r:audio_device:s0
-
 /data/oemnvitems(/.*)?                                          u:object_r:nv_data_file:s0
