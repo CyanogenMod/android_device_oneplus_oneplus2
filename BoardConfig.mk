@@ -159,6 +159,7 @@ TARGET_NO_RPC := true
 
 # Sensors
 USE_SENSOR_MULTI_HAL := true
+TARGET_PREFERS_AOSP_ROTATION_SENSOR := true
 
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
