@@ -237,6 +237,9 @@ PRODUCT_PACKAGES += \
     librmnetctl \
     libxml2
 
+PRODUCT_PACKAGES += telephony-ext
+PRODUCT_BOOT_JARS += telephony-ext
+
 # Sensors
 PRODUCT_PACKAGES += \
     sensors.msm8994 \
