@@ -94,10 +94,8 @@ public:
 
 	static bool wan_up;
 	static bool wan_up_v6;
-	static uint8_t xlat_mux_id;
 	/* IPACM interface name */
 	static char wan_up_dev_name[IF_NAME_LEN];
-	static uint32_t curr_wan_ip;
 	IPACM_Wan(int, ipacm_wan_iface_type, uint8_t *);
 	virtual ~IPACM_Wan();
 
@@ -141,15 +139,6 @@ public:
 #endif
 	}
 
-	static uint32_t getWANIP()
-	{
-		return curr_wan_ip;
-	}
-
-	static bool getXlat_Mux_Id()
-	{
-		return xlat_mux_id;
-	}
 
 	void event_callback(ipa_cm_event_id event,
 											void *data);
@@ -166,12 +155,6 @@ public:
 	static uint32_t backhaul_ipv6_prefix[2];
 
 	static bool embms_is_on;
-	static bool backhaul_is_wan_bridge;
-
-	static bool isWan_Bridge_Mode()
-	{
-		return backhaul_is_wan_bridge;
-	}
 #ifdef FEATURE_IPA_ANDROID
 	/* IPACM interface id */
 	static int ipa_if_num_tether_v4_total;
@@ -196,11 +179,6 @@ private:
 	uint32_t ODU_fl_hdl[IPA_NUM_DEFAULT_WAN_FILTER_RULES];
 	int num_firewall_v4,num_firewall_v6;
 	uint32_t wan_v4_addr;
-	uint32_t wan_v4_addr_gw;
-	uint32_t wan_v6_addr_gw[4];
-	bool wan_v4_addr_set;
-	bool wan_v4_addr_gw_set;
-	bool wan_v6_addr_gw_set;
 	bool active_v4;
 	bool active_v6;
 	bool header_set_v4;
@@ -208,7 +186,8 @@ private:
 	bool header_partial_default_wan_v4;
 	bool header_partial_default_wan_v6;
 	uint8_t ext_router_mac_addr[IPA_MAC_ADDR_SIZE];
-	uint8_t netdev_mac[IPA_MAC_ADDR_SIZE];
+	uint16_t eth2_ofst_v4;
+	uint16_t eth2_ofst_v6;
 
 	static int num_ipv4_modem_pdn;
 
@@ -231,12 +210,8 @@ private:
 	int header_name_count;
 	int num_wan_client;
 	uint8_t invalid_mac[IPA_MAC_ADDR_SIZE];
-	bool is_xlat;
-
 	/* update network stats for CNE */
 	int ipa_network_stats_fd;
-	uint32_t hdr_hdl_dummy_v6;
-	uint32_t hdr_proc_hdl_dummy_v6;
 
 	inline ipa_wan_client* get_client_memptr(ipa_wan_client *param, int cnt)
 	{
@@ -272,82 +247,6 @@ private:
 			}
 		}
 
-		return IPACM_INVALID_INDEX;
-	}
-
-	inline int get_wan_client_index_ipv4(uint32_t ipv4_addr)
-	{
-		int cnt;
-		int num_wan_client_tmp = num_wan_client;
-
-		IPACMDBG_H("Passed IPv4 %x\n", ipv4_addr);
-
-		for(cnt = 0; cnt < num_wan_client_tmp; cnt++)
-		{
-			if (get_client_memptr(wan_client, cnt)->ipv4_set)
-			{
-				IPACMDBG_H("stored IPv4 %x\n", get_client_memptr(wan_client, cnt)->v4_addr);
-
-				if(ipv4_addr == get_client_memptr(wan_client, cnt)->v4_addr)
-				{
-					IPACMDBG_H("Matched client index: %d\n", cnt);
-					IPACMDBG_H("The MAC is %02x:%02x:%02x:%02x:%02x:%02x\n",
-							get_client_memptr(wan_client, cnt)->mac[0],
-							get_client_memptr(wan_client, cnt)->mac[1],
-							get_client_memptr(wan_client, cnt)->mac[2],
-							get_client_memptr(wan_client, cnt)->mac[3],
-							get_client_memptr(wan_client, cnt)->mac[4],
-							get_client_memptr(wan_client, cnt)->mac[5]);
-					IPACMDBG_H("header set ipv4(%d) ipv6(%d)\n",
-							get_client_memptr(wan_client, cnt)->ipv4_header_set,
-							get_client_memptr(wan_client, cnt)->ipv6_header_set);
-					return cnt;
-				}
-			}
-		}
-		return IPACM_INVALID_INDEX;
-	}
-
-	inline int get_wan_client_index_ipv6(uint32_t* ipv6_addr)
-	{
-		int cnt, v6_num;
-		int num_wan_client_tmp = num_wan_client;
-
-		IPACMDBG_H("Get ipv6 address 0x%08x.0x%08x.0x%08x.0x%08x\n", ipv6_addr[0], ipv6_addr[1], ipv6_addr[2], ipv6_addr[3]);
-
-		for(cnt = 0; cnt < num_wan_client_tmp; cnt++)
-		{
-			if (get_client_memptr(wan_client, cnt)->ipv6_set)
-			{
-			    for(v6_num=0;v6_num < get_client_memptr(wan_client, cnt)->ipv6_set;v6_num++)
-	            {
-
-					IPACMDBG_H("stored IPv6 0x%08x.0x%08x.0x%08x.0x%08x\n", get_client_memptr(wan_client, cnt)->v6_addr[v6_num][0],
-						get_client_memptr(wan_client, cnt)->v6_addr[v6_num][1],
-						get_client_memptr(wan_client, cnt)->v6_addr[v6_num][2],
-						get_client_memptr(wan_client, cnt)->v6_addr[v6_num][3]);
-
-					if(ipv6_addr[0] == get_client_memptr(wan_client, cnt)->v6_addr[v6_num][0] &&
-					   ipv6_addr[1] == get_client_memptr(wan_client, cnt)->v6_addr[v6_num][1] &&
-					   ipv6_addr[2]== get_client_memptr(wan_client, cnt)->v6_addr[v6_num][2] &&
-					   ipv6_addr[3] == get_client_memptr(wan_client, cnt)->v6_addr[v6_num][3])
-					{
-						IPACMDBG_H("Matched client index: %d\n", cnt);
-						IPACMDBG_H("The MAC is %02x:%02x:%02x:%02x:%02x:%02x\n",
-								get_client_memptr(wan_client, cnt)->mac[0],
-								get_client_memptr(wan_client, cnt)->mac[1],
-								get_client_memptr(wan_client, cnt)->mac[2],
-								get_client_memptr(wan_client, cnt)->mac[3],
-								get_client_memptr(wan_client, cnt)->mac[4],
-								get_client_memptr(wan_client, cnt)->mac[5]);
-						IPACMDBG_H("header set ipv4(%d) ipv6(%d)\n",
-								get_client_memptr(wan_client, cnt)->ipv4_header_set,
-								get_client_memptr(wan_client, cnt)->ipv6_header_set);
-						return cnt;
-					}
-				}
-			}
-		}
 		return IPACM_INVALID_INDEX;
 	}
 
@@ -426,23 +325,19 @@ private:
 	/* wan default route/filter rule configuration */
 	int handle_route_add_evt(ipa_ip_type iptype);
 
-	/* construct complete STA ethernet header */
-	int handle_sta_header_add_evt();
-
-	bool check_dft_firewall_rules_attr_mask(IPACM_firewall_conf_t *firewall_config);
-
-#ifdef FEATURE_IPA_ANDROID
+	/* construct complete ethernet header */
+	int handle_header_add_evt(uint8_t *mac_addr);
 	/* wan posting supported tether_iface */
 	int post_wan_up_tether_evt(ipa_ip_type iptype, int ipa_if_num_tether);
 
-	int post_wan_down_tether_evt(ipa_ip_type iptype, int ipa_if_num_tether);
-#endif
 	int config_dft_firewall_rules(ipa_ip_type iptype);
 
 	/* configure the initial firewall filter rules */
 	int config_dft_embms_rules(ipa_ioc_add_flt_rule *pFilteringTable_v4, ipa_ioc_add_flt_rule *pFilteringTable_v6);
 
 	int handle_route_del_evt(ipa_ip_type iptype);
+
+	int post_wan_down_tether_evt(ipa_ip_type iptype, int ipa_if_num_tether);
 
 	int del_dft_firewall_rules(ipa_ip_type iptype);
 
@@ -457,9 +352,6 @@ private:
 	/* configure the initial firewall filter rules */
 	int config_dft_firewall_rules_ex(struct ipa_flt_rule_add* rules, int rule_offset,
 		ipa_ip_type iptype);
-
-	/* Change IP Type.*/
-	void config_ip_type(ipa_ip_type iptype);
 
 	/* init filtering rule in wan dl filtering table */
 	int init_fl_rule_ex(ipa_ip_type iptype);
@@ -484,18 +376,11 @@ private:
 
 	bool is_global_ipv6_addr(uint32_t* ipv6_addr);
 
-	void handle_wlan_SCC_MCC_switch(bool, ipa_ip_type);
-
-	void handle_wan_client_SCC_MCC_switch(bool, ipa_ip_type);
-
 	int handle_network_stats_evt();
 
 	int m_fd_ipa;
 
 	int handle_network_stats_update(ipa_get_apn_data_stats_resp_msg_v01 *data);
-
-	/* construct dummy ethernet header */
-	int add_dummy_rx_hdr();
 };
 
 #endif /* IPACM_WAN_H */

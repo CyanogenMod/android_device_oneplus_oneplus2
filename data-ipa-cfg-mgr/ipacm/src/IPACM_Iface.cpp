@@ -82,6 +82,8 @@ IPACM_Iface::IPACM_Iface(int iface_index)
 	memset(software_routing_fl_rule_hdl, 0, sizeof(software_routing_fl_rule_hdl));
 	memset(ipv6_addr, 0, sizeof(ipv6_addr));
 
+	flt_rule_count_v4 = 0;
+	flt_rule_count_v6 = 0;
 	query_iface_property();
 	IPACMDBG_H(" create iface-index(%d) constructor\n", ipa_if_num);
 	return;
@@ -133,9 +135,6 @@ int IPACM_Iface::handle_software_routing_enable(void)
 	flt_rule_entry.flt_rule_hdl = -1;
 	flt_rule_entry.status = -1;
 	flt_rule_entry.rule.action = IPA_PASS_TO_EXCEPTION;
-#ifdef FEATURE_IPA_V3
-	flt_rule_entry.rule.hashable = true;
-#endif
 	memcpy(&flt_rule_entry.rule.attrib,
 				 &rx_prop->rx[0].attrib,
 				 sizeof(flt_rule_entry.rule.attrib));
@@ -160,7 +159,6 @@ int IPACM_Iface::handle_software_routing_enable(void)
 			goto fail;
 		}
 
-		IPACM_Iface::ipacmcfg->increaseFltRuleCount(rx_prop->rx[0].src_pipe, IPA_IP_v4, 1);
 		IPACMDBG("soft-routing flt rule hdl0=0x%x\n", m_pFilteringTable->rules[0].flt_rule_hdl);
 		/* copy filter hdls */
 		software_routing_fl_rule_hdl[0] = m_pFilteringTable->rules[0].flt_rule_hdl;
@@ -181,7 +179,6 @@ int IPACM_Iface::handle_software_routing_enable(void)
 			goto fail;
 		}
 
-		IPACM_Iface::ipacmcfg->increaseFltRuleCount(rx_prop->rx[0].src_pipe, IPA_IP_v6, 1);
 		IPACMDBG("soft-routing flt rule hdl0=0x%x\n", m_pFilteringTable->rules[0].flt_rule_hdl);
 		/* copy filter hdls */
 		software_routing_fl_rule_hdl[1] = m_pFilteringTable->rules[0].flt_rule_hdl;
@@ -212,7 +209,6 @@ int IPACM_Iface::handle_software_routing_enable(void)
 			goto fail;
 		}
 
-		IPACM_Iface::ipacmcfg->increaseFltRuleCount(rx_prop->rx[0].src_pipe, ip_type, 1);
 		IPACMDBG("soft-routing flt rule hdl0=0x%x\n", m_pFilteringTable->rules[0].flt_rule_hdl);
 		/* copy filter hdls */
 		if (ip_type == IPA_IP_v4)
@@ -262,7 +258,6 @@ int IPACM_Iface::handle_software_routing_disable(void)
 			res = IPACM_FAILURE;
 			goto fail;
 		}
-		IPACM_Iface::ipacmcfg->decreaseFltRuleCount(rx_prop->rx[0].src_pipe, IPA_IP_v4, 1);
 
 		/* ipv6 case */
 		if (m_filtering.DeleteFilteringHdls(&software_routing_fl_rule_hdl[1],
@@ -272,7 +267,6 @@ int IPACM_Iface::handle_software_routing_disable(void)
 			res = IPACM_FAILURE;
 			goto fail;
 		}
-		IPACM_Iface::ipacmcfg->decreaseFltRuleCount(rx_prop->rx[0].src_pipe, IPA_IP_v6, 1);
 		softwarerouting_act = false;
 #if 0
 	}
@@ -303,7 +297,6 @@ int IPACM_Iface::handle_software_routing_disable(void)
 			res = IPACM_FAILURE;
 			goto fail;
 		}
-		IPACM_Iface::ipacmcfg->decreaseFltRuleCount(rx_prop->rx[0].src_pipe, ip, 1);
 		softwarerouting_act = false;
 	}
 #endif
@@ -546,47 +539,28 @@ int IPACM_Iface::query_iface_property(void)
 			close(fd);
 			return IPACM_FAILURE;
 		}
-		memcpy(tx_prop->name, dev_name, sizeof(tx_prop->name));
-		tx_prop->num_tx_props = iface_query->num_tx_props;
+	memcpy(tx_prop->name, dev_name, sizeof(tx_prop->name));
+	tx_prop->num_tx_props = iface_query->num_tx_props;
 
-		if (ioctl(fd, IPA_IOC_QUERY_INTF_TX_PROPS, tx_prop) < 0)
-		{
-			PERROR("ioctl IPA_IOC_QUERY_INTF_TX_PROPS failed\n");
-			/* tx_prop memory will free when iface-down*/
-			res = IPACM_FAILURE;
-		}
+	if (ioctl(fd, IPA_IOC_QUERY_INTF_TX_PROPS, tx_prop) < 0)
+	{
+		PERROR("ioctl IPA_IOC_QUERY_INTF_TX_PROPS failed\n");
+		/* tx_prop memory will free when iface-down*/
+		res = IPACM_FAILURE;
+	}
 
 		if (res != IPACM_FAILURE)
 		{
 			for (cnt = 0; cnt < tx_prop->num_tx_props; cnt++)
 			{
-				IPACMDBG_H("Tx(%d):attrib-mask:0x%x, ip-type: %d, dst_pipe: %d, alt_dst_pipe: %d, header: %s\n",
-						cnt, tx_prop->tx[cnt].attrib.attrib_mask,
-						tx_prop->tx[cnt].ip, tx_prop->tx[cnt].dst_pipe,
-						tx_prop->tx[cnt].alt_dst_pipe,
-						tx_prop->tx[cnt].hdr_name);
-
-				if (tx_prop->tx[cnt].dst_pipe == 0)
-				{
-					IPACMERR("Tx(%d): wrong tx property: dst_pipe: 0.\n", cnt);
-					close(fd);
-					return IPACM_FAILURE;
-				}
-				if (tx_prop->tx[cnt].alt_dst_pipe == 0 &&
-					((memcmp(dev_name, "wlan0", sizeof("wlan0")) == 0) ||
-					(memcmp(dev_name, "wlan1", sizeof("wlan1")) == 0)))
-				{
-					IPACMERR("Tx(%d): wrong tx property: alt_dst_pipe: 0. \n", cnt);
-					close(fd);
-					return IPACM_FAILURE;
-				}
-
+				IPACMDBG_H("Tx(%d):attrib-mask:0x%x, ip-type: %d, dst_pipe: %d, header: %s\n",
+								 cnt, tx_prop->tx[cnt].attrib.attrib_mask, tx_prop->tx[cnt].ip, tx_prop->tx[cnt].dst_pipe, tx_prop->tx[cnt].hdr_name);
 			}
 		}
 
 	}
 
-	if (iface_query->num_rx_props > 0)
+		if (iface_query->num_rx_props > 0)
 	{
 		rx_prop = (struct ipa_ioc_query_intf_rx_props *)
 			 calloc(1, sizeof(struct ipa_ioc_query_intf_rx_props) +
@@ -597,16 +571,16 @@ int IPACM_Iface::query_iface_property(void)
 			close(fd);
 			return IPACM_FAILURE;
 		}
-		memcpy(rx_prop->name, dev_name,
+	memcpy(rx_prop->name, dev_name,
 				 sizeof(rx_prop->name));
-		rx_prop->num_rx_props = iface_query->num_rx_props;
+	rx_prop->num_rx_props = iface_query->num_rx_props;
 
-		if (ioctl(fd, IPA_IOC_QUERY_INTF_RX_PROPS, rx_prop) < 0)
-		{
-			PERROR("ioctl IPA_IOC_QUERY_INTF_RX_PROPS failed\n");
-			/* rx_prop memory will free when iface-down*/
-			res = IPACM_FAILURE;
-		}
+	if (ioctl(fd, IPA_IOC_QUERY_INTF_RX_PROPS, rx_prop) < 0)
+	{
+		PERROR("ioctl IPA_IOC_QUERY_INTF_RX_PROPS failed\n");
+		/* rx_prop memory will free when iface-down*/
+		res = IPACM_FAILURE;
+	}
 
 		if (res != IPACM_FAILURE)
 		{
@@ -747,10 +721,6 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		flt_rule_entry.flt_rule_hdl = -1;
 		flt_rule_entry.status = -1;
 		flt_rule_entry.rule.action = IPA_PASS_TO_EXCEPTION;
-#ifdef FEATURE_IPA_V3
-		flt_rule_entry.at_rear = false;
-		flt_rule_entry.rule.hashable = false;
-#endif
 		IPACMDBG_H("rx property attrib mask:0x%x\n", rx_prop->rx[0].attrib.attrib_mask);
 		memcpy(&flt_rule_entry.rule.attrib,
 					 &rx_prop->rx[0].attrib,
@@ -766,19 +736,11 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		flt_rule_entry.rule.attrib.attrib_mask |= IPA_FLT_DST_ADDR;
 		flt_rule_entry.rule.attrib.u.v4.dst_addr_mask = 0xF0000000;
 		flt_rule_entry.rule.attrib.u.v4.dst_addr = 0xE0000000;
-#ifdef FEATURE_IPA_V3
-		flt_rule_entry.at_rear = true;
-		flt_rule_entry.rule.hashable = true;
-#endif
 		memcpy(&(m_pFilteringTable->rules[1]), &flt_rule_entry, sizeof(struct ipa_flt_rule_add));
 
 		/* Configuring Broadcast Filtering Rule */
 		flt_rule_entry.rule.attrib.u.v4.dst_addr_mask = 0xFFFFFFFF;
 		flt_rule_entry.rule.attrib.u.v4.dst_addr = 0xFFFFFFFF;
-#ifdef FEATURE_IPA_V3
-		flt_rule_entry.at_rear = true;
-		flt_rule_entry.rule.hashable = true;
-#endif
 		memcpy(&(m_pFilteringTable->rules[2]), &flt_rule_entry, sizeof(struct ipa_flt_rule_add));
 
 		if (false == m_filtering.AddFilteringRule(m_pFilteringTable))
@@ -789,7 +751,7 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		}
 		else
 		{
-			IPACM_Iface::ipacmcfg->increaseFltRuleCount(rx_prop->rx[0].src_pipe, IPA_IP_v4, IPV4_DEFAULT_FILTERTING_RULES);
+			flt_rule_count_v4 += IPV4_DEFAULT_FILTERTING_RULES;
 			/* copy filter hdls */
 			for (int i = 0; i < IPV4_DEFAULT_FILTERTING_RULES; i++)
 			{
@@ -830,6 +792,7 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		flt_rule_entry.flt_rule_hdl = -1;
 		flt_rule_entry.status = -1;
 		flt_rule_entry.rule.action = IPA_PASS_TO_EXCEPTION;
+
 		/* Configuring Multicast Filtering Rule */
 		memcpy(&flt_rule_entry.rule.attrib,
 					 &rx_prop->rx[0].attrib,
@@ -843,10 +806,6 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[1] = 0x00000000;
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[2] = 0x00000000;
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[3] = 0X00000000;
-#ifdef FEATURE_IPA_V3
-		flt_rule_entry.at_rear = true;
-		flt_rule_entry.rule.hashable = true;
-#endif
 		memcpy(&(m_pFilteringTable->rules[0]), &flt_rule_entry, sizeof(struct ipa_flt_rule_add));
 
 		/* Configuring fe80::/10 Link-Scoped Unicast Filtering Rule */
@@ -858,10 +817,6 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[1] = 0x00000000;
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[2] = 0x00000000;
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[3] = 0X00000000;
-#ifdef FEATURE_IPA_V3
-		flt_rule_entry.at_rear = true;
-		flt_rule_entry.rule.hashable = true;
-#endif
 		memcpy(&(m_pFilteringTable->rules[1]), &flt_rule_entry, sizeof(struct ipa_flt_rule_add));
 
 		/* Configuring fec0::/10 Reserved by IETF Filtering Rule */
@@ -873,10 +828,6 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[1] = 0x00000000;
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[2] = 0x00000000;
 		flt_rule_entry.rule.attrib.u.v6.dst_addr[3] = 0X00000000;
-#ifdef FEATURE_IPA_V3
-		flt_rule_entry.at_rear = true;
-		flt_rule_entry.rule.hashable = true;
-#endif
 		memcpy(&(m_pFilteringTable->rules[2]), &flt_rule_entry, sizeof(struct ipa_flt_rule_add));
 
 #ifdef FEATURE_IPA_ANDROID
@@ -891,6 +842,7 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		flt_rule_entry.rule.to_uc = 0;
 		flt_rule_entry.rule.action = IPA_PASS_TO_EXCEPTION;
 		flt_rule_entry.rule.eq_attrib_type = 1;
+
 		flt_rule_entry.rule.eq_attrib.rule_eq_bitmap = 0;
 
 		if(rx_prop->rx[0].attrib.attrib_mask & IPA_FLT_META_DATA)
@@ -933,7 +885,7 @@ int IPACM_Iface::init_fl_rule(ipa_ip_type iptype)
 		}
 		else
 		{
-			IPACM_Iface::ipacmcfg->increaseFltRuleCount(rx_prop->rx[0].src_pipe, IPA_IP_v6, IPV6_DEFAULT_FILTERTING_RULES);
+			flt_rule_count_v6 += IPV6_DEFAULT_FILTERTING_RULES;
 			/* copy filter hdls */
 			for (int i = 0;
 					 i < IPV6_DEFAULT_FILTERTING_RULES;
@@ -990,4 +942,49 @@ int IPACM_Iface::ipa_get_if_index
   IPACMDBG_H("Interface index %d\n", *if_index);
   close(fd);
   return IPACM_SUCCESS;
+}
+
+size_t IPACM_Iface::strlcpy(char *dest, const char *src, size_t n)
+{
+	size_t ret = strlen(src);
+	size_t len = 0;
+	if (n > 0) {
+		if(ret >= n)
+		{
+			len = n-1;
+			IPACMERR(" overflow detected \n");
+		}
+		else
+		{
+			len = ret;
+		}
+		dest[len] = '\0';
+		memcpy(dest, src, len);
+	}
+	return ret;
+}
+
+size_t IPACM_Iface::strlcat(char *dest, const char *src, size_t n)
+{
+	size_t dsize = strlen(dest);
+	size_t len = strlen(src);
+	size_t ret = dsize + len;
+
+	if (dsize < n)
+	{
+		dest += dsize;
+		n -= dsize;
+		if (len >= n)
+		{
+			len = n - 1;
+			IPACMERR(" overflow detected \n");
+		}
+		dest[len] = '\0';
+		memcpy(dest, src, len);
+	}
+	else
+	{
+		IPACMERR(" dest buffer full\n");
+	}
+	return ret;
 }

@@ -59,6 +59,17 @@ using namespace std;
 #define UDP_TIMEOUT_UPDATE 20
 #define BROADCAST_IPV4_ADDR 0xFFFFFFFF
 
+
+#define IPACM_TCP_UDP_DIR_NAME       "/proc/sys/net/ipv4/netfilter"
+#define IPACM_TCP_FILE_NAME  "ip_conntrack_tcp_timeout_established"
+#define IPACM_UDP_FILE_NAME   "ip_conntrack_udp_timeout_stream"
+
+#define IPACM_TCP_FULL_FILE_NAME  "/proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_timeout_established"
+#define IPACM_UDP_FULL_FILE_NAME   "/proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout_stream"
+
+#define INOTIFY_EVT_SIZE  (sizeof(struct inotify_event))
+#define INOTIFY_BUFFER_LEN     (INOTIFY_EVT_SIZE + 2*sizeof(IPACM_TCP_FILE_NAME))
+
 class IPACM_ConntrackClient
 {
 
@@ -84,6 +95,7 @@ public:
    static void* TCPRegisterWithConnTrack(void *);
    static void* UDPRegisterWithConnTrack(void *);
    static void* UDPConnTimeoutUpdate(void *);
+   static void* TCPUDP_Timeout_monitor(void *);
 
    static void UpdateUDPFilters(void *, bool);
    static void UpdateTCPFilters(void *, bool);
@@ -95,9 +107,6 @@ public:
 #define iptodot(X,Y) \
 		 IPACMLOG(" %s(0x%x): %d.%d.%d.%d\n", X, Y, ((Y>>24) & 0xFF), ((Y>>16) & 0xFF), ((Y>>8) & 0xFF), (Y & 0xFF));
 #endif
-
-#define log_nat(A,B,C,D,E,F) \
-		IPACMDBG_H("protocol %d Private IP: %d.%d.%d.%d\t Target IP: %d.%d.%d.%d\t private port: %d public port: %d %s",A,((B>>24) & 0xFF), ((B>>16) & 0xFF), ((B>>8) & 0xFF), (B & 0xFF), ((C>>24) & 0xFF), ((C>>16) & 0xFF),((C>>8) & 0xFF),(C & 0xFF),D,E,F);
 
 };
 

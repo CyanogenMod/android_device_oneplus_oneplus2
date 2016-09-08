@@ -48,7 +48,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "IPACM_Listener.h"
 #include "IPACM_Iface.h"
 
-#define IPA_MAX_NUM_NEIGHBOR_CLIENTS  100
+#define IPA_MAX_NUM_NEIGHBOR_CLIENTS  17
 
 struct ipa_neighbor_client
 {
@@ -72,9 +72,8 @@ private:
 
 	int num_neighbor_client;
 
-	int circular_index;
-
 	ipa_neighbor_client neighbor_client[IPA_MAX_NUM_NEIGHBOR_CLIENTS];
+
 
 };
 

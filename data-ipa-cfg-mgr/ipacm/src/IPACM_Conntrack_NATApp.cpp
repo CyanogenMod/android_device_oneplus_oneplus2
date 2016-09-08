@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
+Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -77,27 +77,24 @@ int NatApp::Init(void)
 	memset(cache, 0, size);
 
 	nALGPort = pConfig->GetAlgPortCnt();
-	if(nALGPort > 0)
+	pALGPorts = (ipacm_alg *)malloc(sizeof(ipacm_alg) * nALGPort);
+	if(pALGPorts == NULL)
 	{
-		pALGPorts = (ipacm_alg *)malloc(sizeof(ipacm_alg) * nALGPort);
-		if(pALGPorts == NULL)
-		{
-			IPACMERR("Unable to allocate memory for alg prots\n");
-			goto fail;
-		}
-		memset(pALGPorts, 0, sizeof(ipacm_alg) * nALGPort);
+		IPACMERR("Unable to allocate memory for alg prots\n");
+		goto fail;
+	}
+	memset(pALGPorts, 0, sizeof(ipacm_alg) * nALGPort);
 
-		if(pConfig->GetAlgPorts(nALGPort, pALGPorts) != 0)
-		{
-			IPACMERR("Unable to retrieve ALG prots\n");
-			goto fail;
-		}
+	if(pConfig->GetAlgPorts(nALGPort, pALGPorts) != 0)
+	{
+		IPACMERR("Unable to retrieve ALG prots\n");
+		goto fail;
+	}
 
-		IPACMDBG("Printing %d alg ports information\n", nALGPort);
-		for(int cnt=0; cnt<nALGPort; cnt++)
-		{
-			IPACMDBG("%d: Proto[%d], port[%d]\n", cnt, pALGPorts[cnt].protocol, pALGPorts[cnt].port);
-		}
+	IPACMDBG("Printing %d alg ports information\n", nALGPort);
+	for(int cnt=0; cnt<nALGPort; cnt++)
+	{
+		IPACMDBG("%d: Proto[%d], port[%d]\n", cnt, pALGPorts[cnt].protocol, pALGPorts[cnt].port);
 	}
 
 	return 0;
@@ -131,7 +128,7 @@ int NatApp::AddTable(uint32_t pub_ip)
 	int ret;
 	int cnt = 0;
 	ipa_nat_ipv4_rule nat_rule;
-	IPACMDBG_H("%s() %d\n", __FUNCTION__, __LINE__);
+	IPACMDBG("%s() %d\n", __FUNCTION__, __LINE__);
 
 	/* Not reset the cache wait it timeout by destroy event */
 #if 0
@@ -149,7 +146,7 @@ int NatApp::AddTable(uint32_t pub_ip)
 		return ret;
 	}
 
-	/* Add back the cached NAT-entry */
+	/* Add back the cashed NAT-entry */
 	if (pub_ip == pub_ip_addr_pre)
 	{
 		IPACMDBG("Restore the cache to ipa NAT-table\n");
@@ -197,14 +194,14 @@ void NatApp::Reset()
 	/* NAT tbl deleted, reset enabled bit */
 	for(cnt = 0; cnt < max_entries; cnt++)
 	{
-		cache[cnt].enabled = false;
+		cache[cnt].enabled ==false;
 	}
 }
 
 int NatApp::DeleteTable(uint32_t pub_ip)
 {
 	int ret;
-	IPACMDBG_H("%s() %d\n", __FUNCTION__, __LINE__);
+	IPACMDBG("%s() %d\n", __FUNCTION__, __LINE__);
 
 	CHK_TBL_HDL();
 
@@ -241,8 +238,11 @@ bool NatApp::ChkForDup(const nat_table_entry *rule)
 			 cache[cnt].target_port == rule->target_port &&
 			 cache[cnt].protocol == rule->protocol)
 		{
-			log_nat(rule->protocol,rule->private_ip,rule->target_ip,rule->private_port,\
-			rule->target_port,"Duplicate Rule");
+			IPACMDBG("Duplicate Rule\n");
+			iptodot("Private IP", rule->private_ip);
+			iptodot("Target IP", rule->target_ip);
+			IPACMDBG("Private Port: %d\t Target Port: %d\t", rule->private_port, rule->target_port);
+			IPACMDBG("protocolcol: %d\n", rule->protocol);
 			return true;
 		}
 	}
@@ -256,9 +256,11 @@ int NatApp::DeleteEntry(const nat_table_entry *rule)
 	int cnt = 0;
 	IPACMDBG("%s() %d\n", __FUNCTION__, __LINE__);
 
-	log_nat(rule->protocol,rule->private_ip,rule->target_ip,rule->private_port,\
-	rule->target_port,"for deletion");
-
+	IPACMDBG("Received below nat entry for deletion\n");
+	iptodot("Private IP", rule->private_ip);
+	iptodot("Target IP", rule->target_ip);
+	IPACMDBG("Private Port: %d\t Target Port: %d\t", rule->private_port, rule->target_port);
+	IPACMDBG("protocolcol: %d\n", rule->protocol);
 
 	for(; cnt < max_entries; cnt++)
 	{
@@ -276,11 +278,11 @@ int NatApp::DeleteEntry(const nat_table_entry *rule)
 					IPACMERR("%s() %d deletion failed\n", __FUNCTION__, __LINE__);
 				}
 
-				IPACMDBG_H("Deleted Nat entry(%d) Successfully\n", cnt);
+				IPACMDBG("Deleted Nat entry(%d) Successfully\n", cnt);
 			}
 			else
 			{
-				IPACMDBG_H("Deleted Nat entry(%d) only from cache\n", cnt);
+				IPACMDBG("Deleted Nat entry(%d) only from cache\n", cnt);
 			}
 
 			memset(&cache[cnt], 0, sizeof(cache[cnt]));
@@ -295,18 +297,23 @@ int NatApp::DeleteEntry(const nat_table_entry *rule)
 /* Add new entry to the nat table on new connection */
 int NatApp::AddEntry(const nat_table_entry *rule)
 {
+
 	int cnt = 0;
 	ipa_nat_ipv4_rule nat_rule;
-
 	IPACMDBG("%s() %d\n", __FUNCTION__, __LINE__);
 
 	CHK_TBL_HDL();
-	log_nat(rule->protocol,rule->private_ip,rule->target_ip,rule->private_port,\
-	rule->target_port,"for addition");
+
+	IPACMDBG("Received below nat entry for addition\n");
+	iptodot("Private IP", rule->private_ip);
+	iptodot("Target IP", rule->target_ip);
+	IPACMDBG("Private Port: %d\t Target Port: %d\t", rule->private_port, rule->target_port);
+	IPACMDBG("protocolcol: %d\n", rule->protocol);
+
 	if(isAlgPort(rule->protocol, rule->private_port) ||
 		 isAlgPort(rule->protocol, rule->target_port))
 	{
-		IPACMERR("connection using ALG Port, ignore\n");
+		IPACMERR("connection using ALG Port. Dont insert into nat table\n");
 		return -1;
 	}
 
@@ -387,11 +394,11 @@ int NatApp::AddEntry(const nat_table_entry *rule)
 
 	if(cache[cnt].enabled == true)
 	{
-		IPACMDBG_H("Added rule(%d) successfully\n", cnt);
+		IPACMDBG("Added rule(%d) successfully\n", cnt);
 	}
   else
   {
-    IPACMDBG_H("Cached rule(%d) successfully\n", cnt);
+    IPACMDBG("Cached rule(%d) successfully\n", cnt);
   }
 
 	return 0;
@@ -469,8 +476,7 @@ void NatApp::UpdateCTUdpTs(nat_table_entry *rule, uint32_t new_ts)
 	ret = nfct_query(ct_hdl, NFCT_Q_UPDATE, ct);
 	if(ret == -1)
 	{
-		IPACMERR("unable to update time stamp");
-		DeleteEntry(rule);
+		PERROR("unable to update time stamp");
 	}
 	else
 	{
@@ -485,13 +491,11 @@ void NatApp::UpdateUDPTimeStamp()
 {
 	int cnt;
 	uint32_t ts;
-	bool read_to = false;
 
 	for(cnt = 0; cnt < max_entries; cnt++)
 	{
 		ts = 0;
-		if(cache[cnt].enabled == true &&
-		   (cache[cnt].private_ip != cache[cnt].public_ip))
+		if(cache[cnt].enabled == true)
 		{
 			IPACMDBG("\n");
 			if(ipa_nat_query_timestamp(nat_table_hdl, cache[cnt].rule_hdl, &ts) < 0)
@@ -505,11 +509,6 @@ void NatApp::UpdateUDPTimeStamp()
 				IPACMDBG("No Change in Time Stamp: cahce:%d, ipahw:%d\n",
 								                  cache[cnt].timestamp, ts);
 				continue;
-			}
-
-			if (read_to == false) {
-				read_to = true;
-				Read_TcpUdp_Timeout();
 			}
 
 			UpdateCTUdpTs(&cache[cnt], ts);
@@ -553,7 +552,7 @@ bool NatApp::isPwrSaveIf(uint32_t ip_addr)
 int NatApp::UpdatePwrSaveIf(uint32_t client_lan_ip)
 {
 	int cnt;
-	IPACMDBG_H("Received IP address: 0x%x\n", client_lan_ip);
+	IPACMDBG("Received IP address: 0x%x\n", client_lan_ip);
 
 	if(client_lan_ip == INVALID_IP_ADDR)
 	{
@@ -570,6 +569,7 @@ int NatApp::UpdatePwrSaveIf(uint32_t client_lan_ip)
 			return 0;
 		}
 	}
+
 
 	for(cnt = 0; cnt < IPA_MAX_NUM_WIFI_CLIENTS; cnt++)
 	{
@@ -604,7 +604,7 @@ int NatApp::ResetPwrSaveIf(uint32_t client_lan_ip)
 	int cnt;
 	ipa_nat_ipv4_rule nat_rule;
 
-	IPACMDBG_H("Received ip address: 0x%x\n", client_lan_ip);
+	IPACMDBG("Received ip address: 0x%x\n", client_lan_ip);
 
 	if(client_lan_ip == INVALID_IP_ADDR)
 	{
@@ -658,6 +658,20 @@ int NatApp::ResetPwrSaveIf(uint32_t client_lan_ip)
 	return -1;
 }
 
+void NatApp::UpdateTcpUdpTo(uint32_t new_value, int proto)
+{
+	if(proto == IPPROTO_TCP)
+	{
+		tcp_timeout = new_value;
+		IPACMDBG("new nat tcp timeout value: %d\n", tcp_timeout);
+	}
+	else if(proto == IPPROTO_UDP)
+	{
+		udp_timeout = new_value;
+		IPACMDBG("new nat udp timeout value: %d\n", udp_timeout);
+	}
+}
+
 uint32_t NatApp::GetTableHdl(uint32_t in_ip_addr)
 {
 	if(in_ip_addr == pub_ip_addr)
@@ -672,36 +686,11 @@ void NatApp::AddTempEntry(const nat_table_entry *new_entry)
 {
 	int cnt;
 
-	IPACMDBG("Received below Temp Nat entry\n");
+	IPACMDBG("Received below nat entry\n");
 	iptodot("Private IP", new_entry->private_ip);
 	iptodot("Target IP", new_entry->target_ip);
 	IPACMDBG("Private Port: %d\t Target Port: %d\t", new_entry->private_port, new_entry->target_port);
 	IPACMDBG("protocolcol: %d\n", new_entry->protocol);
-
-	if(isAlgPort(new_entry->protocol, new_entry->private_port) ||
-		 isAlgPort(new_entry->protocol, new_entry->target_port))
-	{
-		IPACMDBG("connection using ALG Port. Dont insert into nat cache\n");
-		return;
-	}
-
-	if(ChkForDup(new_entry))
-	{
-		return;
-	}
-
-	for(cnt=0; cnt<MAX_TEMP_ENTRIES; cnt++)
-	{
-		if(temp[cnt].private_ip == new_entry->private_ip &&
-			 temp[cnt].target_ip == new_entry->target_ip &&
-			 temp[cnt].private_port ==  new_entry->private_port  &&
-			 temp[cnt].target_port == new_entry->target_port &&
-			 temp[cnt].protocol == new_entry->protocol)
-		{
-			IPACMDBG("Received duplicate Temp entry\n");
-			return;
-		}
-	}
 
 	for(cnt=0; cnt<MAX_TEMP_ENTRIES; cnt++)
 	{
@@ -714,7 +703,7 @@ void NatApp::AddTempEntry(const nat_table_entry *new_entry)
 		}
 	}
 
-	IPACMDBG("Unable to add temp entry, cache full\n");
+	IPACMDBG("unable to add temp entry, cache full\n");
 	return;
 }
 
@@ -725,8 +714,8 @@ void NatApp::DeleteTempEntry(const nat_table_entry *entry)
 	IPACMDBG("Received below nat entry\n");
 	iptodot("Private IP", entry->private_ip);
 	iptodot("Target IP", entry->target_ip);
-	IPACMDBG("Private Port: %d\t Target Port: %d\n", entry->private_port, entry->target_port);
-	IPACMDBG("protocol: %d\n", entry->protocol);
+	IPACMDBG("Private Port: %d\t Target Port: %d\t", entry->private_port, entry->target_port);
+	IPACMDBG("protocolcol: %d\n", entry->protocol);
 
 	for(cnt=0; cnt<MAX_TEMP_ENTRIES; cnt++)
 	{
@@ -742,18 +731,17 @@ void NatApp::DeleteTempEntry(const nat_table_entry *entry)
 		}
 	}
 
-	IPACMDBG("No Such Temp Entry exists\n");
+	IPACMDBG("No Such Entry exists\n");
 	return;
 }
 
-void NatApp::FlushTempEntries(uint32_t ip_addr, bool isAdd,
-		bool isDummy)
+void NatApp::FlushTempEntries(uint32_t ip_addr, bool isAdd)
 {
 	int cnt;
 	int ret;
 
-	IPACMDBG_H("Received below with isAdd:%d ", isAdd);
-	iptodot("IP Address: ", ip_addr);
+	IPACMDBG("Received below with isAdd:%d\n", isAdd);
+	iptodot("IP Address:", ip_addr);
 
 	for(cnt=0; cnt<MAX_TEMP_ENTRIES; cnt++)
 	{
@@ -764,14 +752,6 @@ void NatApp::FlushTempEntries(uint32_t ip_addr, bool isAdd,
 			{
 				if(temp[cnt].public_ip == pub_ip_addr)
 				{
-					if (isDummy) {
-						/* To avoild DL expections for non IPA path */
-						temp[cnt].private_ip = temp[cnt].public_ip;
-						temp[cnt].private_port = temp[cnt].public_port;
-						IPACMDBG("Flushing dummy temp rule");
-						iptodot("Private IP", temp[cnt].private_ip);
-					}
-
 					ret = AddEntry(&temp[cnt]);
 					if(ret)
 					{
@@ -789,8 +769,8 @@ void NatApp::FlushTempEntries(uint32_t ip_addr, bool isAdd,
 
 int NatApp::DelEntriesOnClntDiscon(uint32_t ip_addr)
 {
-	int cnt, tmp = 0;
-	IPACMDBG_H("Received IP address: 0x%x\n", ip_addr);
+ 	int cnt, tmp = curCnt;
+	IPACMDBG("Received IP address: 0x%x\n", ip_addr);
 
 	if(ip_addr == INVALID_IP_ADDR)
 	{
@@ -798,46 +778,45 @@ int NatApp::DelEntriesOnClntDiscon(uint32_t ip_addr)
 		return -1;
 	}
 
-	for(cnt = 0; cnt < IPA_MAX_NUM_WIFI_CLIENTS; cnt++)
-	{
-		if(PwrSaveIfs[cnt] == ip_addr)
-		{
-			PwrSaveIfs[cnt] = 0;
-			IPACMDBG("Remove %d power save entry\n", cnt);
-			break;
-		}
-	}
 
-	for(cnt = 0; cnt < max_entries; cnt++)
+  for(cnt = 0; cnt < IPA_MAX_NUM_WIFI_CLIENTS; cnt++)
+  {
+    if(PwrSaveIfs[cnt] == ip_addr)
+    {
+      PwrSaveIfs[cnt] = 0;
+      IPACMDBG("Remove %d power save entry\n", cnt);
+      break;
+    }
+  }
+
+  for(cnt = 0; cnt < max_entries; cnt++)
+  {
+	if(cache[cnt].private_ip == ip_addr)
 	{
-		if(cache[cnt].private_ip == ip_addr)
-		{
-			if(cache[cnt].enabled == true)
+		if(cache[cnt].enabled == true)
+      		{
+			if(ipa_nat_del_ipv4_rule(nat_table_hdl, cache[cnt].rule_hdl) < 0)
 			{
-				if(ipa_nat_del_ipv4_rule(nat_table_hdl, cache[cnt].rule_hdl) < 0)
-				{
-					IPACMERR("unable to delete the rule\n");
-					continue;
-				}
-				else
-				{
-					IPACMDBG("won't delete the rule\n");
-					cache[cnt].enabled = false;
-					tmp++;
-				}
+				IPACMERR("unable to delete the rule\n");
+				continue;
 			}
-			IPACMDBG("won't delete the rule for entry %d, enabled %d\n",cnt, cache[cnt].enabled);
-		}
+			else
+			{
+				IPACMDBG("won't delete the rule\n");
+				cache[cnt].enabled = false;
+		        }
+	        }
+		IPACMDBG("won't delete the rule for entry %d, enabled %d\n",cnt, cache[cnt].enabled);
 	}
-
-	IPACMDBG("Deleted (but cached) %d entries\n", tmp);
-	return 0;
+  }
+  IPACMDBG("Deleted %d entries\n", (tmp - curCnt));
+  return 0;
 }
 
 int NatApp::DelEntriesOnSTAClntDiscon(uint32_t ip_addr)
 {
 	int cnt, tmp = curCnt;
-	IPACMDBG_H("Received IP address: 0x%x\n", ip_addr);
+	IPACMDBG("Received IP address: 0x%x\n", ip_addr);
 
 	if(ip_addr == INVALID_IP_ADDR)
 	{
@@ -871,7 +850,6 @@ int NatApp::DelEntriesOnSTAClntDiscon(uint32_t ip_addr)
 void NatApp::CacheEntry(const nat_table_entry *rule)
 {
 	int cnt;
-
 	if(rule->private_ip == 0 ||
 		 rule->target_ip == 0 ||
 		 rule->private_port == 0  ||
@@ -884,7 +862,7 @@ void NatApp::CacheEntry(const nat_table_entry *rule)
 
 	if(!ChkForDup(rule))
 	{
-		for(cnt=0; cnt < max_entries; cnt++)
+		for(; cnt < max_entries; cnt++)
 		{
 			if(cache[cnt].private_ip == 0 &&
 				 cache[cnt].target_ip == 0 &&
@@ -912,7 +890,6 @@ void NatApp::CacheEntry(const nat_table_entry *rule)
 			cache[cnt].protocol = rule->protocol;
 			cache[cnt].timestamp = 0;
 			cache[cnt].public_port = rule->public_port;
-			cache[cnt].public_ip = rule->public_ip;
 			cache[cnt].dst_nat = rule->dst_nat;
 			curCnt++;
 		}
@@ -925,45 +902,5 @@ void NatApp::CacheEntry(const nat_table_entry *rule)
 	}
 
 	IPACMDBG("Cached rule(%d) successfully\n", cnt);
-	return;
-}
-
-void NatApp::Read_TcpUdp_Timeout(void) {
-	FILE *udp_fd = NULL, *tcp_fd = NULL;
-
-	/* Read UDP timeout value */
-	udp_fd = fopen(IPACM_UDP_FULL_FILE_NAME, "r");
-	if (udp_fd == NULL) {
-		IPACMERR("unable to open %s\n", IPACM_UDP_FULL_FILE_NAME);
-		goto fail;
-	}
-
-	if (fscanf(udp_fd, "%d", &udp_timeout) != 1) {
-		IPACMERR("Error reading udp timeout\n");
-	}
-	IPACMDBG_H("udp timeout value: %d\n", udp_timeout);
-
-
-	/* Read TCP timeout value */
-	tcp_fd = fopen(IPACM_TCP_FULL_FILE_NAME, "r");
-	if (tcp_fd == NULL) {
-		IPACMERR("unable to open %s\n", IPACM_TCP_FULL_FILE_NAME);
-		goto fail;
-	}
-
-
-	if (fscanf(tcp_fd, "%d", &tcp_timeout) != 1) {
-		IPACMERR("Error reading tcp timeout\n");
-	}
-	IPACMDBG_H("tcp timeout value: %d\n", tcp_timeout);
-
-fail:
-	if (udp_fd) {
-		fclose(udp_fd);
-	}
-	if (tcp_fd) {
-		fclose(tcp_fd);
-	}
-
 	return;
 }
