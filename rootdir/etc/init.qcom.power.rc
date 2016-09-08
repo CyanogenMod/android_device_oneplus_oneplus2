@@ -19,12 +19,12 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay "19000 960000:39000 1248000:29000"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 19000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 90
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 960000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "80 960000:95 1248000:99"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 80
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 80000
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
@@ -39,7 +39,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1248000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "90 1248000:95 1800000:70"
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "85 1500000:90 1800000:70"
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 80000
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 384000
@@ -75,7 +75,7 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu4/core_ctl/max_cpus 4
     write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 0
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 70
-    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 10
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 20
     write /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms  100
     write /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster 1
     write /sys/devices/system/cpu/cpu4/core_ctl/task_thres 4
@@ -103,6 +103,11 @@ on enable-low-power
     write /sys/class/net/rmnet_ipa0/queues/rx-0/rps_cpus 8
     write /sys/class/devfreq/qcom,cpubw.33/governor "bw_hwmon"
     write /sys/class/devfreq/qcom,mincpubw.34/governor "cpufreq"
+
+    # Set Memory parameters
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 0
+    write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,32256,55296,80640"
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 81250
 
     # Set perfd properties
     rm /data/system/perfd/default_values
