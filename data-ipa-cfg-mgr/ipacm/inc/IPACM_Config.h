@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
+Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -62,7 +62,7 @@ typedef struct _ipa_rm_client
     bool rx_bypass_ipa;          /* support WLAN may not register RX-property, should not add dependency */
 }ipa_rm_client;
 
-#define MAX_NUM_EXT_PROPS 25
+#define MAX_NUM_EXT_PROPS 15
 
 /* used to hold extended properties */
 typedef struct
@@ -113,99 +113,23 @@ public:
 
 	bool ipacm_odu_enable;
 
-	bool ipacm_odu_embms_enable;
-
-	bool ipacm_ip_passthrough_mode;
-
 	int ipa_nat_iface_entries;
-
-	/* Store the total number of wlan guest ap configured */
-	int ipa_num_wlan_guest_ap;
-
-	/* Max valid rm entry */
-	int ipa_max_valid_rm_entry;
 
 	/* Store SW-enable or not */
 	bool ipa_sw_rt_enable;
 
-	/* Store bridge mode or not */
-	bool ipa_bridge_enable;
-
-	/* Store bridge netdev mac */
-	uint8_t bridge_mac[IPA_MAC_ADDR_SIZE];
-
-	/* Store the flt rule count for each producer client*/
-	int flt_rule_count_v4[IPA_CLIENT_CONS - IPA_CLIENT_PROD];
-	int flt_rule_count_v6[IPA_CLIENT_CONS - IPA_CLIENT_PROD];
-
 	/* IPACM routing table name for v4/v6 */
 	struct ipa_ioc_get_rt_tbl rt_tbl_lan_v4, rt_tbl_wan_v4, rt_tbl_default_v4, rt_tbl_v6, rt_tbl_wan_v6;
 	struct ipa_ioc_get_rt_tbl rt_tbl_wan_dl;
+	struct ipa_ioc_get_rt_tbl rt_tbl_lan2lan_v4, rt_tbl_lan2lan_v6;
+
 	struct ipa_ioc_get_rt_tbl rt_tbl_odu_v4, rt_tbl_odu_v6;
 
-	bool isMCC_Mode;
+	struct ipa_ioc_get_rt_tbl rt_tbl_eth_bridge_usb_wlan_v4, rt_tbl_eth_bridge_wlan_wlan_v4;
+	struct ipa_ioc_get_rt_tbl rt_tbl_eth_bridge_usb_wlan_v6, rt_tbl_eth_bridge_wlan_wlan_v6;
 
 	/* To return the instance */
 	static IPACM_Config* GetInstance();
-
-	const char* getEventName(ipa_cm_event_id event_id);
-
-	inline void increaseFltRuleCount(int index, ipa_ip_type iptype, int increment)
-	{
-		if((index >= IPA_CLIENT_CONS - IPA_CLIENT_PROD) || (index < 0))
-		{
-			IPACMERR("Index is out of range: %d.\n", index);
-			return;
-		}
-		if(iptype == IPA_IP_v4)
-		{
-			flt_rule_count_v4[index] += increment;
-			IPACMDBG_H("Now num of v4 flt rules on client %d is %d.\n", index, flt_rule_count_v4[index]);
-		}
-		else
-		{
-			flt_rule_count_v6[index] += increment;
-			IPACMDBG_H("Now num of v6 flt rules on client %d is %d.\n", index, flt_rule_count_v6[index]);
-		}
-		return;
-	}
-
-	inline void decreaseFltRuleCount(int index, ipa_ip_type iptype, int decrement)
-	{
-		if((index >= IPA_CLIENT_CONS - IPA_CLIENT_PROD) || (index < 0))
-		{
-			IPACMERR("Index is out of range: %d.\n", index);
-			return;
-		}
-		if(iptype == IPA_IP_v4)
-		{
-			flt_rule_count_v4[index] -= decrement;
-			IPACMDBG_H("Now num of v4 flt rules on client %d is %d.\n", index, flt_rule_count_v4[index]);
-		}
-		else
-		{
-			flt_rule_count_v6[index] -= decrement;
-			IPACMDBG_H("Now num of v6 flt rules on client %d is %d.\n", index, flt_rule_count_v6[index]);
-		}
-		return;
-	}
-
-	inline int getFltRuleCount(int index, ipa_ip_type iptype)
-	{
-		if((index >= IPA_CLIENT_CONS - IPA_CLIENT_PROD) || (index < 0))
-		{
-			IPACMERR("Index is out of range: %d.\n", index);
-			return -1;
-		}
-		if(iptype == IPA_IP_v4)
-		{
-			return flt_rule_count_v4[index];
-		}
-		else
-		{
-			return flt_rule_count_v6[index];
-		}
-	}
 
 	inline int GetAlgPortCnt()
 	{

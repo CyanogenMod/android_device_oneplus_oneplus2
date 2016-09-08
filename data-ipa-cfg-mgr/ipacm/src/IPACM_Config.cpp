@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
+Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -47,77 +47,15 @@ IPACM_Config *IPACM_Config::pInstance = NULL;
 const char *IPACM_Config::DEVICE_NAME = "/dev/ipa";
 const char *IPACM_Config::DEVICE_NAME_ODU = "/dev/odu_ipa_bridge";
 
-#define __stringify(x...) #x
-
-const char *ipacm_event_name[] = {
-	__stringify(IPA_CFG_CHANGE_EVENT),                     /* NULL */
-	__stringify(IPA_PRIVATE_SUBNET_CHANGE_EVENT),          /* ipacm_event_data_fid */
-	__stringify(IPA_FIREWALL_CHANGE_EVENT),                /* NULL */
-	__stringify(IPA_LINK_UP_EVENT),                        /* ipacm_event_data_fid */
-	__stringify(IPA_LINK_DOWN_EVENT),                      /* ipacm_event_data_fid */
-	__stringify(IPA_USB_LINK_UP_EVENT),                    /* ipacm_event_data_fid */
-	__stringify(IPA_BRIDGE_LINK_UP_EVENT),                 /* ipacm_event_data_all */
-	__stringify(IPA_WAN_EMBMS_LINK_UP_EVENT),              /* ipacm_event_data_mac */
-	__stringify(IPA_ADDR_ADD_EVENT),                       /* ipacm_event_data_addr */
-	__stringify(IPA_ADDR_DEL_EVENT),                       /* no use */
-	__stringify(IPA_ROUTE_ADD_EVENT),                      /* ipacm_event_data_addr */
-	__stringify(IPA_ROUTE_DEL_EVENT),                      /* ipacm_event_data_addr */
-	__stringify(IPA_WAN_UPSTREAM_ROUTE_ADD_EVENT),         /* ipacm_event_data_fid */
-	__stringify(IPA_WAN_UPSTREAM_ROUTE_DEL_EVENT),         /* ipacm_event_data_fid */
-	__stringify(IPA_WLAN_AP_LINK_UP_EVENT),                /* ipacm_event_data_mac */
-	__stringify(IPA_WLAN_STA_LINK_UP_EVENT),               /* ipacm_event_data_mac */
-	__stringify(IPA_WLAN_LINK_DOWN_EVENT),                 /* ipacm_event_data_mac */
-	__stringify(IPA_WLAN_CLIENT_ADD_EVENT),                /* ipacm_event_data_mac */
-	__stringify(IPA_WLAN_CLIENT_ADD_EVENT_EX),             /* ipacm_event_data_wlan_ex */
-	__stringify(IPA_WLAN_CLIENT_DEL_EVENT),                /* ipacm_event_data_mac */
-	__stringify(IPA_WLAN_CLIENT_POWER_SAVE_EVENT),         /* ipacm_event_data_mac */
-	__stringify(IPA_WLAN_CLIENT_RECOVER_EVENT),            /* ipacm_event_data_mac */
-	__stringify(IPA_NEW_NEIGH_EVENT),                      /* ipacm_event_data_all */
-	__stringify(IPA_DEL_NEIGH_EVENT),                      /* ipacm_event_data_all */
-	__stringify(IPA_NEIGH_CLIENT_IP_ADDR_ADD_EVENT),       /* ipacm_event_data_all */
-	__stringify(IPA_NEIGH_CLIENT_IP_ADDR_DEL_EVENT),       /* ipacm_event_data_all */
-	__stringify(IPA_SW_ROUTING_ENABLE),                    /* NULL */
-	__stringify(IPA_SW_ROUTING_DISABLE),                   /* NULL */
-	__stringify(IPA_PROCESS_CT_MESSAGE),                   /* ipacm_ct_evt_data */
-	__stringify(IPA_PROCESS_CT_MESSAGE_V6),                /* ipacm_ct_evt_data */
-	__stringify(IPA_LAN_TO_LAN_NEW_CONNECTION),            /* ipacm_event_connection */
-	__stringify(IPA_LAN_TO_LAN_DEL_CONNECTION),            /* ipacm_event_connection */
-	__stringify(IPA_WLAN_SWITCH_TO_SCC),                   /* No Data */
-	__stringify(IPA_WLAN_SWITCH_TO_MCC),                   /* No Data */
-	__stringify(IPA_CRADLE_WAN_MODE_SWITCH),               /* ipacm_event_cradle_wan_mode */
-	__stringify(IPA_WAN_XLAT_CONNECT_EVENT),               /* ipacm_event_data_fid */
-	__stringify(IPA_TETHERING_STATS_UPDATE_EVENT),         /* ipacm_event_data_fid */
-	__stringify(IPA_NETWORK_STATS_UPDATE_EVENT),           /* ipacm_event_data_fid */
-	__stringify(IPA_EXTERNAL_EVENT_MAX),
-	__stringify(IPA_HANDLE_WAN_UP),                        /* ipacm_event_iface_up  */
-	__stringify(IPA_HANDLE_WAN_DOWN),                      /* ipacm_event_iface_up  */
-	__stringify(IPA_HANDLE_WAN_UP_V6),                     /* NULL */
-	__stringify(IPA_HANDLE_WAN_DOWN_V6),                   /* NULL */
-	__stringify(IPA_HANDLE_WAN_UP_TETHER),                 /* ipacm_event_iface_up_tehter */
-	__stringify(IPA_HANDLE_WAN_DOWN_TETHER),               /* ipacm_event_iface_up_tehter */
-	__stringify(IPA_HANDLE_WAN_UP_V6_TETHER),              /* ipacm_event_iface_up_tehter */
-	__stringify(IPA_HANDLE_WAN_DOWN_V6_TETHER),            /* ipacm_event_iface_up_tehter */
-	__stringify(IPA_HANDLE_WLAN_UP),                       /* ipacm_event_iface_up */
-	__stringify(IPA_HANDLE_LAN_UP),                        /* ipacm_event_iface_up */
-	__stringify(IPA_ETH_BRIDGE_IFACE_UP),                  /* ipacm_event_eth_bridge*/
-	__stringify(IPA_ETH_BRIDGE_IFACE_DOWN),                /* ipacm_event_eth_bridge*/
-	__stringify(IPA_ETH_BRIDGE_CLIENT_ADD),                /* ipacm_event_eth_bridge*/
-	__stringify(IPA_ETH_BRIDGE_CLIENT_DEL),                /* ipacm_event_eth_bridge*/
-	__stringify(IPA_ETH_BRIDGE_WLAN_SCC_MCC_SWITCH),       /* ipacm_event_eth_bridge*/
-	__stringify(IPA_LAN_DELETE_SELF),                      /* ipacm_event_data_fid */
-	__stringify(IPACM_EVENT_MAX),
-};
-
 IPACM_Config::IPACM_Config()
 {
 	iface_table = NULL;
 	alg_table = NULL;
 	memset(&ipa_client_rm_map_tbl, 0, sizeof(ipa_client_rm_map_tbl));
 	memset(&ipa_rm_tbl, 0, sizeof(ipa_rm_tbl));
-	ipa_rm_a2_check=0;
+    ipa_rm_a2_check=0;
 	ipacm_odu_enable = false;
 	ipacm_odu_router_mode = false;
-	ipa_num_wlan_guest_ap = 0;
 
 	ipa_num_ipa_interfaces = 0;
 	ipa_num_private_subnet = 0;
@@ -125,9 +63,6 @@ IPACM_Config::IPACM_Config()
 	ipa_nat_max_entries = 0;
 	ipa_nat_iface_entries = 0;
 	ipa_sw_rt_enable = false;
-	ipa_bridge_enable = false;
-	isMCC_Mode = false;
-	ipa_max_valid_rm_entry = 0;
 
 	memset(&rt_tbl_default_v4, 0, sizeof(rt_tbl_default_v4));
 	memset(&rt_tbl_lan_v4, 0, sizeof(rt_tbl_lan_v4));
@@ -141,11 +76,12 @@ IPACM_Config::IPACM_Config()
 	memset(&ext_prop_v4, 0, sizeof(ext_prop_v4));
 	memset(&ext_prop_v6, 0, sizeof(ext_prop_v6));
 
-	qmap_id = ~0;
+	memset(&rt_tbl_eth_bridge_usb_wlan_v4, 0, sizeof(rt_tbl_eth_bridge_usb_wlan_v4));
+	memset(&rt_tbl_eth_bridge_wlan_wlan_v4, 0, sizeof(rt_tbl_eth_bridge_wlan_wlan_v4));
+	memset(&rt_tbl_eth_bridge_usb_wlan_v6, 0, sizeof(rt_tbl_eth_bridge_usb_wlan_v6));
+	memset(&rt_tbl_eth_bridge_wlan_wlan_v6, 0, sizeof(rt_tbl_eth_bridge_wlan_wlan_v6));
 
-	memset(flt_rule_count_v4, 0, (IPA_CLIENT_CONS - IPA_CLIENT_PROD)*sizeof(int));
-	memset(flt_rule_count_v6, 0, (IPA_CLIENT_CONS - IPA_CLIENT_PROD)*sizeof(int));
-	memset(bridge_mac, 0, IPA_MAC_ADDR_SIZE*sizeof(uint8_t));
+	qmap_id = ~0;
 
 	IPACMDBG_H(" create IPACM_Config constructor\n");
 	return;
@@ -186,14 +122,6 @@ int IPACM_Config::Init(void)
 		goto fail;
 	}
 
-	/* Check wlan AP-AP access mode configuration */
-	if (cfg->num_wlan_guest_ap == 2)
-	{
-		IPACMDBG_H("IPACM_Config::Both wlan APs can not be configured in guest ap mode. \n");
-		IPACMDBG_H("IPACM_Config::configure both APs in full access mode or at least one in guest ap mode. \n");
-		ret = IPACM_FAILURE;
-		goto fail;
-	}
 	/* Construct IPACM Iface table */
 	ipa_num_ipa_interfaces = cfg->iface_config.num_iface_entries;
 	if (iface_table != NULL)
@@ -215,10 +143,7 @@ int IPACM_Config::Init(void)
 	{
 		strncpy(iface_table[i].iface_name, cfg->iface_config.iface_entries[i].iface_name, sizeof(iface_table[i].iface_name));
 		iface_table[i].if_cat = cfg->iface_config.iface_entries[i].if_cat;
-		iface_table[i].if_mode = cfg->iface_config.iface_entries[i].if_mode;
-		iface_table[i].wlan_mode = cfg->iface_config.iface_entries[i].wlan_mode;
-		IPACMDBG_H("IPACM_Config::iface_table[%d] = %s, cat=%d, mode=%d wlan-mode=%d \n", i, iface_table[i].iface_name,
-				iface_table[i].if_cat, iface_table[i].if_mode, iface_table[i].wlan_mode);
+		IPACMDBG_H("IPACM_Config::iface_table[%d] = %s, cat=%d\n", i, iface_table[i].iface_name, iface_table[i].if_cat);
 		/* copy bridge interface name to ipacmcfg */
 		if( iface_table[i].if_cat == VIRTUAL_IF)
 		{
@@ -282,16 +207,8 @@ int IPACM_Config::Init(void)
 	/* Find ODU is either router mode or bridge mode*/
 	ipacm_odu_enable = cfg->odu_enable;
 	ipacm_odu_router_mode = cfg->router_mode_enable;
-	ipacm_odu_embms_enable = cfg->odu_embms_enable;
 	IPACMDBG_H("ipacm_odu_enable %d\n", ipacm_odu_enable);
 	IPACMDBG_H("ipacm_odu_mode %d\n", ipacm_odu_router_mode);
-	IPACMDBG_H("ipacm_odu_embms_enable %d\n", ipacm_odu_embms_enable);
-
-	ipacm_ip_passthrough_mode = cfg->ip_passthrough_mode;
-	IPACMDBG_H("ipacm_ip_passthrough_mode %d. \n", ipacm_ip_passthrough_mode);
-
-	ipa_num_wlan_guest_ap = cfg->num_wlan_guest_ap;
-	IPACMDBG_H("ipa_num_wlan_guest_ap %d\n",ipa_num_wlan_guest_ap);
 
 	/* Allocate more non-nat entries if the monitored iface dun have Tx/Rx properties */
 	if (pNatIfaces != NULL)
@@ -300,7 +217,6 @@ int IPACM_Config::Init(void)
 		pNatIfaces = NULL;
 		IPACMDBG_H("RESET IPACM_Config::pNatIfaces \n");
 	}
-	ipa_nat_iface_entries = 0;
 	pNatIfaces = (NatIfaces *)calloc(ipa_num_ipa_interfaces, sizeof(NatIfaces));
 	if (pNatIfaces == NULL)
 	{
@@ -336,6 +252,24 @@ int IPACM_Config::Init(void)
 	rt_tbl_wan_dl.ip = IPA_IP_MAX;
 	strncpy(rt_tbl_wan_dl.name, WAN_DL_ROUTE_TABLE_NAME, sizeof(rt_tbl_wan_dl.name));
 
+	rt_tbl_lan2lan_v4.ip = IPA_IP_v4;
+	strncpy(rt_tbl_lan2lan_v4.name, V4_LAN_TO_LAN_ROUTE_TABLE_NAME, sizeof(rt_tbl_lan2lan_v4.name));
+
+	rt_tbl_lan2lan_v6.ip = IPA_IP_v6;
+	strncpy(rt_tbl_lan2lan_v6.name, V6_LAN_TO_LAN_ROUTE_TABLE_NAME, sizeof(rt_tbl_lan2lan_v6.name));
+
+	rt_tbl_eth_bridge_usb_wlan_v4.ip = IPA_IP_v4;
+	strncpy(rt_tbl_eth_bridge_usb_wlan_v4.name, ETH_BRIDGE_USB_WLAN_ROUTE_TABLE_NAME_V4, sizeof(rt_tbl_eth_bridge_usb_wlan_v4.name));
+
+	rt_tbl_eth_bridge_wlan_wlan_v4.ip = IPA_IP_v4;
+	strncpy(rt_tbl_eth_bridge_wlan_wlan_v4.name, ETH_BRIDGE_WLAN_WLAN_ROUTE_TABLE_NAME_V4, sizeof(rt_tbl_eth_bridge_wlan_wlan_v4.name));
+
+	rt_tbl_eth_bridge_usb_wlan_v6.ip = IPA_IP_v6;
+	strncpy(rt_tbl_eth_bridge_usb_wlan_v6.name, ETH_BRIDGE_USB_WLAN_ROUTE_TABLE_NAME_V6, sizeof(rt_tbl_eth_bridge_usb_wlan_v6.name));
+
+	rt_tbl_eth_bridge_wlan_wlan_v6.ip = IPA_IP_v6;
+	strncpy(rt_tbl_eth_bridge_wlan_wlan_v6.name, ETH_BRIDGE_WLAN_WLAN_ROUTE_TABLE_NAME_V6, sizeof(rt_tbl_eth_bridge_wlan_wlan_v6.name));
+
 	/* Construct IPACM ipa_client map to rm_resource table */
 	ipa_client_rm_map_tbl[IPA_CLIENT_WLAN1_PROD]= IPA_RM_RESOURCE_WLAN_PROD;
 	ipa_client_rm_map_tbl[IPA_CLIENT_USB_PROD]= IPA_RM_RESOURCE_USB_PROD;
@@ -351,9 +285,6 @@ int IPACM_Config::Init(void)
 	ipa_client_rm_map_tbl[IPA_CLIENT_A2_EMBEDDED_CONS]= IPA_RM_RESOURCE_Q6_CONS;
 	ipa_client_rm_map_tbl[IPA_CLIENT_A2_TETHERED_CONS]= IPA_RM_RESOURCE_Q6_CONS;
 	ipa_client_rm_map_tbl[IPA_CLIENT_APPS_WAN_CONS]= IPA_RM_RESOURCE_Q6_CONS;
-	ipa_client_rm_map_tbl[IPA_CLIENT_ODU_PROD]= IPA_RM_RESOURCE_ODU_ADAPT_PROD;
-	ipa_client_rm_map_tbl[IPA_CLIENT_ODU_EMB_CONS]= IPA_RM_RESOURCE_ODU_ADAPT_CONS;
-	ipa_client_rm_map_tbl[IPA_CLIENT_ODU_TETH_CONS]= IPA_RM_RESOURCE_ODU_ADAPT_CONS;
 
 	/* Create the entries which IPACM wants to add dependencies on */
 	ipa_rm_tbl[0].producer_rm1 = IPA_RM_RESOURCE_WLAN_PROD;
@@ -371,28 +302,9 @@ int IPACM_Config::Init(void)
 	ipa_rm_tbl[2].producer_rm2 = IPA_RM_RESOURCE_USB_PROD;
 	ipa_rm_tbl[2].consumer_rm2 = IPA_RM_RESOURCE_WLAN_CONS;
 
-	ipa_rm_tbl[3].producer_rm1 = IPA_RM_RESOURCE_ODU_ADAPT_PROD;
-	ipa_rm_tbl[3].consumer_rm1 = IPA_RM_RESOURCE_Q6_CONS;
-	ipa_rm_tbl[3].producer_rm2 = IPA_RM_RESOURCE_Q6_PROD;
-	ipa_rm_tbl[3].consumer_rm2 = IPA_RM_RESOURCE_ODU_ADAPT_CONS;
-
-	ipa_rm_tbl[4].producer_rm1 = IPA_RM_RESOURCE_WLAN_PROD;
-	ipa_rm_tbl[4].consumer_rm1 = IPA_RM_RESOURCE_ODU_ADAPT_CONS;
-	ipa_rm_tbl[4].producer_rm2 = IPA_RM_RESOURCE_ODU_ADAPT_PROD;
-	ipa_rm_tbl[4].consumer_rm2 = IPA_RM_RESOURCE_WLAN_CONS;
-
-	ipa_rm_tbl[5].producer_rm1 = IPA_RM_RESOURCE_ODU_ADAPT_PROD;
-	ipa_rm_tbl[5].consumer_rm1 = IPA_RM_RESOURCE_USB_CONS;
-	ipa_rm_tbl[5].producer_rm2 = IPA_RM_RESOURCE_USB_PROD;
-	ipa_rm_tbl[5].consumer_rm2 = IPA_RM_RESOURCE_ODU_ADAPT_CONS;
-	ipa_max_valid_rm_entry = 6; /* max is IPA_MAX_RM_ENTRY (6)*/
-
 	IPACMDBG_H(" depend MAP-0 rm index %d to rm index: %d \n", IPA_RM_RESOURCE_WLAN_PROD, IPA_RM_RESOURCE_Q6_CONS);
 	IPACMDBG_H(" depend MAP-1 rm index %d to rm index: %d \n", IPA_RM_RESOURCE_USB_PROD, IPA_RM_RESOURCE_Q6_CONS);
 	IPACMDBG_H(" depend MAP-2 rm index %d to rm index: %d \n", IPA_RM_RESOURCE_WLAN_PROD, IPA_RM_RESOURCE_USB_CONS);
-	IPACMDBG_H(" depend MAP-3 rm index %d to rm index: %d \n", IPA_RM_RESOURCE_ODU_ADAPT_PROD, IPA_RM_RESOURCE_Q6_CONS);
-	IPACMDBG_H(" depend MAP-4 rm index %d to rm index: %d \n", IPA_RM_RESOURCE_WLAN_PROD, IPA_RM_RESOURCE_ODU_ADAPT_CONS);
-	IPACMDBG_H(" depend MAP-5 rm index %d to rm index: %d \n", IPA_RM_RESOURCE_ODU_ADAPT_PROD, IPA_RM_RESOURCE_USB_CONS);
 
 fail:
 	if (cfg != NULL)
@@ -462,19 +374,6 @@ int IPACM_Config::GetNatIfaces(int nIfaces, NatIfaces *pIfaces)
 
 int IPACM_Config::AddNatIfaces(char *dev_name)
 {
-	int i;
-	/* Check if this iface already in NAT-iface*/
-	for(i = 0; i < ipa_nat_iface_entries; i++)
-	{
-		if(strncmp(dev_name,
-							 pNatIfaces[i].iface_name,
-							 sizeof(pNatIfaces[i].iface_name)) == 0)
-		{
-			IPACMDBG("Interface (%s) is add to nat iface already\n", dev_name);
-				return 0;
-		}
-	}
-
 	IPACMDBG_H("Add iface %s to NAT-ifaces, origin it has %d nat ifaces\n",
 					          dev_name, ipa_nat_iface_entries);
 	ipa_nat_iface_entries++;
@@ -543,7 +442,7 @@ void IPACM_Config::AddRmDepend(ipa_rm_resource_name rm1,bool rx_bypass_ipa)
 		IPACMDBG_H("got %d times default RT routing from A2 \n", ipa_rm_a2_check);
 	}
 
-	for(int i=0;i<ipa_max_valid_rm_entry;i++)
+	for(int i=0;i<IPA_MAX_PRIVATE_SUBNET_ENTRIES;i++)
 	{
 		if(rm1 == ipa_rm_tbl[i].producer_rm1)
 		{
@@ -651,7 +550,7 @@ void IPACM_Config::DelRmDepend(ipa_rm_resource_name rm1)
 		IPACMDBG_H("Left %d times default RT routing from A2 \n", ipa_rm_a2_check);
 	}
 
-	for(int i=0;i<ipa_max_valid_rm_entry;i++)
+	for(int i=0;i<IPA_MAX_PRIVATE_SUBNET_ENTRIES;i++)
 	{
 
 		if(rm1 == ipa_rm_tbl[i].producer_rm1)
@@ -755,7 +654,7 @@ int IPACM_Config::SetExtProp(ipa_ioc_query_intf_ext_props *prop)
 		{
 			if(ext_prop_v4.num_ext_props >= MAX_NUM_EXT_PROPS)
 			{
-				IPACMERR("IPv4 extended property table is full!\n");
+				IPACMDBG_H("IPv4 extended property table is full!\n");
 				continue;
 			}
 			memcpy(&ext_prop_v4.prop[ext_prop_v4.num_ext_props], &prop->ext[i], sizeof(struct ipa_ioc_ext_intf_prop));
@@ -765,7 +664,7 @@ int IPACM_Config::SetExtProp(ipa_ioc_query_intf_ext_props *prop)
 		{
 			if(ext_prop_v6.num_ext_props >= MAX_NUM_EXT_PROPS)
 			{
-				IPACMERR("IPv6 extended property table is full!\n");
+				IPACMDBG_H("IPv6 extended property table is full!\n");
 				continue;
 			}
 			memcpy(&ext_prop_v6.prop[ext_prop_v6.num_ext_props], &prop->ext[i], sizeof(struct ipa_ioc_ext_intf_prop));
@@ -809,15 +708,4 @@ int IPACM_Config::DelExtProp(ipa_ip_type ip_type)
 	}
 
 	return IPACM_SUCCESS;
-}
-
-const char* IPACM_Config::getEventName(ipa_cm_event_id event_id)
-{
-	if(event_id >= sizeof(ipacm_event_name)/sizeof(ipacm_event_name[0]))
-	{
-		IPACMERR("Event name array is not consistent with event array!\n");
-		return NULL;
-	}
-
-	return ipacm_event_name[event_id];
 }

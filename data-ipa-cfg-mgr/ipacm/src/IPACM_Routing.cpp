@@ -1,4 +1,4 @@
-/*
+/* 
 Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -73,26 +73,11 @@ bool IPACM_Routing::DeviceNodeIsOpened()
 
 bool IPACM_Routing::AddRoutingRule(struct ipa_ioc_add_rt_rule *ruleTable)
 {
-	int retval = 0, cnt=0;
-	bool isInvalid = false;
+	int retval = 0;
 
 	if (!DeviceNodeIsOpened())
 	{
 		IPACMERR("Device is not opened\n");
-		return false;
-	}
-
-	for(cnt=0; cnt<ruleTable->num_rules; cnt++)
-	{
-		if(ruleTable->rules[cnt].rule.dst > IPA_CLIENT_MAX)
-		{
-			IPACMERR("Invalid dst pipe, Rule:%d  dst_pipe:%d\n", cnt, ruleTable->rules[cnt].rule.dst);
-			isInvalid = true;
-		}
-	}
-
-	if(isInvalid)
-	{
 		return false;
 	}
 
@@ -101,11 +86,6 @@ bool IPACM_Routing::AddRoutingRule(struct ipa_ioc_add_rt_rule *ruleTable)
 	{
 		IPACMERR("Failed adding routing rule %p\n", ruleTable);
 		return false;
-	}
-
-	for(cnt=0; cnt<ruleTable->num_rules; cnt++)
-	{
-		IPACMDBG("Rule:%d  dst_pipe:%d\n", cnt, ruleTable->rules[cnt].rule.dst);
 	}
 
 	IPACMDBG_H("Added routing rule %p\n", ruleTable);
@@ -176,10 +156,8 @@ bool IPACM_Routing::GetRoutingTable(struct ipa_ioc_get_rt_tbl *routingTable)
 		IPACMERR("IPA_IOCTL_GET_RT_TBL ioctl failed, routingTable =0x%p, retval=0x%x.\n", routingTable, retval);
 		return false;
 	}
-	IPACMDBG_H("IPA_IOCTL_GET_RT_TBL ioctl issued to IPA routing block.\n");
-	/* put routing table right after successfully get routing table */
-	PutRoutingTable(routingTable->hdl);
 
+	IPACMDBG_H("IPA_IOCTL_GET_RT_TBL ioctl issued to IPA routing block.\n");
 	return true;
 }
 
@@ -246,31 +224,3 @@ fail:
 	return res;
 }
 
-bool IPACM_Routing::ModifyRoutingRule(struct ipa_ioc_mdfy_rt_rule *mdfyRules)
-{
-	int retval = 0, cnt;
-
-	if (!DeviceNodeIsOpened())
-	{
-		IPACMERR("Device is not opened\n");
-		return false;
-	}
-
-	retval = ioctl(m_fd, IPA_IOC_MDFY_RT_RULE, mdfyRules);
-	if (retval)
-	{
-		IPACMERR("Failed modifying routing rules %p\n", mdfyRules);
-		return false;
-	}
-
-	for(cnt=0; cnt<mdfyRules->num_rules; cnt++)
-	{
-		if(mdfyRules->rules[cnt].status != 0)
-		{
-			IPACMERR("Unable to modify rule: %d\n", cnt);
-		}
-	}
-
-	IPACMDBG_H("Modified routing rules %p\n", mdfyRules);
-	return true;
-}

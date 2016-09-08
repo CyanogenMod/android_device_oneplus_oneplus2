@@ -1,5 +1,5 @@
 /* 
-Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
+Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -58,16 +58,7 @@ int IPACM_EvtDispatcher::PostEvt
 	Message *item = NULL;
 	MessageQueue *MsgQueue = NULL;
 
-	if(data->event < IPA_EXTERNAL_EVENT_MAX)
-	{
-		IPACMDBG("Insert event into external queue.\n");
-		MsgQueue = MessageQueue::getInstanceExternal();
-	}
-	else
-	{
-		IPACMDBG("Insert event into internal queue.\n");
-		MsgQueue = MessageQueue::getInstanceInternal();
-	}
+	MsgQueue = MessageQueue::getInstance();
 	if(MsgQueue == NULL)
 	{
 		IPACMERR("unable to retrieve MsgQueue instance\n");
@@ -81,6 +72,7 @@ int IPACM_EvtDispatcher::PostEvt
 		return IPACM_FAILURE;
 	}
 
+	IPACMDBG("Populating item to post to queue\n");
 	item->evt.callback_ptr = IPACM_EvtDispatcher::ProcessEvt;
 	memcpy(&item->evt.data, data, sizeof(ipacm_cmd_q_data));
 

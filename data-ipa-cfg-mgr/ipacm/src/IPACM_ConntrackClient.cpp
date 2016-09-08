@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
+Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -445,7 +445,7 @@ void* IPACM_ConntrackClient::TCPRegisterWithConnTrack(void *)
 	}
 
 	/* Register callback with netfilter handler */
-	IPACMDBG_H("tcp handle:%p, fd:%d\n", pClient->tcp_hdl, nfct_fd(pClient->tcp_hdl));
+	IPACMDBG("tcp handle:%p, fd:%d\n", pClient->tcp_hdl, nfct_fd(pClient->tcp_hdl));
 #ifndef CT_OPT
 	nfct_callback_register(pClient->tcp_hdl,
 			(nf_conntrack_msg_type)	(NFCT_T_UPDATE | NFCT_T_DESTROY | NFCT_T_NEW),
@@ -476,7 +476,7 @@ void* IPACM_ConntrackClient::TCPRegisterWithConnTrack(void *)
 	nfct_callback_unregister(pClient->tcp_hdl);
 	/* close the handle */
 	nfct_close(pClient->tcp_hdl);
-	pClient->tcp_hdl = NULL;
+  pClient->tcp_hdl = NULL;
 
 	pthread_exit(NULL);
 	return NULL;
@@ -522,11 +522,11 @@ void* IPACM_ConntrackClient::UDPRegisterWithConnTrack(void *)
 	}
 
 	/* Register callback with netfilter handler */
-	IPACMDBG_H("udp handle:%p, fd:%d\n", pClient->udp_hdl, nfct_fd(pClient->udp_hdl));
+	IPACMDBG("udp handle:%p, fd:%d\n", pClient->udp_hdl, nfct_fd(pClient->udp_hdl));
 	nfct_callback_register(pClient->udp_hdl,
-			(nf_conntrack_msg_type)(NFCT_T_NEW | NFCT_T_DESTROY),
-			IPAConntrackEventCB,
-			NULL);
+												 (nf_conntrack_msg_type)(NFCT_T_NEW | NFCT_T_DESTROY),
+												 IPAConntrackEventCB,
+												 NULL);
 
 	/* Block to catch events from net filter connection track */
 ctcatch:
@@ -650,3 +650,140 @@ void IPACM_ConntrackClient::UpdateTCPFilters(void *param, bool isWan)
   return;
 }
 
+void IPACM_ConntrackClient::Read_TcpUdp_Timeout(char *in, int len)
+{
+	int proto;
+	FILE *fd = NULL;
+	char to_str[10];
+	uint32_t value;
+	NatApp *nat_inst = NULL;
+
+	nat_inst = NatApp::GetInstance();
+	if(nat_inst == NULL)
+	{
+		IPACMERR("unable to create nat instance\n");
+		return;
+	}
+
+	if(!strncmp(in, IPACM_TCP_FILE_NAME, len))
+	{
+		proto = IPPROTO_TCP;
+	}
+	else if(!strncmp(in, IPACM_UDP_FILE_NAME, len))
+	{
+		proto = IPPROTO_UDP;
+	}
+	else
+	{
+		return;
+	}
+
+	if(proto == IPPROTO_TCP)
+	{
+		fd = fopen(IPACM_TCP_FULL_FILE_NAME, "r");
+	}
+	else
+	{
+		fd = fopen(IPACM_UDP_FULL_FILE_NAME, "r");
+	}
+	if(fd == NULL)
+	{
+		PERROR("unable to open file");
+		return;
+	}
+
+	fgets(to_str, sizeof(to_str), fd);
+	value = atoi(to_str);
+	IPACMDBG("Protocol %d file \"%s\" value: %d\n", proto, in, value);
+	nat_inst->UpdateTcpUdpTo(value, proto);
+
+	fclose(fd);
+	return;
+}
+
+void *IPACM_ConntrackClient::TCPUDP_Timeout_monitor(void *)
+{
+  int length;
+	int wd;
+	char buffer[INOTIFY_BUFFER_LEN];
+	int inotify_fd;
+	uint32_t mask = IN_MODIFY;
+	FILE *to_fd = NULL;
+	char to_str[10];
+	uint32_t value=0;
+	NatApp *nat_inst = NULL;
+
+	nat_inst = NatApp::GetInstance();
+	if(nat_inst == NULL)
+	{
+		IPACMERR("unable to create nat instance\n");
+		return NULL;
+	}
+
+	to_fd = fopen(IPACM_TCP_FULL_FILE_NAME, "r");
+	if(to_fd == NULL)
+	{
+	  PERROR("unable to open file \"ip_conntrack_tcp_timeout_established\" ");
+		return NULL;
+	}
+	memset(to_str, 0, sizeof(to_str));
+	fgets(to_str, sizeof(to_str), to_fd);
+	value = atoi(to_str);
+	IPACMDBG("ip conntrack tcp timeout initial value:%d\n", value);
+	nat_inst->UpdateTcpUdpTo(value, IPPROTO_TCP);
+	fclose(to_fd);
+
+	to_fd = fopen(IPACM_UDP_FULL_FILE_NAME, "r");
+	if(to_fd == NULL)
+	{
+	  PERROR("unable to open file \"ip_conntrack_udp_timeout_stream\" ");
+		return NULL;
+	}
+	memset(to_str, 0, sizeof(to_str));
+	fgets(to_str, sizeof(to_str), to_fd);
+	value = atoi(to_str);
+	IPACMDBG("ip conntrack udp timeout:%d\n", value);
+	nat_inst->UpdateTcpUdpTo(value, IPPROTO_UDP);
+	fclose(to_fd);
+
+	inotify_fd = inotify_init();
+	if (inotify_fd < 0)
+	{
+		PERROR("inotify_init");
+		return NULL;
+	}
+
+	IPACMDBG("Waiting for nofications in dir %s with mask: 0x%x\n",
+					              IPACM_TCP_UDP_DIR_NAME, mask);
+
+	wd = inotify_add_watch(inotify_fd,
+												 IPACM_TCP_UDP_DIR_NAME,
+												 mask);
+
+	while (1)
+	{
+		length = read(inotify_fd, buffer, INOTIFY_BUFFER_LEN);
+		struct inotify_event *event = (struct inotify_event *)buffer;
+
+		if (length < 0)
+		{
+			IPACMERR("inotify read() error return length: %d and mask: 0x%x 0x%x\n",
+							         length, event->mask, mask);
+			return NULL;
+		}
+
+		if( (event->len > 0) && (event->mask & IN_MODIFY) )
+		{
+			if(!(event->mask & IN_ISDIR))
+			{
+				IPACMDBG("Received inotify event for file %s with mask %x value",
+								       event->name, event->mask);
+				Read_TcpUdp_Timeout(event->name, event->len);
+			}
+		}
+	}
+
+	(void)inotify_rm_watch(inotify_fd, wd);
+	(void)close(inotify_fd);
+	return NULL;
+}

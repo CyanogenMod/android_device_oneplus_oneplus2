@@ -1,5 +1,5 @@
 /* 
-Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
+Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -40,42 +40,24 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include "IPACM_CmdQueue.h"
 #include "IPACM_Log.h"
-#include "IPACM_Iface.h"
 
 pthread_mutex_t mutex    = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t  cond_var = PTHREAD_COND_INITIALIZER;
 
-MessageQueue* MessageQueue::inst_internal = NULL;
-MessageQueue* MessageQueue::inst_external = NULL;
-
-MessageQueue* MessageQueue::getInstanceInternal()
+MessageQueue* MessageQueue::inst = NULL;
+MessageQueue* MessageQueue::getInstance()
 {
-	if(inst_internal == NULL)
+	if(inst == NULL)
 	{
-		inst_internal = new MessageQueue();
-		if(inst_internal == NULL)
+		inst = new MessageQueue();
+		if(inst == NULL)
 		{
-			IPACMERR("unable to create internal Message Queue instance\n");
+			IPACMERR("unable to create Message Queue instance\n");
 			return NULL;
 		}
 	}
 
-	return inst_internal;
-}
-
-MessageQueue* MessageQueue::getInstanceExternal()
-{
-	if(inst_external == NULL)
-	{
-		inst_external = new MessageQueue();
-		if(inst_external == NULL)
-		{
-			IPACMERR("unable to create external Message Queue instance\n");
-			return NULL;
-		}
-	}
-
-	return inst_external;
+	return inst;
 }
 
 void MessageQueue::enqueue(Message *item)
@@ -119,22 +101,14 @@ Message* MessageQueue::dequeue(void)
 
 void* MessageQueue::Process(void *param)
 {
-	MessageQueue *MsgQueueInternal = NULL;
-	MessageQueue *MsgQueueExternal = NULL;
+	MessageQueue *MsgQueue = NULL;
 	Message *item = NULL;
 	IPACMDBG("MessageQueue::Process()\n");
 
-	MsgQueueInternal = MessageQueue::getInstanceInternal();
-	if(MsgQueueInternal == NULL)
+	MsgQueue = MessageQueue::getInstance();
+	if(MsgQueue == NULL)
 	{
-		IPACMERR("unable to start internal cmd queue process\n");
-		return NULL;
-	}
-
-	MsgQueueExternal = MessageQueue::getInstanceExternal();
-	if(MsgQueueExternal == NULL)
-	{
-		IPACMERR("unable to start external cmd queue process\n");
+		IPACMERR("unable to start cmd queue process\n");
 		return NULL;
 	}
 
@@ -146,21 +120,7 @@ void* MessageQueue::Process(void *param)
 			return NULL;
 		}
 
-		item = MsgQueueInternal->dequeue();
-		if(item == NULL)
-		{
-			item = MsgQueueExternal->dequeue();
-			if(item)
-			{
-				IPACMDBG("Get event %s from external queue.\n",
-					IPACM_Iface::ipacmcfg->getEventName(item->evt.data.event));
-			}
-		}
-		else
-		{
-			IPACMDBG("Get event %s from internal queue.\n",
-				IPACM_Iface::ipacmcfg->getEventName(item->evt.data.event));
-		}
+		item = MsgQueue->dequeue();
 
 		if(item == NULL)
 		{

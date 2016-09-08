@@ -484,18 +484,12 @@ uint16_t ipa_nati_make_rule_hdl(uint16_t tbl_hdl,
 	tbl_ptr = &ipv4_nat_cache.ip4_tbl[tbl_hdl-1];
 
 	if (tbl_entry >= tbl_ptr->table_entries) {
-		/* Increase the current expansion table count */
-		tbl_ptr->cur_expn_tbl_cnt++;
-
 		/* Update the index into table */
 		rule_hdl = tbl_entry - tbl_ptr->table_entries;
 		rule_hdl = (rule_hdl << IPA_NAT_RULE_HDL_TBL_TYPE_BITS);
 		/* Update the table type mask */
 		rule_hdl = (rule_hdl | IPA_NAT_RULE_HDL_TBL_TYPE_MASK);
 	} else {
-		/* Increase the current count */
-		tbl_ptr->cur_tbl_cnt++;
-
 		rule_hdl = tbl_entry;
 		rule_hdl = (rule_hdl << IPA_NAT_RULE_HDL_TBL_TYPE_BITS);
 	}
@@ -823,7 +817,7 @@ int ipa_nati_update_cache(struct ipa_ioc_nat_alloc_mem *mem,
 																 prot, flags,
 																 fd, offset);
 #endif
-	if (MAP_FAILED  == ipv4_rules_addr) {
+	if (NULL == ipv4_rules_addr) {
 		perror("unable to mmap the memory\n");
 		return -EINVAL;
 	}
@@ -1158,13 +1152,11 @@ uint16_t ipa_nati_generate_tbl_rule(const ipa_nat_ipv4_rule *clnt_rule,
 
 	/* On collision check for the free entry in expansion table */
 	new_entry = ipa_nati_expn_tbl_free_entry(expn_tbl,
-					tbl_ptr->expn_table_entries);
+																					 tbl_ptr->expn_table_entries);
 
 	if (IPA_NAT_INVALID_NAT_ENTRY == new_entry) {
 		/* Expansion table is full return*/
-		IPAERR("Expansion table is full\n");
-		IPAERR("Current Table: %d & Expn Entries: %d\n",
-			   tbl_ptr->cur_tbl_cnt, tbl_ptr->cur_expn_tbl_cnt);
+		IPAERR("expansion table is full\n");
 		return IPA_NAT_INVALID_NAT_ENTRY;
 	}
 	new_entry += tbl_ptr->table_entries;
@@ -1247,14 +1239,13 @@ uint16_t ipa_nati_generate_index_rule(const ipa_nat_ipv4_rule *clnt_rule,
 	}
 
 	/* On collision check for the free entry in expansion table */
-	new_entry = ipa_nati_index_expn_get_free_entry(indx_expn_tbl,
-					tbl_ptr->expn_table_entries);
+	new_entry = ipa_nati_index_expn_get_free_entry(
+																								 indx_expn_tbl,
+																								 tbl_ptr->expn_table_entries);
 
 	if (IPA_NAT_INVALID_NAT_ENTRY == new_entry) {
 		/* Expansion table is full return*/
-		IPAERR("Index expansion table is full\n");
-		IPAERR("Current Table: %d & Expn Entries: %d\n",
-			   tbl_ptr->cur_tbl_cnt, tbl_ptr->cur_expn_tbl_cnt);
+		IPAERR("index expansion table is full\n");
 		return IPA_NAT_INVALID_NAT_ENTRY;
 	}
 	new_entry += tbl_ptr->table_entries;
