@@ -1,5 +1,5 @@
 type proc_touchpanel, fs_type;
 type cam_proc, file_type;
-type cam_sysfs, sysfs_type;
+type cam_sysfs, fs_type;
 type nv_data_file, file_type;
 type stm_sensor, file_type;
