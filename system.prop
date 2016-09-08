@@ -47,6 +47,7 @@ ro.bluetooth.wipower=true
 
 # Camera
 camera.disable_zsl_mode=1
+persist.camera.HAL3.enabled=0
 persist.camera.cpp.duplication=false
 
 # CEC
