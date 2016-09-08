@@ -42,7 +42,7 @@ vendor/lib64/libbtnv.so
 # Camera
 bin/mm-qcamera-app
 bin/mm-qcamera-daemon
-lib/hw/camera.msm8994.so
+lib/hw/camera.vendor.msm8994.so
 lib/libFNVfbEngineLib.so
 lib/libmm-qcamera.so
 lib/libmmcamera_interface.so
