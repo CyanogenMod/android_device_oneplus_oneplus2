@@ -42,7 +42,7 @@ vendor/lib64/libbtnv.so
 # Camera
 bin/mm-qcamera-app
 bin/mm-qcamera-daemon
-lib/hw/camera.vendor.msm8994.so
+lib/hw/camera.msm8994.so:lib/hw/camera.vendor.msm8994.so
 lib/libFNVfbEngineLib.so
 lib/libmm-qcamera.so
 lib/libmmcamera_interface.so
@@ -205,7 +205,7 @@ etc/permissions/com.quicinc.cne.xml
 framework/ConnectivityExt.jar
 framework/cneapiclient.jar
 framework/com.quicinc.cne.jar
--priv-app/CNEService/CNEService.apk
+-priv-app/CNEService/CNEService.apk|ca5f9a0e15a561b36de819ade9147c0ffdda207d
 vendor/lib/libNimsWrap.so
 vendor/lib/libcne.so
 vendor/lib/libcneapiclient.so
@@ -441,8 +441,8 @@ vendor/lib64/libqmi_encdec.so
 vendor/lib64/libsmemlog.so
 
 # Radio
--app/QtiTelephonyService/QtiTelephonyService.apk
--app/shutdownlistener/shutdownlistener.apk
+-app/QtiTelephonyService/QtiTelephonyService.apk|4610d741cedd4e784011915b16f3f4879cd2e19b
+-app/shutdownlistener/shutdownlistener.apk|e35de2893b60e52cc9f2cb2c6211ccf7db92ed6f
 bin/netmgrd
 bin/qmuxd
 bin/radish
@@ -450,12 +450,12 @@ bin/rfs_access
 bin/rmt_storage
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
--framework/qcnvitems.jar
--framework/qcrilhook.jar
-framework/qti-telephony-common.jar
-framework/QtiTelephonyServicelibrary.jar
+-framework/qcnvitems.jar|9fdaf0bbb5582c64f39e36e96fa5566876744237
+-framework/qcrilhook.jar|10de4ed30abbd5a03d92bfa3eafe6527f409a167
+framework/qti-telephony-common.jar|2daebd9343e5c4c7fabe0d8e76c5df5e89bd9d96
+framework/QtiTelephonyServicelibrary.jar|27c83fe7005affb6937aad19e4c061ba047c43e3
 lib64/libparam.so
--priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
+-priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|8f7d06b5c0b7b1ce2e0ae6d39c99ff3b04a4d1c2
 -vendor/lib/libmdmdetect.so
 vendor/lib64/libconfigdb.so
 vendor/lib64/liblqe.so
@@ -491,7 +491,7 @@ vendor/lib64/libthermalclient.so
 vendor/lib64/libthermalioctl.so
 
 # Time services
--app/TimeService/TimeService.apk
+-app/TimeService/TimeService.apk|8bd31d8f96c2e726cdb1a9d04f4da06b0e8914dd
 bin/time_daemon
 vendor/lib/libTimeService.so
 -vendor/lib/libtime_genoff.so
