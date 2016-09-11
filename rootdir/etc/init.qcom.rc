@@ -163,16 +163,6 @@ on init
     chmod 660 /sys/class/leds/green/duty_pcts
     chmod 660 /sys/class/leds/blue/duty_pcts
 
-    # Add for enginerr app for sys/class selinux recon
-    restorecon /sys/class/leds/keyboard-backlight/brightness
-    restorecon /sys/class/leds/button-backlight/brightness
-    restorecon /sys/class/leds/red/brightness
-    restorecon /sys/class/leds/green/brightness
-    restorecon /sys/class/leds/blue/brightness
-    restorecon /sys/class/leds/red/blink
-    restorecon /sys/class/leds/green/blink
-    restorecon /sys/class/leds/blue/blink
-
     # GPU Tuning
     chown root system /sys/class/kgsl/kgsl-3d0/dispatch/inflight
     chmod 0660 /sys/class/kgsl/kgsl-3d0/dispatch/inflight
@@ -183,18 +173,6 @@ on init
     mkdir /sys/fs/cgroup/freezer 0750 root system
     mount cgroup none /sys/fs/cgroup/freezer  freezer
     chmod 777 /sys/fs/cgroup/freezer
-
-    # Wifi ftm test
-    chown system system /system/bin/wifi_ftm
-    chmod 0777  /system/bin/wifi_ftm
-    chown system system /system/bin/wifi_single
-    chmod 0777  /system/bin/wifi_single
-    chown system system /system/bin/iwpriv
-    chmod 0777  /system/bin/iwpriv
-    chown system system /system/bin/iwlist
-    chmod 0777  /system/bin/iwlist
-    chown system system /system/xbin/tcpdump
-    chmod 0777  /system/xbin/tcpdump
 
     write /sys/module/printk/parameters/print_wall_time 1
 
@@ -710,9 +688,9 @@ service rmt_storage /system/bin/rmt_storage
     user root
 
 service rfs_access /system/bin/rfs_access
-   class core
-   user root
-   group system net_raw
+    class core
+    user root
+    group system net_raw
 
 on property:wc_transport.start_hci=true
     start start_hci_filter
@@ -772,11 +750,11 @@ service bt-sap /system/bin/sapd 15
     oneshot
 
 service btsnoop /system/bin/btsnoop
-   user bluetooth
-   group bluetooth net_bt_admin sdcard_rw sdcard_r
-   class late_start
-   disabled
-   oneshot
+    user bluetooth
+    group bluetooth net_bt_admin sdcard_rw sdcard_r
+    class late_start
+    disabled
+    oneshot
 
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
@@ -904,9 +882,9 @@ service cnss_diag /system/bin/cnss_diag --q
 
 service drmdiag /system/bin/drmdiagapp
     class late_start
-     user root
-     disabled
-     oneshot
+    user root
+    disabled
+    oneshot
 
 on property:drmdiag.load=1
     start drmdiag
