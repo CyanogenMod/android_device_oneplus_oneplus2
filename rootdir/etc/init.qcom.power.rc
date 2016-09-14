@@ -128,11 +128,17 @@ on enable-low-power
     setprop ro.min_freq_4 384000
     start perfd
 
+service charger /charger
+    class charger
+    group log
+    seclabel u:r:healthd:s0
+
 on charger
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
+    write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
 on class_start:late_start
     trigger enable-low-power
