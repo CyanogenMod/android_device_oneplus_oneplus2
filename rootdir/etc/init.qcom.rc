@@ -944,9 +944,6 @@ service profiler_daemon /system/bin/profiler_daemon
     group root
     disabled
 
-service charger /charger
-    class charger
-
 service ssr_diag /system/bin/ssr_diag
     class late_start
     user system
