@@ -101,3 +101,6 @@ ro.qc.sdk.camera.facialproc=false
 
 # Time services
 persist.timed.enable=true
+
+# Wifi
+persist.data.iwlan.enable=true

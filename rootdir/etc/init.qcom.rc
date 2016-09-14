@@ -535,6 +535,38 @@ service adsprpcd /system/bin/adsprpcd
     user media
     group media
 
+service imsqmidaemon /system/bin/imsqmidaemon
+    class main
+    user system
+    socket ims_qmid stream 0660 system radio
+    group radio net_raw log diag
+
+service imsdatadaemon /system/bin/imsdatadaemon
+    class main
+    user system
+    socket ims_datad stream 0660 system radio
+    group system wifi radio inet net_raw log diag net_admin
+    disabled
+
+on property:sys.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon
+
+service ims_rtp_daemon /system/bin/ims_rtp_daemon
+   class main
+   user system
+   socket ims_rtpd stream 0660 system radio
+   group radio net_raw diag inet log
+   disabled
+
+on property:sys.ims.DATA_DAEMON_STATUS=1
+    start ims_rtp_daemon
+
+service imscmservice /system/bin/imscmservice
+   class main
+   user system
+   group radio net_raw diag diag log
+   group radio net_raw diag diag log
+
 service usf_tester /system/bin/usf_tester
     user system
     group system inet
@@ -883,12 +915,25 @@ service ftm_ffbm /system/bin/ftmdaemon
     disabled
     oneshot
 
-service cnss_diag /system/bin/cnss_diag --q
+service cnss_diag /system/bin/cnss_diag -q -f
     class main
     user root
     group root
     disabled
-    oneshot
+
+on property:cnss_diag.load=true
+    start cnss_diag
+
+on property:cnss_diag.load=false
+    stop cnss_diag
+
+service cnss-daemon /system/bin/cnss-daemon -n -l
+    class late_start
+
+service loc_launcher /system/bin/loc_launcher
+    #loc_launcher will start as root and set its uid to gps
+    class late_start
+    group gps inet net_raw diag net_admin wifi
 
 service drmdiag /system/bin/drmdiagapp
     class late_start
