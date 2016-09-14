@@ -218,12 +218,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.msm8994
 
-# QMI
-PRODUCT_PACKAGES += \
-    dsi_config.xml \
-    netmgr_config.xml \
-    qmi_config.xml
-
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.qcom.bt.sh
@@ -251,18 +245,7 @@ PRODUCT_PACKAGES += \
     sensors.ssc.wrapper
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensors/hals.conf:system/etc/sensors/hals.conf \
-    $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
-
-# Thermal config
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/thermal-engine.conf:system/etc/thermal-engine.conf \
-    $(LOCAL_PATH)/configs/perf-profile0.conf:system/vendor/etc/perf-profile0.conf \
-    $(LOCAL_PATH)/configs/perf-profile1.conf:system/vendor/etc/perf-profile1.conf \
-    $(LOCAL_PATH)/configs/perf-profile2.conf:system/vendor/etc/perf-profile2.conf \
-    $(LOCAL_PATH)/configs/perf-profile3.conf:system/vendor/etc/perf-profile3.conf \
-    $(LOCAL_PATH)/configs/perf-profile4.conf:system/vendor/etc/perf-profile4.conf \
-    $(LOCAL_PATH)/configs/perf-profile5.conf:system/vendor/etc/perf-profile5.conf
+    $(LOCAL_PATH)/configs/sensors/hals.conf:system/etc/sensors/hals.conf
 
 # USB
 PRODUCT_PACKAGES += \
@@ -286,10 +269,8 @@ PRODUCT_PACKAGES += \
     ipacm \
     ipacm-diag \
     IPACM_cfg.xml \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
-    libwpa_client \
     hostapd \
+    libwpa_client \
     wpa_supplicant \
     wpa_supplicant.conf \
     wpa_supplicant_overlay.conf \
