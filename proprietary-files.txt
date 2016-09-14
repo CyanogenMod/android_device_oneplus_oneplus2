@@ -241,11 +241,7 @@ vendor/lib64/libdpmnsrm.so
 
 # DRM
 bin/qseecomd
-vendor/lib/hw/gatekeeper.msm8994.so
-vendor/lib/hw/keystore.msm8994.so
 vendor/lib/libQSEEComAPI.so
-vendor/lib64/hw/gatekeeper.msm8994.so
-vendor/lib64/hw/keystore.msm8994.so
 vendor/lib64/libQSEEComAPI.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
@@ -262,6 +258,10 @@ lib/hw/fingerprint.msm8994.so
 lib/lib_fpc_tac_shared.so
 lib64/hw/fingerprint.msm8994.so
 lib64/lib_fpc_tac_shared.so
+
+# Gatekeeper
+vendor/lib/hw/gatekeeper.msm8994.so
+vendor/lib64/hw/gatekeeper.msm8994.so
 
 # GPS
 -lib/libloc_api_v02.so
@@ -341,8 +341,9 @@ vendor/lib64/libscale.so
 etc/firmware/a420_pfp.fw
 etc/firmware/a420_pm4.fw
 
-# IPA
-bin/ipacm-diag
+# Keystore
+vendor/lib/hw/keystore.msm8994.so
+vendor/lib64/hw/keystore.msm8994.so
 
 # Listen
 vendor/lib/hw/sound_trigger.primary.msm8994.so
@@ -380,6 +381,12 @@ etc/firmware/venus.mdt
 bin/energy-awareness
 bin/msm_irqbalance
 vendor/bin/perfd
+vendor/etc/perf-profile0.conf
+vendor/etc/perf-profile1.conf
+vendor/etc/perf-profile2.conf
+vendor/etc/perf-profile3.conf
+vendor/etc/perf-profile4.conf
+vendor/etc/perf-profile5.conf
 vendor/lib/libqti-perfd-client.so
 vendor/lib64/libqti-perfd-client.so
 
@@ -443,11 +450,15 @@ vendor/lib64/libsmemlog.so
 # Radio
 -app/QtiTelephonyService/QtiTelephonyService.apk|4610d741cedd4e784011915b16f3f4879cd2e19b
 -app/shutdownlistener/shutdownlistener.apk|e35de2893b60e52cc9f2cb2c6211ccf7db92ed6f
+bin/ipacm-diag
 bin/netmgrd
 bin/qmuxd
 bin/radish
 bin/rfs_access
 bin/rmt_storage
+etc/data/dsi_config.xml
+etc/data/netmgr_config.xml
+etc/data/qmi_config.xml
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar|9fdaf0bbb5582c64f39e36e96fa5566876744237
@@ -469,8 +480,7 @@ vendor/lib64/libsystem_health_mon.so
 
 # Sensors
 bin/sensors.qcom
-etc/firmware/tp/14049/14049_FW_S1302.img
-etc/firmware/tp/14049/14049_FW_S3320_jdi.img
+etc/sensors/sensor_def_qcomdev.conf
 vendor/lib/hw/activity_recognition.msm8994.so
 vendor/lib/libsensor1.so
 vendor/lib/libsensor_reg.so
@@ -485,6 +495,7 @@ vendor/lib64/libsensor_user_cal.so
 vendor/lib64/sensors.ssc.so
 
 # Thermal
+etc/thermal-engine.conf
 vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so
 vendor/lib64/libthermalclient.so
@@ -497,3 +508,7 @@ vendor/lib/libTimeService.so
 -vendor/lib/libtime_genoff.so
 vendor/lib64/libTimeService.so
 -vendor/lib64/libtime_genoff.so
+
+# TP Firmware
+etc/firmware/tp/14049/14049_FW_S1302.img
+etc/firmware/tp/14049/14049_FW_S3320_jdi.img
