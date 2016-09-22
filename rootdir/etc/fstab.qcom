@@ -18,4 +18,3 @@
 /dev/block/bootdevice/by-name/bluetooth               /bt_firmware      vfat    ro,shortname=lower,uid=1002,gid=3002,dmask=222,fmask=333,context=u:object_r:bt_firmware_file:s0                 wait
 
 /devices/soc.0/f9200000.ssusb/f9200000.dwc3/xhci-hcd* auto              auto    defaults                                                                                                        voldmanaged=usbdisk:auto
-/dev/block/zram0                                      none              swap    defaults                                                                                                        zramsize=536870912,zramstreams=4,notrim
