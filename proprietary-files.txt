@@ -232,6 +232,9 @@ vendor/lib64/libvendorconn.so
 vendor/lib64/libwqe.so
 vendor/lib64/libxml.so
 
+# Display calibration
+-etc/pp_calib_data_jd35695_1080p_cmd_mode_dsi_panel.xml
+
 # DPM
 bin/dpmd
 etc/dpm/dpm.conf
