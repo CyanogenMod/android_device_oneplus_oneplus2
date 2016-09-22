@@ -33,6 +33,7 @@ on early-init
 
     # Setup zram options
     write /sys/block/zram0/comp_algorithm lz4
+    write /proc/sys/vm/swappiness 100
 
 on early-fs
     mkdir /firmware 0771 system system
@@ -40,7 +41,6 @@ on early-fs
     mkdir /persist 0771 system system
 
     mount_all /fstab.qcom
-    swapon_all /fstab.qcom
 
 on init
     chmod 0644 /proc/cmdline
@@ -509,6 +509,12 @@ on property:init.svc.per_mgr=running
 on property:sys.shutdown.requested=*
     stop per_proxy
 
+service zram-init /system/bin/sh /system/etc/init.zram.sh
+    class late_start
+    user root
+    disabled
+    oneshot
+
 service fingerprintd /system/bin/fingerprintd
     class late_start
     user system
@@ -641,6 +647,7 @@ service energy-awareness /system/bin/energy-awareness
     oneshot
 
 on property:sys.boot_completed=1
+    start zram-init
     write /dev/kmsg "Boot completed "
 
 # corefile limit and ETB enabling
