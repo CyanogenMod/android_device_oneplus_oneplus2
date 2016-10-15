@@ -29,6 +29,6 @@
   <string name="pocket_gesture_summary">Upozornit pulsováním při vyjmutí z kapsy</string>
   <!-- Help text -->
   <string name="dlg_ok">OK</string>
-  <string name="doze_settings_help_title">Nápověda</string>
+  <string name="doze_settings_help_title">Uživatelská příručka</string>
   <string name="doze_settings_help_text">Tyto funkce používají události senzorů ke spuštění pulzování oznámení. Vybraný senzor je zapnut pouze v případě přijetí upozornění, což vede k úspoře baterie. Je zde i možnost zapnout daný senzor ihned po vypnutí obrazovky, ale dochází k většímu vybíjení.</string>
 </resources>

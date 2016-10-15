@@ -16,15 +16,15 @@
 
 package com.cyanogenmod.settings.doze;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.UserHandle;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+
+import static android.provider.Settings.Secure.DOZE_ENABLED;
 
 public final class Utils {
 
@@ -33,12 +33,12 @@ public final class Utils {
 
     private static final String DOZE_INTENT = "com.android.systemui.doze.pulse";
 
-    protected static final String AMBIENT_DISPLAY_KEY = "ambient_display";
+    protected static final String AMBIENT_DISPLAY_KEY = "doze_enabled";
     protected static final String PICK_UP_KEY = "pick_up";
-    protected static final String TILT_ALWAYS_KEY = "tilt_always";
     protected static final String GESTURE_HAND_WAVE_KEY = "gesture_hand_wave";
     protected static final String GESTURE_POCKET_KEY = "gesture_pocket";
-    protected static final String PROXIMITY_ALWAYS_KEY = "proximity_always";
+
+    public static final Uri DOZE_ENABLED_URI = Settings.Secure.getUriFor(DOZE_ENABLED);
 
     protected static void startService(Context context) {
         if (DEBUG) Log.d(TAG, "Starting service");
@@ -52,12 +52,12 @@ public final class Utils {
 
     protected static boolean isDozeEnabled(Context context) {
         return Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Secure.DOZE_ENABLED, 1) != 0;
+                DOZE_ENABLED, 1) != 0;
     }
 
     protected static boolean enableDoze(boolean enable, Context context) {
         boolean dozeEnabled = Settings.Secure.putInt(context.getContentResolver(),
-                Settings.Secure.DOZE_ENABLED, enable ? 1 : 0);
+                              DOZE_ENABLED, enable ? 1 : 0);
         if (enable) {
             startService(context);
         } else {
@@ -77,11 +77,6 @@ public final class Utils {
                 .getBoolean(PICK_UP_KEY, false);
     }
 
-    protected static boolean tiltAlwaysEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(TILT_ALWAYS_KEY, false);
-    }
-
     protected static boolean handwaveGestureEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(GESTURE_HAND_WAVE_KEY, false);
@@ -90,11 +85,6 @@ public final class Utils {
     protected static boolean pocketGestureEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(GESTURE_POCKET_KEY, false);
-    }
-
-    protected static boolean proximityAlwaysEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(PROXIMITY_ALWAYS_KEY, false);
     }
 
     protected static boolean sensorsEnabled(Context context) {
