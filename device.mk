@@ -105,10 +105,6 @@ PRODUCT_PACKAGES += \
     sensors.hal.tof \
     Snap
 
-# Charger
-PRODUCT_PACKAGES += \
-    charger_res_images
-
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
     cneapiclient \
