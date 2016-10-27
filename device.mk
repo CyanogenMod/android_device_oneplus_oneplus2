@@ -102,7 +102,8 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8994 \
-    libcamera_shim \
+    mm-qcamera-app \
+    libmm-qcamera \
     sensors.hal.tof \
     Snap
 
