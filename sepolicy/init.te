@@ -1,0 +1,1 @@
+allow init cam_sysfs:file relabelto;
