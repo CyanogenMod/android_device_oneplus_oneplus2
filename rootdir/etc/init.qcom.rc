@@ -43,6 +43,8 @@ on early-fs
     mount_all /fstab.qcom
 
 on init
+    export LD_SHIM_LIBS /system/vendor/lib64/lib-imscamera.so|libshim_camera.so
+
     chmod 0644 /proc/cmdline
 
     symlink /sdcard /storage/sdcard0
