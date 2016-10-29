@@ -1,0 +1,1 @@
+allow cam_sysfs sysfs:filesystem associate;

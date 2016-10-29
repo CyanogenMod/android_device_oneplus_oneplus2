@@ -1,0 +1,23 @@
+type mm-qcamera_op, domain;
+type mm-qcamera_op_exec, exec_type, file_type;
+
+init_daemon_domain(mm-qcamera_op)
+
+allow mm-qcamera_op cam_sysfs:file { open read write };
+allow mm-qcamera_op camera_data_file:dir { add_name remove_name write search };
+allow mm-qcamera_op camera_data_file:sock_file { create unlink };
+allow mm-qcamera_op cameraserver:fd use;
+allow mm-qcamera_op gpu_device:chr_file { ioctl open read write };
+allow mm-qcamera_op input_device:dir search;
+allow mm-qcamera_op ion_device:chr_file { ioctl open read write };
+allow mm-qcamera_op self:tcp_socket { create setopt bind listen };
+allow mm-qcamera_op sensors:unix_stream_socket connectto;
+allow mm-qcamera_op sensors_device:chr_file getattr;
+allow mm-qcamera_op sensors_socket:sock_file write;
+allow mm-qcamera_op stm_sensor:chr_file { ioctl open read };
+allow mm-qcamera_op surfaceflinger:fd use;
+allow mm-qcamera_op sysfs:file { open read };
+allow mm-qcamera_op system_file:file execmod;
+allow mm-qcamera_op video_device:chr_file { ioctl open read write };
+allow mm-qcamera_op port:tcp_socket name_bind;
+allow mm-qcamera_op node:tcp_socket node_bind;

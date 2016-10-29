@@ -472,7 +472,7 @@ on post-fs-data
     chmod 2770 /data/system/perfd
 
 # start camera server as daemon
-service qcamerasvr /system/bin/mm-qcamera-daemon
+service qcamerasvr /system/bin/mm-qcamera-daemon-op
     class main
     user camera
     group camera system inet input graphics

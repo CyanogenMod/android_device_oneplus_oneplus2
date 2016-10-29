@@ -1,0 +1,2 @@
+allow priv_app device:dir { read open };
+allow priv_app rfs_system_file:dir getattr;

@@ -1,1 +1,2 @@
 allow qmuxd property_socket:sock_file write;
+allow qmuxd diag_device:chr_file { ioctl open read write };
