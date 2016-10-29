@@ -23,6 +23,7 @@ ro.bluetooth.a4wp=true
 ro.bluetooth.wipower=true
 
 # Camera
+camera.hal1.packagelist=com.skype.raider,com.whatsapp,com.tencent.mm,com.google.android.GoogleCamera
 persist.camera.cpp.duplication=false
 vidc.debug.perf.mode=2
 vidc.enc.dcvs.extra-buff-count=2
