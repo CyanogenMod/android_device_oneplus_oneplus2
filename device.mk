@@ -104,8 +104,7 @@ PRODUCT_PACKAGES += \
     camera.msm8994 \
     mm-qcamera-app \
     libmm-qcamera \
-    sensors.hal.tof \
-    Snap
+    sensors.hal.tof
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
