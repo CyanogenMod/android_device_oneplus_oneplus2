@@ -1,6 +1,7 @@
 # system.prop for OnePlus2
 
 # Audio
+audio.offload.video=true
 persist.audio.fluence.voicecall=true
 persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
@@ -14,7 +15,8 @@ use.voice.path.for.pcm.voip=true
 audio.offload.multiple.enabled=true
 audio.offload.gapless.enabled=true
 mm.enable.smoothstreaming=true
-audio.offload.buffer.size.kb=1024
+audio.offload.buffer.size.kb=32
+tunnel.audio.encode=false
 
 # Bluetooth
 bluetooth.hfp.client=1
