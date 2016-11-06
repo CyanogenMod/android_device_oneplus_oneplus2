@@ -1,0 +1,3 @@
+allow mm-qcamerad cam_sysfs:file { open read write };
+allow mm-qcamerad stm_sensor:chr_file { ioctl open read };
+allow mm-qcamerad system_file:file execmod;

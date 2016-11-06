@@ -1,2 +1,1 @@
-allow cameraserver mm-qcamera_op:unix_dgram_socket sendto;
 allow cameraserver system_data_file:sock_file write;

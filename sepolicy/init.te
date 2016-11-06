@@ -1,1 +1,2 @@
 allow init cam_sysfs:file relabelto;
+allow init proc_dirty_ratio:file write;
