@@ -531,6 +531,11 @@ vendor/lib64/libTimeService.so
 etc/firmware/tp/14049/14049_FW_S1302.img
 etc/firmware/tp/14049/14049_FW_S3320_jdi.img
 
+# Widevine
+vendor/lib/libWVStreamControlAPI_L3.so
+vendor/lib/libwvdrm_L3.so
+vendor/lib/mediadrm/libwvdrmengine.so
+
 # Wifi
 bin/cnss-daemon
 bin/cnss_diag
