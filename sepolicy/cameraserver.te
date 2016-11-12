@@ -1,1 +1,0 @@
-allow cameraserver system_data_file:sock_file write;
