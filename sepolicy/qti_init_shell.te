@@ -1,6 +1,4 @@
-allow qti_init_shell bluetooth_loader_exec:file { read open };
-allow qti_init_shell btnvtool_exec:file { read getattr open execute execute_no_trans };
-allow qti_init_shell kmsg_device:chr_file { write open };
-allow qti_init_shell persist_bluetooth_file:dir search;
-allow qti_init_shell persist_bluetooth_file:file { read getattr open };
-allow qti_init_shell smem_log_device:chr_file { read write ioctl open };
+allow qti_init_shell bluetooth_loader_exec:file { open read };
+allow qti_init_shell btnvtool_exec:file { execute execute_no_trans getattr open read };
+allow qti_init_shell kmsg_device:chr_file { open write };
+allow qti_init_shell smem_log_device:chr_file { ioctl open read write };
