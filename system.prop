@@ -102,6 +102,9 @@ ro.qc.sdk.sensors.gestures=true
 ro.qc.sdk.gestures.camera=false
 ro.qc.sdk.camera.facialproc=false
 
+# Storage
+ro.sys.sdcardfs=true
+
 # Time services
 persist.timed.enable=true
 
