@@ -1,5 +1,5 @@
 allow fingerprintd sysfs:file write;
-allow fingerprintd system_data_file:dir { write remove_name add_name };
+allow fingerprintd system_data_file:dir { add_name remove_name write };
 allow fingerprintd system_data_file:sock_file { create unlink };
-allow fingerprintd tee_device:chr_file { read write ioctl open };
+allow fingerprintd tee_device:chr_file { ioctl open read write };
 allow fingerprintd firmware_file:dir search;

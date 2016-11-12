@@ -1,2 +1,1 @@
-allow priv_app device:dir { read open };
-allow priv_app rfs_system_file:dir getattr;
+allow priv_app cache_private_backup_file:dir getattr;

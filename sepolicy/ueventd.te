@@ -1,4 +1,2 @@
-allow ueventd vfat:dir search;
-allow ueventd vfat:file { read open };
-allow ueventd stm_sensor:chr_file { create setattr };
 allow ueventd cam_sysfs:file getattr;
+allow ueventd stm_sensor:chr_file { create setattr };
