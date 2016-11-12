@@ -1,3 +1,2 @@
-allow perfd system_data_file:sock_file write;
 allow perfd system_data_file:dir { add_name remove_name write };
-allow perfd system_data_file:sock_file { create setattr unlink };
+allow perfd system_data_file:sock_file { create setattr unlink write };

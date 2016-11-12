@@ -1,1 +1,0 @@
-allow tee vfat:file { read getattr open };

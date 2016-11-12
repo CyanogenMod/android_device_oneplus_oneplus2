@@ -1,5 +1,0 @@
-allow sensors cam_sysfs:file getattr;
-allow sensors device:dir { write add_name };
-allow sensors input_device:chr_file { relabelfrom getattr link };
-allow sensors stm_sensor:chr_file relabelto;
-allow sensors input_device:dir search;
