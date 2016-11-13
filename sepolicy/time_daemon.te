@@ -1,1 +1,3 @@
 allow time_daemon property_socket:sock_file write;
+allow time_daemon init:unix_stream_socket connectto;
+allow time_daemon system_prop:property_service set;

@@ -1,2 +1,4 @@
 allow qmuxd property_socket:sock_file write;
 allow qmuxd diag_device:chr_file { ioctl open read write };
+allow qmuxd init:unix_stream_socket connectto;
+allow qmuxd system_prop:property_service set;

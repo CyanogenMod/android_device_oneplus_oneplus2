@@ -1,0 +1,1 @@
+allow ims system_prop:property_service set;
