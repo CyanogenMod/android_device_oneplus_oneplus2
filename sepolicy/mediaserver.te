@@ -1,2 +1,4 @@
 allow mediaserver system_server:unix_stream_socket { read write };
 allow mediaserver sensorservice_service:service_manager find;
+allow mediaserver audio_device:chr_file { ioctl open read write };
+allow mediaserver system_data_file:sock_file write;
