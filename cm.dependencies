@@ -6,5 +6,9 @@
   {
     "repository": "android_kernel_oneplus_msm8994",
     "target_path": "kernel/oneplus/msm8994"
+  },
+  {
+    "repository": "android_packages_resources_devicesettings",
+    "target_path": "packages/resources/devicesettings"
   }
 ]

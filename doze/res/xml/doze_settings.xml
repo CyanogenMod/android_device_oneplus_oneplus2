@@ -24,14 +24,14 @@
         <SwitchPreference
             android:key="pick_up"
             android:defaultValue="false"
-            android:title="@string/pick_up_title"
-            android:summary="@string/pick_up_summary" />
+            android:title="@string/pick_up_gesture_title"
+            android:summary="@string/pick_up_gesture_summary" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="priximity_sensor"
-        android:title="@string/priximity_sensor_title" >
+        android:title="@string/proximity_sensor_title" >
 
         <SwitchPreference
             android:key="gesture_hand_wave"
