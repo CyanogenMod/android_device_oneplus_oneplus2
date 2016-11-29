@@ -19,6 +19,7 @@
   <string name="always_enabled_summary">הקשב לאירועי החיישן ברגע שהמסך נכבה</string>
   <!-- Tilt sensor -->
   <string name="tilt_sensor_title">חיישן הטייה</string>
+  <string name="pick_up_title">הרמה</string>
   <string name="pick_up_summary">הצג התראות כשהמכשיר מורם</string>
   <!-- Proximity sensor -->
   <string name="priximity_sensor_title">חיישן קרבה</string>
