@@ -6,9 +6,6 @@
 /dev/block/bootdevice/by-name/config                            u:object_r:frp_block_device:s0
 
 /persist/.genmac                                                u:object_r:wifi_data_file:s0
-/persist/.bt_nv.bin                                             u:object_r:bluetooth_data_file:s0
-
-/system/etc/init\.qcom\.bt\.sh                                  u:object_r:bluetooth_loader_exec:s0
 
 /sys/devices/soc.0/f9928000.i2c/i2c-6/6-0029/enable_ps_sensor   u:object_r:cam_sysfs:s0
 /sys/devices/soc.0/f9928000.i2c/i2c-6/6-0029/set_delay_ms       u:object_r:cam_sysfs:s0
