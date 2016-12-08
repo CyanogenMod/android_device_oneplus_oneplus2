@@ -214,7 +214,7 @@ etc/permissions/com.quicinc.cne.xml
 framework/ConnectivityExt.jar
 framework/cneapiclient.jar
 framework/com.quicinc.cne.jar
--priv-app/CNEService/CNEService.apk|ca5f9a0e15a561b36de819ade9147c0ffdda207d
+-priv-app/CNEService/CNEService.apk|df1c3a80a4a1a36915f423a7969cff1cdedddcb2
 vendor/lib/libNimsWrap.so
 vendor/lib/libcne.so
 vendor/lib/libcneapiclient.so
@@ -244,7 +244,7 @@ etc/permissions/dpmapi.xml
 framework/com.qti.dpmframework.jar
 framework/dpmapi.jar
 framework/tcmclient.jar
--priv-app/dpmserviceapp/dpmserviceapp.apk|eefe7347dbf916b6a3ef796baa118b043d6949a6
+-priv-app/dpmserviceapp/dpmserviceapp.apk|27f91229cdbcec87edaf23c6b821c64a108dad83
 vendor/lib/libdpmctmgr.so
 vendor/lib/libdpmfdmgr.so
 vendor/lib/libdpmframework.so
@@ -284,12 +284,12 @@ vendor/lib64/hw/gatekeeper.msm8994.so
 bin/loc_launcher
 etc/permissions/com.qti.location.sdk.xml
 etc/permissions/com.qualcomm.location.xml
-framework/com.qti.location.sdk.jar|61a6756bfd926759056037e72d4af1d4e1cdb1ec
+framework/com.qti.location.sdk.jar|5f813d74715b42dc5175563cd5027269c5fe08fb
 -lib/libloc_api_v02.so
 -lib/libloc_ds_api.so
 -lib64/libloc_api_v02.so
 -lib64/libloc_ds_api.so
--priv-app/com.qualcomm.location/com.qualcomm.location.apk|ef867b7fcf6458696f082aa784d082e4531bc489
+-priv-app/com.qualcomm.location/com.qualcomm.location.apk|11c5e4aacb2e346645b9ab37f7f01d08a16e9297
 vendor/bin/slim_daemon
 vendor/lib/hw/flp.default.so
 vendor/lib/libdataitems.so
@@ -370,7 +370,7 @@ etc/firmware/venus.mbn
 etc/firmware/venus.mdt
 
 # Network
--priv-app/QtiTetherService/QtiTetherService.apk|c53b741fb3d76c25f4de7410e9869e8e82dc3c61
+-priv-app/QtiTetherService/QtiTetherService.apk|1f88a499a74cff043a296637db1c1dcecaafdee7
 vendor/lib/libconnctrl.so
 vendor/lib64/libconnctrl.so
 vendor/lib64/libQtiTether.so
@@ -442,10 +442,10 @@ vendor/lib64/libqmi_encdec.so
 vendor/lib64/libsmemlog.so
 
 # Radio
--app/datastatusnotification/datastatusnotification.apk|35b7c2f41662465d056703c257ec5cc1fef75b4f
--app/fastdormancy/fastdormancy.apk|80f660bc74b3d7fc99987422f5ef624e1e6b4224
--app/QtiTelephonyService/QtiTelephonyService.apk|4610d741cedd4e784011915b16f3f4879cd2e19b
--app/shutdownlistener/shutdownlistener.apk|e35de2893b60e52cc9f2cb2c6211ccf7db92ed6f
+-app/datastatusnotification/datastatusnotification.apk|d5b8dbdfb9010758dffec92851937ded0bcca43b
+-app/fastdormancy/fastdormancy.apk|3a7ba6ce1796fea35932b68a465071a1db72fef1
+-app/QtiTelephonyService/QtiTelephonyService.apk|b3bd4921c583936d82d40582bde113fd58622efb
+-app/shutdownlistener/shutdownlistener.apk|5423f30ebab40e4a5b6609048681e060531e1eea
 bin/ipacm-diag
 bin/netmgrd
 bin/qmuxd
@@ -458,12 +458,12 @@ etc/data/qmi_config.xml
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
 etc/permissions/telephonyservice.xml
--framework/qcnvitems.jar|56a2fb4f80583c7940b9513265cd97e9313dd338
--framework/qcrilhook.jar|52a0e673bb287e7b29c660bebb6c1c2dbb985213
-framework/qti-telephony-common.jar|eabfa165b2c4d1d6c7baae424bf13a0e8575e8f6
-framework/QtiTelephonyServicelibrary.jar|27c83fe7005affb6937aad19e4c061ba047c43e3
+-framework/qcnvitems.jar|8f1a22639392cef4e62bde005430a14bfa42d17e
+-framework/qcrilhook.jar|e94696ceea03cd31e159dc7fc10c5d694fe9fd94
+framework/qti-telephony-common.jar|fbd9aa168759bca89327643a23a7d32aaa78f79a
+framework/QtiTelephonyServicelibrary.jar|1d4ff53f9229caaa91fe3994757bcd359a18b756
 lib64/libparam.so
--priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|42de8ddd1ab482b1ddd0bae5ae16d905b4773211
+-priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|8d6a447cc4ee0ca78f6abb042b484c52775db9ed
 vendor/bin/qti
 -vendor/lib/libmdmdetect.so
 vendor/lib64/libconfigdb.so
@@ -504,8 +504,8 @@ vendor/lib64/libimscamera_jni.so
 vendor/lib64/libimsmedia_jni.so
 vendor/lib64/librcc.so
 vendor/lib64/libvoice-svc.so
--vendor/app/ims/ims.apk|138de3a169d8c4703d9e5645abeb19e427b04909
--vendor/app/imssettings/imssettings.apk|3020cdd3bc6d3c5bd147f2086fdd62fae108d81b
+-vendor/app/ims/ims.apk|21f343af6b656ad1dc890b18fed940ad61e31fb0
+-vendor/app/imssettings/imssettings.apk|87ada7621f77f9cf8efa27ebb46157c98df3a7cc
 
 # Sensors
 bin/sensors.qcom
@@ -531,7 +531,7 @@ vendor/lib64/libthermalclient.so
 vendor/lib64/libthermalioctl.so
 
 # Time services
--app/TimeService/TimeService.apk|8bd31d8f96c2e726cdb1a9d04f4da06b0e8914dd
+-app/TimeService/TimeService.apk|5198efe6b554038a5c96962b381517a0274a26df
 bin/time_daemon
 vendor/lib/libTimeService.so
 -vendor/lib/libtime_genoff.so
