@@ -1,1 +1,2 @@
 allow audioserver system_data_file:sock_file write;
+allow audioserver rootfs:lnk_file getattr;

@@ -1,0 +1,1 @@
+﻿allow wcnss_filter rootfs:lnk_file getattr;
