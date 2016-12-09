@@ -123,10 +123,6 @@ PRODUCT_PACKAGES += \
     liboverlay \
     libtinyxml
 
-# Doze mode
-PRODUCT_PACKAGES += \
-    OneplusDoze
-
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     e2fsck \
@@ -282,3 +278,6 @@ PRODUCT_COPY_FILES += \
 
 # Inherit from oppo-common
 $(call inherit-product, device/oppo/common/common.mk)
+
+# Inherit from oneplus-common
+$(call inherit-product, device/oneplus/common/common.mk)
