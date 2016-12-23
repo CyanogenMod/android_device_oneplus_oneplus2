@@ -386,5 +386,4 @@
     <bool name="config_enableAutoPowerModes">true</bool>
 
     <integer name="config_buttonBrightnessSettingDefault">60</integer>
-
 </resources>
